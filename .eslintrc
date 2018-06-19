@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "airbnb-base",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
+  "plugins": [
+    "babel"
+  ],
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "babel/semi": 1,
+    "comma-dangle": "off",
+    "max-len": [
+      "error", 120
+    ]
+  }
+}

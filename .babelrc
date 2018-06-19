@@ -1,0 +1,14 @@
+{
+    "presets": [
+        ["env", {
+            exclude: ["transform-regenerator"]
+        }]
+    ],
+
+    "plugins": [
+        "transform-class-properties",
+        ["fast-async",{
+           "runtimePattern": "LeanCoffeePowerUp\\.js"
+        }]
+    ]
+}

@@ -1,0 +1,35 @@
+{
+  "name": "leancoffee-powerup",
+  "version": "0.0.1",
+  "description": "Everything you need to conduct a lean coffee session in Trello!",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [
+    "trello",
+    "power-up"
+  ],
+  "author": "Angelo Tata <angelo.tata@gmail.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "format-duration": "^1.1.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.3",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-babel": "^5.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "fast-async": "^6.3.7",
+    "uglifyjs-webpack-plugin": "^1.2.5",
+    "webpack": "^4.10.2",
+    "webpack-cli": "^3.0.1"
+  }
+}
