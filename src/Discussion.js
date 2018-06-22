@@ -72,9 +72,9 @@ class Discussion {
     pause = async (t) => {
       const intervalId = await this.boardStorage.getDiscussionIntervalId(t);
       clearInterval(intervalId);
-      this.saveElapsed(t);
 
       this.cardStorage.saveDiscussionStatus(t, Statuses.PAUSED);
+      this.saveElapsed(t);
       this.boardStorage.writeMultiple(t, {
         [BoardStorage.DISCUSSION_STATUS]: Statuses.PAUSED,
         [BoardStorage.DISCUSSION_STARTED_AT]: null,
@@ -88,8 +88,8 @@ class Discussion {
       clearInterval(intervalId);
 
       try {
-        await this.saveElapsed(t);
         await this.cardStorage.saveDiscussionStatus(t, Statuses.ENDED);
+        await this.saveElapsed(t);
         await this.cardStorage.deleteMultiple(t, [CardStorage.DISCUSSION_THUMBS]);
         await this.boardStorage.deleteMultiple(t, [
           BoardStorage.DISCUSSION_STATUS,
