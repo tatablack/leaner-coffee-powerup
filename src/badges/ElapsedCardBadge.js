@@ -13,7 +13,7 @@ class ElapsedCardBadge {
     this.cardStorage = new CardStorage();
   }
 
-  async getTitle() {
+  async getTitle(t) {
     return this.DEFAULT_TITLE;
   }
 
@@ -32,7 +32,7 @@ class ElapsedCardBadge {
     if (!elapsed) { return null; }
 
     return {
-      title: await this.getTitle(),
+      title: await this.getTitle(t),
       text: await this.getText(t, elapsed),
       color: await this.getColor(t)
     };
