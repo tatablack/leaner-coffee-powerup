@@ -2,12 +2,20 @@
 <html lang="en-us">
 
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
+  <title><%= htmlWebpackPlugin.options.title %></title>
+  <% if (htmlWebpackPlugin.files.favicon) { %>
+    <link rel="shortcut icon" href="<%= htmlWebpackPlugin.files.favicon%>">
+  <% } %>
 </head>
 
 <body>
-    <script src="https://p.trellocdn.com/power-up.min.js"></script>
-    <script src="/dist/main.js"></script>
+  <script src="https://p.trellocdn.com/power-up.min.js"></script>
+
+
+  <% if (htmlWebpackPlugin.options.devServer) { %>
+    <script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
+  <% } %>
 </body>
 
 </html>
