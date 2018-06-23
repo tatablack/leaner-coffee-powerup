@@ -2,55 +2,63 @@ import { StorageScope, StorageVisibility } from '../TrelloConstants';
 import Storage from './Storage';
 
 class CardStorage extends Storage {
-    static DISCUSSION_STATUS = 'leancoffeeDiscussionStatus';
-    static DISCUSSION_ELAPSED = 'leancoffeeDiscussionElapsed';
-    static DISCUSSION_THUMBS = 'leancoffeeDiscussionThumbs';
-    static VOTES = 'leancoffeeVotes';
+  static DISCUSSION_STATUS = 'leancoffeeDiscussionStatus';
+  static DISCUSSION_ELAPSED = 'leancoffeeDiscussionElapsed';
+  static DISCUSSION_THUMBS = 'leancoffeeDiscussionThumbs';
+  static VOTES = 'leancoffeeVotes';
 
-    constructor() {
-      super(StorageScope.CARD, StorageVisibility.SHARED);
-    }
+  constructor() {
+    super(StorageScope.CARD, StorageVisibility.SHARED);
+  }
 
-    getDiscussionStatus(t) {
-      return this.read(t, CardStorage.DISCUSSION_STATUS);
-    }
+  getDiscussionStatus(t) {
+    return this.read(t, CardStorage.DISCUSSION_STATUS);
+  }
 
-    getDiscussionElapsed(t) {
-      return this.read(t, CardStorage.DISCUSSION_ELAPSED);
-    }
+  getDiscussionElapsed(t) {
+    return this.read(t, CardStorage.DISCUSSION_ELAPSED);
+  }
 
-    getDiscussionThumbs(t) {
-      return this.read(t, CardStorage.DISCUSSION_THUMBS);
-    }
+  getDiscussionThumbs(t) {
+    return this.read(t, CardStorage.DISCUSSION_THUMBS);
+  }
 
-    getVotes(t) {
-      return this.read(t, CardStorage.VOTES);
-    }
+  getVotes(t) {
+    return this.read(t, CardStorage.VOTES);
+  }
 
-    getVoteFor = async (t) => {
-      const votes = await this.read(t, CardStorage.VOTES);
+  countVotesById = async (t, cardId) => {
+    const votes = await this.readById(t, CardStorage.VOTES, cardId);
 
-      if (!votes) { return null; }
+    if (!votes) { return 0; }
 
-      const currentMember = t.getContext().member;
-      return votes[currentMember];
-    };
+    return Object.keys(votes).filter(key => votes[key]).length;
+  };
 
-    saveDiscussionStatus(t, newStatus) {
-      return this.write(t, CardStorage.DISCUSSION_STATUS, newStatus);
-    }
+  getVoteFor = async (t) => {
+    const votes = await this.read(t, CardStorage.VOTES);
 
-    saveDiscussionElapsed(t, newElapsed) {
-      return this.write(t, CardStorage.DISCUSSION_ELAPSED, newElapsed);
-    }
+    if (!votes) { return null; }
 
-    saveDiscussionThumbs(t, newThumbs) {
-      return this.write(t, CardStorage.DISCUSSION_THUMBS, newThumbs);
-    }
+    const currentMember = t.getContext().member;
+    return votes[currentMember];
+  };
 
-    saveVotes(t, newVotes) {
-      return this.write(t, CardStorage.VOTES, newVotes);
-    }
+  saveDiscussionStatus(t, newStatus) {
+    return this.write(t, CardStorage.DISCUSSION_STATUS, newStatus);
+  }
+
+  saveDiscussionElapsed(t, newElapsed) {
+    return this.write(t, CardStorage.DISCUSSION_ELAPSED, newElapsed);
+  }
+
+  saveDiscussionThumbs(t, newThumbs) {
+    return this.write(t, CardStorage.DISCUSSION_THUMBS, newThumbs);
+  }
+
+  saveVotes(t, newVotes) {
+    return this.write(t, CardStorage.VOTES, newVotes);
+  }
 }
 
 export default CardStorage;

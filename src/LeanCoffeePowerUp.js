@@ -53,7 +53,31 @@ class LeanCoffeePowerUp {
         ];
 
         return badges.filter(badge => badge);
-      }
+      },
+
+      'list-sorters': () => [{
+        text: 'Most Votes',
+        callback: async (t, opts) => {
+          const countedCards = await Promise.all(opts.cards.map(async (card) => {
+            const leanCoffeeVotes = await this.cardStorage.countVotesById(t, card.id);
+            return Object.assign({ leanCoffeeVotes }, card);
+          }));
+
+          const sortedCards = countedCards.sort((cardA, cardB) => {
+            if (cardA.leanCoffeeVotes < cardB.leanCoffeeVotes) {
+              return 1;
+            } else if (cardB.leanCoffeeVotes < cardA.leanCoffeeVotes) {
+              return -1;
+            }
+
+            return 0;
+          });
+
+          return {
+            sortedIds: sortedCards.map(card => card.id)
+          };
+        }
+      }]
     });
   }
 

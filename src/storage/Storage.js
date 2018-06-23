@@ -5,6 +5,10 @@ class Storage {
     Object.assign(this, { scope, visibility });
   }
 
+  readById(t, key, cardId) {
+    return t.get(cardId, this.visibility, key);
+  }
+
   read(t, key) {
     return t.get(this.scope, this.visibility, key);
   }
