@@ -8,15 +8,15 @@ import Discussion, { Thumbs } from './Discussion';
 
 
 class LeanCoffeePowerUp {
-  constructor({ TrelloPowerUp, hostname, maxDiscussionDuration }) {
+  constructor({ TrelloPowerUp, host, maxDiscussionDuration }) {
     this.trello = TrelloPowerUp;
-    this.hostname = hostname;
+    this.host = host;
 
     this.cardStorage = new CardStorage();
 
     this.elapsedCardBadge = new ElapsedCardBadge();
     this.elapsedCardDetailBadge = new ElapsedCardDetailBadge();
-    this.votingCardBadge = new VotingCardBadge(this.hostname);
+    this.votingCardBadge = new VotingCardBadge(this.host);
     this.thumbsCardDetailBadge = new ThumbsCardDetailBadge();
 
     this.discussion = new Discussion(maxDiscussionDuration);
@@ -25,12 +25,12 @@ class LeanCoffeePowerUp {
   start() {
     this.trello.initialize({
       'card-buttons': async t => [{
-        icon: `${this.hostname}/assets/timer.svg`,
+        icon: `${this.host}/assets/timer.svg`,
         text: 'Discussion',
         condition: VisibilityConditions.IS_ADMIN,
         callback: this.handleDiscussion
       }, {
-        icon: `${this.hostname}/assets/heart.svg`,
+        icon: `${this.host}/assets/heart.svg`,
         text: `Vote    ${await this.cardStorage.getVoteFor(t) ? '☑' : '☐'}`,
         callback: this.handleVoting
       }],
@@ -69,7 +69,7 @@ class LeanCoffeePowerUp {
       if (await this.discussion.isOngoingOrPausedForAnotherCard(t)) {
         t.popup({
           title: 'Lean Coffee',
-          url: `${this.hostname}/ongoing_or_paused.html`,
+          url: `${this.host}/ongoing_or_paused.html`,
           height: 120
         });
 
