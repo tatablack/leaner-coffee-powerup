@@ -46,7 +46,7 @@ module.exports = {
     modulesPlugin,
     new HtmlWebpackPlugin({
       title: 'Lean Coffee Trello Power-up',
-      template: 'index.html'
+      template: '_index.html',
     }),
     new UglifyJsPlugin({ sourceMap: true })
   ]
