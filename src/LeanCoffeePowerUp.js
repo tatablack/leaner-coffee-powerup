@@ -25,12 +25,12 @@ class LeanCoffeePowerUp {
   start() {
     this.trello.initialize({
       'card-buttons': async t => [{
-        icon: `${this.host}/assets/timer.svg`,
+        icon: `${this.host}/assets/powerup/timer.svg`,
         text: 'Discussion',
         condition: VisibilityConditions.IS_ADMIN,
         callback: this.handleDiscussion
       }, {
-        icon: `${this.host}/assets/heart.svg`,
+        icon: `${this.host}/assets/powerup/heart.svg`,
         text: `Vote    ${await this.cardStorage.getVoteFor(t) ? '☑' : '☐'}`,
         callback: this.handleVoting
       }],
