@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "dist": "export NODE_ENV=production && webpack"
+    "dist": "export NODE_ENV=production && webpack",
+    "deploy": "npm run dist && npx s3-deploy './dist/**' --cwd './dist/' --gzip --deleteRemoved --etag --region=eu-west-1 --bucket $TRELLO_POWERUPS_BUCKET_NAME --profile $TRELLO_POWERUPS_PROFILE"
   },
   "keywords": [
     "trello",
@@ -15,7 +15,8 @@
   "author": "Angelo Tata <angelo.tata@gmail.com>",
   "license": "Apache-2.0",
   "dependencies": {
-    "format-duration": "^1.1.0"
+    "format-duration": "^1.1.0",
+    "s3-deploy": "^1.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
