@@ -1,8 +1,8 @@
 import CardStorage from '../storage/CardStorage';
 
 class VotingCardBadge {
-  constructor(host) {
-    this.host = host;
+  constructor(baseUrl) {
+    this.baseUrl = baseUrl;
     this.cardStorage = new CardStorage();
   }
 
@@ -17,7 +17,7 @@ class VotingCardBadge {
     return {
       text: votes.length,
       color: hasVoted ? 'blue' : null,
-      icon: `${this.host}/assets/powerup/${hasVoted ? 'heart_white.svg' : 'heart.svg'}`,
+      icon: `${this.baseUrl}/assets/powerup/${hasVoted ? 'heart_white.svg' : 'heart.svg'}`,
     };
   };
 }
