@@ -22,8 +22,11 @@ const modulesPlugin = (isProduction ?
 module.exports = {
   mode: 'production',
   devtool: isProduction ? 'source-map' : 'source-map',
-  
-  entry: './src/index.js',
+
+  entry: {
+    main: './src/index.js',
+    settings: './src/settings.js'
+  },
 
   output: {
     filename: '[name].[hash].js',
@@ -50,7 +53,14 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Lean Coffee Trello Power-up',
       template: '_index.html',
-      filename: 'index.html'
+      filename: 'index.html',
+      chunks: ['main']
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Lean Coffee Settings',
+      template: '_settings.html',
+      filename: 'settings.html',
+      chunks: ['settings']
     }),
     new UglifyJsPlugin({ sourceMap: true }),
     new CopyWebpackPlugin([

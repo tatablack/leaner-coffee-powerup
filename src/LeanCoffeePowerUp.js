@@ -77,7 +77,15 @@ class LeanCoffeePowerUp {
             sortedIds: sortedCards.map(card => card.id)
           };
         }
-      }]
+      }],
+
+      'show-settings': (t) => {
+        return t.popup({
+          title: 'Lean Coffee Settings',
+          url: `${this.baseUrl}/settings.html`,
+          height: 184 // we can always resize later
+        });
+      }
     });
   }
 
