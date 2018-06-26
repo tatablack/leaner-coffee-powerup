@@ -99,9 +99,17 @@ class LeanCoffeePowerUp {
 
     handleDiscussion = async (t) => {
       if (await this.discussion.isOngoingOrPausedForAnotherCard(t)) {
+      const boardStatus = await this.boardStorage.getDiscussionStatus(t);
+      const cardId = await this.boardStorage.getDiscussionCardId(t);
+      const cardName = (await t.cards('id', 'name')).find(card => card.id === cardId).name;
+
         t.popup({
           title: 'Lean Coffee',
           url: `${this.baseUrl}/ongoing_or_paused.html`,
+        args: {
+          currentCardBeingDiscussed: cardName,
+          currentDiscussionStatus: boardStatus
+        },
           height: 120
         });
 
