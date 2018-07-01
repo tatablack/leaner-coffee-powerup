@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dist": "export NODE_ENV=production && webpack",
-    "deploy": "npm run dist && npx s3-deploy './dist/**' --cwd './dist/' --gzip --deleteRemoved --etag --region=eu-west-1 --bucket $TRELLO_POWERUPS_BUCKET_NAME --profile $TRELLO_POWERUPS_PROFILE"
+    "deploy": "npm run dist && npx s3-deploy './dist/**' --cwd './dist/' --gzip html,js,svg --deleteRemoved --etag --region=eu-west-1 --bucket $TRELLO_POWERUPS_BUCKET_NAME --profile $TRELLO_POWERUPS_PROFILE"
   },
   "keywords": [
     "trello",
@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "format-duration": "^1.1.0",
-    "s3-deploy": "^1.0.1"
+    "s3-deploy": "^1.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
