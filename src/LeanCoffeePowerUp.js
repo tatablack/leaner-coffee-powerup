@@ -14,8 +14,8 @@ class LeanCoffeePowerUp {
 
     this.cardStorage = new CardStorage();
 
-    this.elapsedCardBadge = new ElapsedCardBadge();
-    this.elapsedCardDetailBadge = new ElapsedCardDetailBadge();
+    this.elapsedCardBadge = new ElapsedCardBadge(this.discussion);
+    this.elapsedCardDetailBadge = new ElapsedCardDetailBadge(this.discussion);
     this.votingCardBadge = new VotingCardBadge(this.baseUrl);
     this.thumbsCardDetailBadge = new ThumbsCardDetailBadge();
 

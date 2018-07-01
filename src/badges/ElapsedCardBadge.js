@@ -1,16 +1,13 @@
 import formatDuration from 'format-duration';
 
-import Discussion from '../Discussion';
-import CardStorage from '../storage/CardStorage';
 import { BadgeColors } from '../TrelloConstants';
 
 
 class ElapsedCardBadge {
   DEFAULT_TITLE = '';
 
-  constructor() {
-    this.discussion = new Discussion();
-    this.cardStorage = new CardStorage();
+  constructor(discussion) {
+    this.discussion = discussion;
   }
 
   async getTitle(t) {
@@ -27,8 +24,9 @@ class ElapsedCardBadge {
     return await this.discussion.isPausedFor(t) ? BadgeColors.YELLOW : BadgeColors.LIGHTGRAY;
   };
 
+
   render = async (t) => {
-    const elapsed = await this.cardStorage.getDiscussionElapsed(t);
+    const elapsed = await this.discussion.getElapsed(t);
     if (!elapsed) { return null; }
 
     return {
