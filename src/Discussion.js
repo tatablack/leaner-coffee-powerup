@@ -40,6 +40,17 @@ class Discussion {
 
     getElapsed = t => this.cardStorage.getDiscussionElapsed(t);
 
+  updateElapsed = async (t) => {
+    const startedAt = await this.boardStorage.getDiscussionStartedAt(t);
+    const elapsed = Date.now() - startedAt;
+
+    if (elapsed > this.maxDiscussionDuration) {
+      this.pause(t);
+    } else {
+      this.saveElapsed(t);
+    }
+  };
+
     saveElapsed = async (t) => {
       const startedAt = await this.boardStorage.getDiscussionStartedAt(t);
       const previousElapsed = await this.boardStorage.getDiscussionPreviousElapsed(t) || 0;
@@ -54,16 +65,7 @@ class Discussion {
         [BoardStorage.DISCUSSION_CARD_ID]: t.getContext().card,
         [BoardStorage.DISCUSSION_STARTED_AT]: Date.now(),
         [BoardStorage.DISCUSSION_PREVIOUS_ELAPSED]: await this.getElapsed(t),
-        [BoardStorage.DISCUSSION_INTERVAL_ID]: setInterval(async () => {
-          const startedAt = await this.boardStorage.getDiscussionStartedAt(t);
-          const elapsed = Date.now() - startedAt;
-
-          if (elapsed > this.maxDiscussionDuration) {
-            this.pause(t);
-          } else {
-            this.saveElapsed(t);
-          }
-        }, 1000, t)
+      [BoardStorage.DISCUSSION_INTERVAL_ID]: setInterval(this.updateElapsed, 5000, t)
       });
 
       this.cardStorage.saveDiscussionStatus(t, Statuses.ONGOING);
