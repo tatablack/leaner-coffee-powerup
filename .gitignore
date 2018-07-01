@@ -1,3 +1,4 @@
 dist
 config.js
 localhost.*
+config.prod.js
