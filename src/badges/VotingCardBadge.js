@@ -12,7 +12,7 @@ class VotingCardBadge {
 
     if (!votes.length) { return null; }
 
-    const hasVoted = await this.cardStorage.getVoteFor(t);
+    const hasVoted = await this.cardStorage.hasCurrentMemberVoted(t);
 
     return {
       text: votes.length,

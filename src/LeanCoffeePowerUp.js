@@ -31,7 +31,7 @@ class LeanCoffeePowerUp {
         callback: this.handleDiscussion
       }, {
         icon: `${this.baseUrl}/assets/powerup/heart.svg`,
-        text: `Vote    ${await this.cardStorage.getVoteFor(t) ? '☑' : '☐'}`,
+        text: `Vote    ${await this.cardStorage.hasCurrentMemberVoted(t) ? '☑' : '☐'}`,
         callback: this.handleVoting
       }],
 

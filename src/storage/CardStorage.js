@@ -35,13 +35,13 @@ class CardStorage extends Storage {
     return Object.keys(votes).filter(key => votes[key]).length;
   };
 
-  getVoteFor = async (t) => {
+  hasCurrentMemberVoted = async (t) => {
     const votes = await this.read(t, CardStorage.VOTES);
 
-    if (!votes) { return null; }
+    if (!votes) { return false; }
 
     const currentMember = t.getContext().member;
-    return votes[currentMember];
+    return !!votes[currentMember];
   };
 
   saveDiscussionStatus(t, newStatus) {
@@ -62,4 +62,3 @@ class CardStorage extends Storage {
 }
 
 export default CardStorage;
-
