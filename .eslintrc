@@ -16,6 +16,7 @@
     "comma-dangle": "off",
     "max-len": [
       "error", 120
-    ]
+    ],
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["webpack.*.js"]}]
   }
 }

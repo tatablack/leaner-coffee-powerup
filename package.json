@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dist": "export NODE_ENV=production && webpack",
+    "start": "npx webpack-serve ./webpack.dev.js",
+    "dist": "export NODE_ENV=production && webpack --config webpack.prod.js",
     "deploy": "npm run dist && npx s3-deploy './dist/**' --cwd './dist/' --gzip html,js,svg --deleteRemoved --etag --region=eu-west-1 --bucket $TRELLO_POWERUPS_BUCKET_NAME --profile $TRELLO_POWERUPS_PROFILE"
   },
   "keywords": [
@@ -36,6 +37,7 @@
     "uglifyjs-webpack-plugin": "^1.2.5",
     "webpack": "^4.10.2",
     "webpack-cli": "^3.0.1",
+    "webpack-merge": "^4.1.3",
     "webpack-serve": "^1.0.4"
   }
 }

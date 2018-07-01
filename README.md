@@ -61,6 +61,8 @@ The build toolchain is, unsurprisingly, Node.js-based (tested with Node.js v8.10
 ### Installing
 Ensure you have a compatible version of Node.js installed. Then run `npm install`.
 Available commands after installation:
+- `npm start` → stars a development server with hot reloading (specifically,
+[`webpack-serve`](https://github.com/webpack-contrib/webpack-serve)).
 - `npm run dist` → builds a production release of the project; output is in the `dist` folder
 
 ### Deployment
