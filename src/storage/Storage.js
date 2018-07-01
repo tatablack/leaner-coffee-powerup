@@ -24,6 +24,10 @@ class Storage {
   deleteMultiple(t, entries) {
     return t.remove(this.scope, this.visibility, entries);
   }
+
+  deleteMultipleById(t, entries, cardId) {
+    return t.remove(cardId, this.visibility, entries);
+  }
 }
 
 export default Storage;
