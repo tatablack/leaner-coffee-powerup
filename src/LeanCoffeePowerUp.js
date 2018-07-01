@@ -3,6 +3,7 @@ import CardStorage from './storage/CardStorage';
 import ElapsedCardBadge from './badges/ElapsedCardBadge';
 import ElapsedCardDetailBadge from './badges/ElapsedCardDetailBadge';
 import VotingCardBadge from './badges/VotingCardBadge';
+import VotingCardDetailBadge from './badges/VotingCardDetailBadge';
 import ThumbsCardDetailBadge from './badges/ThumbsCardDetailBadge';
 import Discussion, { Thumbs } from './Discussion';
 
@@ -17,6 +18,7 @@ class LeanCoffeePowerUp {
     this.elapsedCardBadge = new ElapsedCardBadge(this.discussion);
     this.elapsedCardDetailBadge = new ElapsedCardDetailBadge(this.discussion);
     this.votingCardBadge = new VotingCardBadge(this.baseUrl);
+    this.votingCardDetailBadge = new VotingCardDetailBadge(this.baseUrl);
     this.thumbsCardDetailBadge = new ThumbsCardDetailBadge();
 
     this.discussion = new Discussion(maxDiscussionDuration);
@@ -47,6 +49,7 @@ class LeanCoffeePowerUp {
       'card-detail-badges': async (t) => {
         const badges = [
           await this.elapsedCardDetailBadge.render(t),
+          await this.votingCardDetailBadge.render(t),
           await this.thumbsCardDetailBadge.render(t, Thumbs.UP),
           await this.thumbsCardDetailBadge.render(t, Thumbs.MIDDLE),
           await this.thumbsCardDetailBadge.render(t, Thumbs.DOWN)
@@ -91,8 +94,17 @@ class LeanCoffeePowerUp {
 
     handleVoting = async (t) => {
       const votes = await this.cardStorage.getVotes(t) || {};
-      const currentMember = t.getContext().member;
-      votes[currentMember] = !votes[currentMember];
+    const currentMember = await t.member('id', 'username', 'fullName', 'avatar');
+
+    if (votes[currentMember.id]) {
+      delete votes[currentMember.id];
+    } else {
+      votes[currentMember.id] = {
+        username: currentMember.username,
+        fullName: currentMember.fullName,
+        avatar: currentMember.avatar // currently unused
+      };
+    }
 
       this.cardStorage.saveVotes(t, votes);
     };

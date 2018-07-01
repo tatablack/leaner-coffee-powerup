@@ -4,22 +4,27 @@ class VotingCardBadge {
   constructor(baseUrl) {
     this.baseUrl = baseUrl;
     this.cardStorage = new CardStorage();
+    this.render = this.render.bind(this);
   }
 
-  render = async (t) => {
-    let votes = await this.cardStorage.getVotes(t) || {};
-    votes = Object.keys(votes).filter(key => votes[key]);
+  // Unable to use class properties here because I need to call
+  // it from a subclass, and it's currently broken - see:
+  // https://github.com/babel/babel/issues/5104
+  //
+  // Upgrading to Babel 7.x should solve it.
+  async render(t) {
+    const votes = await this.cardStorage.getVotes(t);
 
-    if (!votes.length) { return null; }
+    if (!votes) { return null; }
 
     const hasVoted = await this.cardStorage.hasCurrentMemberVoted(t);
 
     return {
-      text: votes.length,
+      text: Object.keys(votes).length,
       color: hasVoted ? 'blue' : null,
       icon: `${this.baseUrl}/assets/powerup/${hasVoted ? 'heart_white.svg' : 'heart.svg'}`,
     };
-  };
+  }
 }
 
 export default VotingCardBadge;
