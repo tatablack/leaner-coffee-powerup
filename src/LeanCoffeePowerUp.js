@@ -61,7 +61,7 @@ class LeanCoffeePowerUp {
       'list-sorters': () => [{
         text: 'Most Votes',
         callback: async (t, opts) => {
-          const countedCards = await Promise.all(opts.cards.map(async (card) => {
+          const countedCards = await this.trello.Promise.all(opts.cards.map(async (card) => {
             const leanCoffeeVotes = await this.cardStorage.countVotesById(t, card.id);
             return Object.assign({ leanCoffeeVotes }, card);
           }));
@@ -82,13 +82,11 @@ class LeanCoffeePowerUp {
         }
       }],
 
-      'show-settings': (t) => {
-        return t.popup({
+      'show-settings': t => t.popup({
           title: 'Lean Coffee Settings',
           url: `${this.baseUrl}/settings.html`,
-          height: 184 // we can always resize later
-        });
-      }
+        height: 184
+      })
     });
   }
 
@@ -124,10 +122,7 @@ class LeanCoffeePowerUp {
         },
           height: 120
         });
-
-        return;
-      }
-
+    } else {
       let items = [];
 
       switch (true) {
@@ -175,6 +170,7 @@ class LeanCoffeePowerUp {
         title: 'Lean Coffee',
         items
       });
+    }
     };
 }
 
