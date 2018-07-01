@@ -60,13 +60,44 @@ The build toolchain is, unsurprisingly, Node.js-based (tested with Node.js v8.10
 
 ### Installing
 Ensure you have a compatible version of Node.js installed. Then run `npm install`.
+
+In order to load your power-up in a Trello board, its files need to be served via HTTPS - which means you'll
+need to create a self-signed certificate and configure a local HTTP server to use it. This is easy enough, thanks
+to `webpack-serve` and, say, `devcert-cli`.
+
+The former is already part of the dependencies; the latter is just a recommendation to easily generate the necessary
+certificate files. See [its GitHub page](https://github.com/davewasmer/devcert-cli#usage) for more information.
+
+The provided npm scripts assume you have generated a `localhost.cert` certificate file and its `localhost.key`
+key file in the root of the project. Tweak as needed.
+
 Available commands after installation:
 - `npm start` → stars a development server with hot reloading (specifically,
 [`webpack-serve`](https://github.com/webpack-contrib/webpack-serve)).
 - `npm run dist` → builds a production release of the project; output is in the `dist` folder
+- `npm run deploy` → builds a production release of the project and uploads it to s3
+
+### Running
+1. Create a local configuration file in the root folder
+
+2. Enable the Power-Up for one of your Trello teams (see "Getting started"), and make sure to fill in the following values:
+- *Power-Up icon URL*: `https://localhost:8080/assets/coffee.svg`
+- *Iframe connector URL*: `https://localhost:8080/index.html`
+
+3. Start the development server: `npm start`
+4. Open a Trello board in the team you added the Power-Up to, and enable it in the board's settings.
 
 ### Deployment
-TBD
+The official version of this Power-Up is currently deployed to S3 by running `npm run deploy`, which behind
+the scenes executes the following:
+
+```
+s3-deploy './dist/**' --cwd './dist/' --region SOME_AWS_REGION --bucket SOME_BUCKET_NAME --gzip --deleteRemoved --etag --profile SOME_AWS_PROFILE
+```
+In order to execute `npm run deploy`, the `$TRELLO_POWERUPS_PROFILE` and `$TRELLO_POWERUPS_BUCKET_NAME` environment
+variables will have to be exported in your shell. The former is the name of a profile in your `~/.aws/credentials` file
+with the necessary privileges to upload and modify files in your S3 bucket, and the latter is the name of your bucket.
+
 
 ## Contributing
 TBD
