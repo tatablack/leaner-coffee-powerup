@@ -1,5 +1,6 @@
 import BoardStorage from './storage/BoardStorage';
 import CardStorage from './storage/CardStorage';
+import Notification from './Notification';
 
 export const Statuses = {
   ONGOING: 'ONGOING',
@@ -14,7 +15,9 @@ export const Thumbs = {
 };
 
 class Discussion {
-  constructor(maxDiscussionDuration) {
+  constructor(baseUrl, maxDiscussionDuration) {
+    this.baseUrl = baseUrl;
+    this.notification = new Notification(this.baseUrl);
     this.maxDiscussionDuration = maxDiscussionDuration;
     this.boardStorage = new BoardStorage();
     this.cardStorage = new CardStorage();
@@ -83,6 +86,8 @@ class Discussion {
         [BoardStorage.DISCUSSION_PREVIOUS_ELAPSED]: await this.getElapsed(t),
         [BoardStorage.DISCUSSION_INTERVAL_ID]: null
       });
+
+    this.notification.play(this.notification.Types.ELAPSED);
     };
 
     end = async (t) => {

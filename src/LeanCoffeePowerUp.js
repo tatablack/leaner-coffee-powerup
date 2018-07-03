@@ -14,14 +14,13 @@ class LeanCoffeePowerUp {
     this.baseUrl = baseUrl;
 
     this.cardStorage = new CardStorage();
+    this.discussion = new Discussion(this.baseUrl, maxDiscussionDuration);
 
     this.elapsedCardBadge = new ElapsedCardBadge(this.discussion);
     this.elapsedCardDetailBadge = new ElapsedCardDetailBadge(this.discussion);
     this.votingCardBadge = new VotingCardBadge(this.baseUrl);
     this.votingCardDetailBadge = new VotingCardDetailBadge(this.baseUrl);
     this.thumbsCardDetailBadge = new ThumbsCardDetailBadge();
-
-    this.discussion = new Discussion(maxDiscussionDuration);
   }
 
   start() {
