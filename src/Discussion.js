@@ -15,7 +15,8 @@ export const Thumbs = {
 };
 
 class Discussion {
-  constructor(baseUrl, maxDiscussionDuration) {
+  constructor(window, baseUrl, maxDiscussionDuration) {
+    this.w = window;
     this.baseUrl = baseUrl;
     this.notification = new Notification(this.baseUrl);
     this.maxDiscussionDuration = maxDiscussionDuration;

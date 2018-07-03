@@ -9,12 +9,13 @@ import Discussion, { Thumbs } from './Discussion';
 
 
 class LeanCoffeePowerUp {
-  constructor({ TrelloPowerUp, baseUrl, maxDiscussionDuration }) {
+  constructor({ window, TrelloPowerUp, baseUrl, maxDiscussionDuration }) {
+    this.w = window;
     this.trello = TrelloPowerUp;
     this.baseUrl = baseUrl;
 
     this.cardStorage = new CardStorage();
-    this.discussion = new Discussion(this.baseUrl, maxDiscussionDuration);
+    this.discussion = new Discussion(this.w, this.baseUrl, maxDiscussionDuration);
 
     this.elapsedCardBadge = new ElapsedCardBadge(this.discussion);
     this.elapsedCardDetailBadge = new ElapsedCardDetailBadge(this.discussion);
