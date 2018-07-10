@@ -2,8 +2,9 @@ import VotingCardBadge from './VotingCardBadge';
 
 class VotingCardDetailBadge extends VotingCardBadge {
   showVoters = async (t) => {
-    const votes = await this.cardStorage.getVotes(t);
-    const items = Object.values(votes).map(vote => ({ text: `${vote.username} (${vote.fullName})` }));
+    const items = await this.getVoters(t);
+
+    if (!items.length) { return; }
 
     t.popup({
       title: 'Voters',
