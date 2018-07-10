@@ -1,4 +1,4 @@
-import { VisibilityConditions } from './TrelloConstants';
+import BoardStorage from './storage/BoardStorage';
 import CardStorage from './storage/CardStorage';
 import ElapsedCardBadge from './badges/ElapsedCardBadge';
 import ElapsedCardDetailBadge from './badges/ElapsedCardDetailBadge';
@@ -14,6 +14,7 @@ class LeanCoffeePowerUp {
     this.trello = TrelloPowerUp;
     this.baseUrl = baseUrl;
 
+    this.boardStorage = new BoardStorage();
     this.cardStorage = new CardStorage();
     this.discussion = new Discussion(this.w, this.baseUrl, maxDiscussionDuration);
 
@@ -24,73 +25,79 @@ class LeanCoffeePowerUp {
     this.thumbsCardDetailBadge = new ThumbsCardDetailBadge();
   }
 
+  handleCardButtons = async t => [{
+    icon: `${this.baseUrl}/assets/powerup/timer.svg`,
+    text: 'Discussion',
+    callback: this.handleDiscussion
+  }, {
+    icon: `${this.baseUrl}/assets/powerup/heart.svg`,
+    text: `Vote    ${await this.cardStorage.hasCurrentMemberVoted(t) ? '☑' : '☐'}`,
+    callback: this.handleVoting
+  }];
+
+  handleCardBadges = async (t) => {
+    const badges = [
+      await this.elapsedCardBadge.render(t),
+      await this.votingCardBadge.render(t)
+    ];
+
+    return badges.filter(badge => badge);
+  };
+
+  handleCardDetailBadges = async (t) => {
+    const badges = [
+      await this.elapsedCardDetailBadge.render(t),
+      await this.votingCardDetailBadge.render(t),
+      await this.thumbsCardDetailBadge.render(t, Thumbs.UP),
+      await this.thumbsCardDetailBadge.render(t, Thumbs.MIDDLE),
+      await this.thumbsCardDetailBadge.render(t, Thumbs.DOWN)
+    ];
+
+    return badges.filter(badge => badge);
+  };
+
+  handleListSorters = () => [{
+    text: 'Most Votes',
+    callback: async (t, opts) => {
+      const countedCards = await this.trello.Promise.all(opts.cards.map(async (card) => {
+        const leanCoffeeVotes = await this.cardStorage.countVotesById(t, card.id);
+        return Object.assign({ leanCoffeeVotes }, card);
+      }));
+
+      const sortedCards = countedCards.sort((cardA, cardB) => {
+        if (cardA.leanCoffeeVotes < cardB.leanCoffeeVotes) {
+          return 1;
+        } else if (cardB.leanCoffeeVotes < cardA.leanCoffeeVotes) {
+          return -1;
+        }
+
+        return 0;
+      });
+
+      return {
+        sortedIds: sortedCards.map(card => card.id)
+      };
+    }
+  }];
+
+  showSettings = t => t.popup({
+    title: 'Lean Coffee Settings',
+    url: `${this.baseUrl}/settings.html`,
+    height: 184
+  });
+
   start() {
     this.trello.initialize({
-      'card-buttons': async t => [{
-        icon: `${this.baseUrl}/assets/powerup/timer.svg`,
-        text: 'Discussion',
-        callback: this.handleDiscussion
-      }, {
-        icon: `${this.baseUrl}/assets/powerup/heart.svg`,
-        text: `Vote    ${await this.cardStorage.hasCurrentMemberVoted(t) ? '☑' : '☐'}`,
-        callback: this.handleVoting
-      }],
-
-      'card-badges': async (t) => {
-        const badges = [
-          await this.elapsedCardBadge.render(t),
-          await this.votingCardBadge.render(t)
-        ];
-
-        return badges.filter(badge => badge);
-      },
-
-      'card-detail-badges': async (t) => {
-        const badges = [
-          await this.elapsedCardDetailBadge.render(t),
-          await this.votingCardDetailBadge.render(t),
-          await this.thumbsCardDetailBadge.render(t, Thumbs.UP),
-          await this.thumbsCardDetailBadge.render(t, Thumbs.MIDDLE),
-          await this.thumbsCardDetailBadge.render(t, Thumbs.DOWN)
-        ];
-
-        return badges.filter(badge => badge);
-      },
-
-      'list-sorters': () => [{
-        text: 'Most Votes',
-        callback: async (t, opts) => {
-          const countedCards = await this.trello.Promise.all(opts.cards.map(async (card) => {
-            const leanCoffeeVotes = await this.cardStorage.countVotesById(t, card.id);
-            return Object.assign({ leanCoffeeVotes }, card);
-          }));
-
-          const sortedCards = countedCards.sort((cardA, cardB) => {
-            if (cardA.leanCoffeeVotes < cardB.leanCoffeeVotes) {
-              return 1;
-            } else if (cardB.leanCoffeeVotes < cardA.leanCoffeeVotes) {
-              return -1;
-            }
-
-            return 0;
-          });
-
-          return {
-            sortedIds: sortedCards.map(card => card.id)
-          };
-        }
-      }],
-
-      'show-settings': t => t.popup({
-          title: 'Lean Coffee Settings',
-          url: `${this.baseUrl}/settings.html`,
-        height: 184
-      })
+      'card-buttons': this.handleCardButtons,
+      'card-badges': this.handleCardBadges,
+      'card-detail-badges': this.handleCardDetailBadges,
+      'list-sorters': this.handleListSorters,
+      'show-settings': this.showSettings
     });
   }
 
-    handleVoting = async (t) => {
-      const votes = await this.cardStorage.getVotes(t) || {};
+  handleVoting = async (t) => {
+    const votes = await this.cardStorage.getVotes(t) || {};
     const currentMember = await t.member('id', 'username', 'fullName', 'avatar');
 
     if (votes[currentMember.id]) {
@@ -103,24 +110,24 @@ class LeanCoffeePowerUp {
       };
     }
 
-      this.cardStorage.saveVotes(t, votes);
-    };
+    this.cardStorage.saveVotes(t, votes);
+  };
 
-    handleDiscussion = async (t) => {
-      if (await this.discussion.isOngoingOrPausedForAnotherCard(t)) {
+  handleDiscussion = async (t) => {
+    if (await this.discussion.isOngoingOrPausedForAnotherCard(t)) {
       const boardStatus = await this.boardStorage.getDiscussionStatus(t);
       const cardId = await this.boardStorage.getDiscussionCardId(t);
       const cardName = (await t.cards('id', 'name')).find(card => card.id === cardId).name;
 
-        t.popup({
-          title: 'Lean Coffee',
-          url: `${this.baseUrl}/ongoing_or_paused.html`,
+      t.popup({
+        title: 'Lean Coffee',
+        url: `${this.baseUrl}/ongoing_or_paused.html`,
         args: {
           currentCardBeingDiscussed: cardName,
           currentDiscussionStatus: boardStatus
         },
-          height: 120
-        });
+        height: 120
+      });
     } else {
       let items = [];
 
@@ -170,7 +177,7 @@ class LeanCoffeePowerUp {
         items
       });
     }
-    };
+  };
 }
 
 export default LeanCoffeePowerUp;
