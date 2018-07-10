@@ -29,7 +29,6 @@ class LeanCoffeePowerUp {
       'card-buttons': async t => [{
         icon: `${this.baseUrl}/assets/powerup/timer.svg`,
         text: 'Discussion',
-        condition: VisibilityConditions.IS_ADMIN,
         callback: this.handleDiscussion
       }, {
         icon: `${this.baseUrl}/assets/powerup/heart.svg`,
