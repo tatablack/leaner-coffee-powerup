@@ -15,7 +15,7 @@ class VotingCardDetailBadge extends VotingCardBadge {
     const commonData = await super.render(t);
 
     if (commonData) {
-      commonData.text = `Voters: ${commonData.text}`;
+      commonData.title = 'Voters';
       delete commonData.icon;
       commonData.callback = this.showVoters;
     }
