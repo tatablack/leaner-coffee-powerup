@@ -1,6 +1,6 @@
 import BoardStorage from './storage/BoardStorage';
 import CardStorage from './storage/CardStorage';
-import Notification from './Notification';
+import Notifications from './Notifications';
 
 export const Statuses = {
   ONGOING: 'ONGOING',
@@ -18,7 +18,7 @@ class Discussion {
   constructor(window, baseUrl, maxDiscussionDuration) {
     this.w = window;
     this.baseUrl = baseUrl;
-    this.notification = new Notification(this.baseUrl);
+    this.notifications = new Notifications(this.w, this.baseUrl);
     this.maxDiscussionDuration = maxDiscussionDuration;
     this.boardStorage = new BoardStorage();
     this.cardStorage = new CardStorage();
@@ -77,6 +77,9 @@ class Discussion {
 
   pause = async (t) => {
     const intervalId = await this.boardStorage.getDiscussionIntervalId(t);
+    const cardId = await this.boardStorage.getDiscussionCardId(t);
+    const cardName = (await t.cards('id', 'name')).find(card => card.id === cardId).name;
+
     clearInterval(intervalId);
 
     this.cardStorage.saveDiscussionStatus(t, Statuses.PAUSED);
@@ -88,7 +91,8 @@ class Discussion {
       [BoardStorage.DISCUSSION_INTERVAL_ID]: null
     });
 
-    this.notification.play(this.notification.Types.ELAPSED);
+    this.notifications.play(this.notifications.Types.ELAPSED);
+    this.notifications.show(this.notifications.Types.ELAPSED, cardName);
   };
 
   end = async (t) => {
