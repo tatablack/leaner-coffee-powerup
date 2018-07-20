@@ -82,7 +82,7 @@ class LeanCoffeePowerUp {
 
   showSettings = t => t.popup({
     title: 'Lean Coffee Settings',
-    url: `${this.baseUrl}/settings.html`,
+    url: t.signUrl(`${this.baseUrl}/settings.html`),
     height: 184
   });
 
