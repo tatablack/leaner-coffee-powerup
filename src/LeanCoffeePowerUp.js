@@ -51,6 +51,18 @@ class LeanCoffeePowerUp {
     return badges.filter(badge => badge);
   };
 
+  handleCardBackSection = async (t) => {
+    return {
+      title: 'Discussion',
+      icon: `${this.baseUrl}/assets/powerup/timer.svg`,
+      content: {
+        type: 'iframe',
+        url: t.signUrl(`${this.baseUrl}/discussion-ui.html`),
+        height: 120
+      }
+    };
+  };
+
   handleListSorters = () => [{
     text: 'Most Votes',
     callback: async (t, opts) => {
@@ -86,6 +98,7 @@ class LeanCoffeePowerUp {
       'card-buttons': this.handleCardButtons,
       'card-badges': this.handleCardBadges,
       'card-detail-badges': this.handleCardDetailBadges,
+      'card-back-section': this.handleCardBackSection,
       'list-sorters': this.handleListSorters,
       'show-settings': this.showSettings
     });

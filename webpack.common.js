@@ -10,7 +10,8 @@ const OUTPUT_FOLDER = 'dist/leancoffee-powerup';
 module.exports = {
   entry: {
     main: './src/index.js',
-    settings: './src/settings.js'
+    settings: './src/settings.js',
+    discussion_ui: './src/discussion-ui.js'
   },
 
   output: {
@@ -42,6 +43,12 @@ module.exports = {
       template: '_settings.html',
       filename: 'settings.html',
       chunks: ['settings']
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Discussion UI',
+      template: '_discussion-ui.html',
+      filename: 'discussion-ui.html',
+      chunks: ['discussion_ui']
     }),
     new CopyWebpackPlugin([
       { from: './assets/**/*', ignore: [{ glob: 'assets/readme/**/*' }] },
