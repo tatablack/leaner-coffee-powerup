@@ -17,6 +17,7 @@
     "max-len": [
       "error", 120
     ],
+    "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["element"] }],
     "import/no-extraneous-dependencies": ["error", {"devDependencies": ["webpack.*.js"]}]
   }
 }

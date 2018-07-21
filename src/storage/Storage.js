@@ -21,6 +21,10 @@ class Storage {
     return t.set(this.scope, this.visibility, entries);
   }
 
+  delete(t, key) {
+    return t.remove(this.scope, this.visibility, key);
+  }
+
   deleteMultiple(t, entries) {
     return t.remove(this.scope, this.visibility, entries);
   }

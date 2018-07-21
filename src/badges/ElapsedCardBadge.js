@@ -4,14 +4,14 @@ import { BadgeColors } from '../TrelloConstants';
 
 
 class ElapsedCardBadge {
-  DEFAULT_TITLE = '';
+  EMPTY_TITLE = '';
 
   constructor(discussion) {
     this.discussion = discussion;
   }
 
-  async getTitle(t) {
-    return this.DEFAULT_TITLE;
+  getTitle() {
+    return this.EMPTY_TITLE;
   }
 
   getText = async (t, elapsed) => formatDuration(elapsed);
@@ -25,16 +25,21 @@ class ElapsedCardBadge {
   };
 
 
-  render = async (t) => {
+  // Unable to use class properties here because I need to call
+  // it from a subclass, and it's currently broken - see:
+  // https://github.com/babel/babel/issues/5104
+  //
+  // Upgrading to Babel 7.x should solve it.
+  async render(t) {
     const elapsed = await this.discussion.getElapsed(t);
     if (!elapsed) { return null; }
 
     return {
-      title: await this.getTitle(t),
+      title: this.getTitle(t),
       text: await this.getText(t, elapsed),
       color: await this.getColor(t)
     };
-  };
+  }
 }
 
 export default ElapsedCardBadge;

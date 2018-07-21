@@ -59,6 +59,10 @@ class CardStorage extends Storage {
   saveVotes(t, newVotes) {
     return this.write(t, CardStorage.VOTES, newVotes);
   }
+
+  deleteDiscussionThumbs(t) {
+    return this.delete(t, CardStorage.DISCUSSION_THUMBS);
+  }
 }
 
 export default CardStorage;

@@ -72,7 +72,8 @@ class Discussion {
       [BoardStorage.DISCUSSION_INTERVAL_ID]: setInterval(this.updateElapsed, 5000, t)
     });
 
-    this.cardStorage.saveDiscussionStatus(t, Statuses.ONGOING);
+    await this.cardStorage.saveDiscussionStatus(t, Statuses.ONGOING);
+    await this.cardStorage.deleteDiscussionThumbs(t);
   };
 
   pause = async (t) => {
