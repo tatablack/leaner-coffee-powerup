@@ -4,7 +4,6 @@ import ElapsedCardBadge from './badges/ElapsedCardBadge';
 import ElapsedCardDetailBadge from './badges/ElapsedCardDetailBadge';
 import VotingCardBadge from './badges/VotingCardBadge';
 import VotingCardDetailBadge from './badges/VotingCardDetailBadge';
-import ThumbsCardDetailBadge from './badges/ThumbsCardDetailBadge';
 import Discussion, { Thumbs } from './Discussion';
 
 
@@ -22,7 +21,6 @@ class LeanCoffeePowerUp {
     this.elapsedCardDetailBadge = new ElapsedCardDetailBadge(this.discussion);
     this.votingCardBadge = new VotingCardBadge(this.baseUrl);
     this.votingCardDetailBadge = new VotingCardDetailBadge(this.baseUrl);
-    this.thumbsCardDetailBadge = new ThumbsCardDetailBadge();
   }
 
   handleCardButtons = async t => [{
@@ -47,10 +45,7 @@ class LeanCoffeePowerUp {
   handleCardDetailBadges = async (t) => {
     const badges = [
       await this.elapsedCardDetailBadge.render(t),
-      await this.votingCardDetailBadge.render(t),
-      await this.thumbsCardDetailBadge.render(t, Thumbs.UP),
-      await this.thumbsCardDetailBadge.render(t, Thumbs.MIDDLE),
-      await this.thumbsCardDetailBadge.render(t, Thumbs.DOWN)
+      await this.votingCardDetailBadge.render(t)
     ];
 
     return badges.filter(badge => badge);
