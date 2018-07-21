@@ -1,16 +1,15 @@
-import formatDuration from 'format-duration';
-
+import { Statuses } from '../Discussion';
 import ElapsedCardBadge from './ElapsedCardBadge';
 
 
 class ElapsedCardDetailBadge extends ElapsedCardBadge {
-  getTitle = async t => (await this.discussion.isPausedFor(t) ? 'Should we keep discussing?' : 'Discussion time');
+  getTitle = () => 'Discussion time';
 
-  getText = async (t, elapsed) => {
-    const isOngoing = await this.discussion.isOngoingFor(t);
-    const isPaused = await this.discussion.isPausedFor(t);
+  render = async (t) => {
+    const discussionStatus = await this.discussion.cardStorage.getDiscussionStatus(t);
+    if (discussionStatus !== Statuses.ENDED) { return null; }
 
-    return (isOngoing ? 'Ongoing → ' : (isPaused ? 'Elapsed → ' : '')) + formatDuration(elapsed);
+    return super.render(t);
   };
 }
 
