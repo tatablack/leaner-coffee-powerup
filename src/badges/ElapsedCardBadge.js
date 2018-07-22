@@ -8,6 +8,7 @@ class ElapsedCardBadge {
 
   constructor(discussion) {
     this.discussion = discussion;
+    this.render = this.render.bind(this);
   }
 
   getTitle() {
