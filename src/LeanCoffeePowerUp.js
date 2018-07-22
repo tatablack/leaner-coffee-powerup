@@ -91,7 +91,7 @@ class LeanCoffeePowerUp {
 
   showSettings = t => t.popup({
     title: 'Lean Coffee Settings',
-    url: t.signUrl(`${this.baseUrl}/settings.html`),
+    url: `${this.baseUrl}/settings.html`,
     height: 184
   });
 
@@ -110,7 +110,7 @@ class LeanCoffeePowerUp {
     if (!await this.voting.canCurrentMemberVote(t)) {
       t.popup({
         title: 'Lean Coffee',
-        url: t.signUrl(`${this.baseUrl}/too_many_votes.html`),
+        url: `${this.baseUrl}/too_many_votes.html`,
         args: {
           maxVotes: await this.voting.getMaxVotes(t)
         },
