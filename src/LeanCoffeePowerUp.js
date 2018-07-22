@@ -4,7 +4,8 @@ import ElapsedCardBadge from './badges/ElapsedCardBadge';
 import ElapsedCardDetailBadge from './badges/ElapsedCardDetailBadge';
 import VotingCardBadge from './badges/VotingCardBadge';
 import VotingCardDetailBadge from './badges/VotingCardDetailBadge';
-import Discussion, { Thumbs } from './Discussion';
+import Discussion from './Discussion';
+import Voting from './Voting';
 
 
 class LeanCoffeePowerUp {
@@ -16,11 +17,12 @@ class LeanCoffeePowerUp {
     this.boardStorage = new BoardStorage();
     this.cardStorage = new CardStorage();
     this.discussion = new Discussion(this.w, this.baseUrl, maxDiscussionDuration);
+    this.voting = new Voting(this.trello);
 
     this.elapsedCardBadge = new ElapsedCardBadge(this.discussion);
     this.elapsedCardDetailBadge = new ElapsedCardDetailBadge(this.discussion);
-    this.votingCardBadge = new VotingCardBadge(this.baseUrl);
-    this.votingCardDetailBadge = new VotingCardDetailBadge(this.baseUrl);
+    this.votingCardBadge = new VotingCardBadge(this.baseUrl, this.voting);
+    this.votingCardDetailBadge = new VotingCardDetailBadge(this.baseUrl, this.voting);
   }
 
   handleCardButtons = async t => [{
@@ -29,7 +31,7 @@ class LeanCoffeePowerUp {
     callback: this.handleDiscussion
   }, {
     icon: `${this.baseUrl}/assets/powerup/heart.svg`,
-    text: `Vote    ${await this.cardStorage.hasCurrentMemberVoted(t) ? '☑' : '☐'}`,
+    text: `Vote    ${await this.voting.hasCurrentMemberVoted(t) ? '☑' : '☐'}`,
     callback: this.handleVoting
   }];
 
@@ -67,7 +69,7 @@ class LeanCoffeePowerUp {
     text: 'Most Votes',
     callback: async (t, opts) => {
       const countedCards = await this.trello.Promise.all(opts.cards.map(async (card) => {
-        const leanCoffeeVotes = await this.cardStorage.countVotesById(t, card.id);
+        const leanCoffeeVotes = await this.voting.countVotesByCard(t, card.id);
         return Object.assign({ leanCoffeeVotes }, card);
       }));
 
@@ -105,7 +107,7 @@ class LeanCoffeePowerUp {
   }
 
   handleVoting = async (t) => {
-    const votes = await this.cardStorage.getVotes(t) || {};
+    const votes = await this.voting.getVotes(t) || {};
     const currentMember = await t.member('id', 'username', 'fullName', 'avatar');
 
     if (votes[currentMember.id]) {

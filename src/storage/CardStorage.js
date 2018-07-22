@@ -23,27 +23,6 @@ class CardStorage extends Storage {
     return this.read(t, CardStorage.DISCUSSION_THUMBS);
   }
 
-  getVotes(t) {
-    return this.read(t, CardStorage.VOTES);
-  }
-
-  countVotesById = async (t, cardId) => {
-    const votes = await this.readById(t, CardStorage.VOTES, cardId);
-
-    if (!votes) { return 0; }
-
-    return Object.keys(votes).filter(key => votes[key]).length;
-  };
-
-  hasCurrentMemberVoted = async (t) => {
-    const votes = await this.read(t, CardStorage.VOTES);
-
-    if (!votes) { return false; }
-
-    const currentMember = t.getContext().member;
-    return !!votes[currentMember];
-  };
-
   saveDiscussionStatus(t, newStatus) {
     return this.write(t, CardStorage.DISCUSSION_STATUS, newStatus);
   }

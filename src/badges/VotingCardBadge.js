@@ -1,14 +1,12 @@
-import CardStorage from '../storage/CardStorage';
-
 class VotingCardBadge {
-  constructor(baseUrl) {
+  constructor(baseUrl, voting) {
     this.baseUrl = baseUrl;
-    this.cardStorage = new CardStorage();
+    this.voting = voting;
     this.render = this.render.bind(this);
   }
 
   getVoters = async (t) => {
-    const votes = await this.cardStorage.getVotes(t) || {};
+    const votes = await this.voting.getVotes(t) || {};
 
     return Object.values(votes).reduce((knownVoters, vote) => {
       if (vote.username) {
@@ -28,7 +26,7 @@ class VotingCardBadge {
     const voters = await this.getVoters(t);
     if (!voters.length) { return null; }
 
-    const hasVoted = await this.cardStorage.hasCurrentMemberVoted(t);
+    const hasVoted = await this.voting.hasCurrentMemberVoted(t);
 
     return {
       text: voters.length,
