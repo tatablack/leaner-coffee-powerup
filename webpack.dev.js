@@ -1,8 +1,9 @@
 const fs = require('fs');
 
 const webpack = require('webpack');
-
 const merge = require('webpack-merge');
+
+const PACKAGE_JSON = require('./package.json');
 const common = require('./webpack.common.js');
 
 const Config = require('./config/config.dev.js');
@@ -15,8 +16,9 @@ module.exports = merge(common, {
     new webpack.NamedModulesPlugin(),
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'development',
-      CONFIG: Config
-    }),
+      CONFIG: Config,
+      VERSION: PACKAGE_JSON.version
+    })
   ],
 
   serve: {

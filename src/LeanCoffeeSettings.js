@@ -4,9 +4,10 @@ import Debug from './Debug';
 
 
 class LeanCoffeeSettings {
-  constructor(window, environment) {
+  constructor(window, environment, version) {
     this.w = window;
     this.t = window.TrelloPowerUp.iframe();
+    this.version = version;
     this.Promise = window.TrelloPowerUp.Promise;
     this.isProduction = environment === 'production';
     this.boardStorage = new BoardStorage();
@@ -15,8 +16,10 @@ class LeanCoffeeSettings {
 
   init() {
     if (!this.isProduction) {
-      this.w.document.getElementsByClassName('dev-only')[0].style.display = 'block';
+      this.w.document.querySelector('.dev-only').style.display = 'block';
     }
+
+    this.w.document.querySelector('.title').innerText = `Jeeves v${this.version}`;
   }
 
   showData = async () => {

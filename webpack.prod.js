@@ -1,7 +1,8 @@
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-
 const merge = require('webpack-merge');
+
+const PACKAGE_JSON = require('./package.json');
 const common = require('./webpack.common.js');
 
 const Config = require('./config/config.prod.js');
@@ -13,7 +14,8 @@ module.exports = merge(common, {
   plugins: [
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
-      CONFIG: Config
+      CONFIG: Config,
+      VERSION: PACKAGE_JSON.version
     }),
     new webpack.HashedModuleIdsPlugin({
       hashFunction: 'sha256',
