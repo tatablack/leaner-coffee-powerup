@@ -107,6 +107,19 @@ class LeanCoffeePowerUp {
   }
 
   handleVoting = async (t) => {
+    if (!await this.voting.canCurrentMemberVote(t)) {
+      t.popup({
+        title: 'Lean Coffee',
+        url: t.signUrl(`${this.baseUrl}/too_many_votes.html`),
+        args: {
+          maxVotes: await this.voting.getMaxVotes(t)
+        },
+        height: 98
+      });
+
+      return;
+    }
+
     const votes = await this.voting.getVotes(t) || {};
     const currentMember = await t.member('id', 'username', 'fullName', 'avatar');
 

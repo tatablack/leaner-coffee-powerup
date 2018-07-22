@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" type="text/css" />
+</head>
+
+<body>
+    <div id="message"></div>
+
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script>
+        const t = window.TrelloPowerUp.iframe();
+
+        const messageText = `
+            <div>
+                Based on the current number of topics,
+                you can vote for $MAXVOTES of them at most.</div>
+            <hr/>
+            <div>
+                See <a href="http://www.leanmath.com/blog-entry/multi-voting-math-or-n3" target="_blank">here</a>
+                for the rationale.
+            </div>
+        `;
+
+        const maxVotes = t.arg('maxVotes');
+
+        document.getElementById('message').innerHTML = messageText.
+            replace('$MAXVOTES', maxVotes);
+
+        t.sizeTo('#message');
+    </script>
+</body>
+
+</html>
