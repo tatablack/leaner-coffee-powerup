@@ -26,24 +26,31 @@ It can be made simpler or more complicated, but that's the gist of it.
 ## Fine. And how does this Power-Up help?
 Once enabled for a board, this Power-Up implements:
 - voting capabilities (similar to the official [Voting Power-Up](http://info.trello.com/power-ups/voting))
-- sorting a list by number of votes
-- discussion management (start/pause/end a timer for a discussion about a card)
-- card badges, displaying:
-    - number of votes
+    - click to vote (duh!)
+    - displaying list of voters
+    - sorting a list by number of votes
+    - (Lean Coffee bonus!) ensuring people can only vote for as many cards as
+    [the rules](http://www.leanmath.com/blog-entry/multi-voting-math-or-n3) allow
+- discussion management
+    - start/pause/end a timer for a discussion about a card
+    - notifications (visual + audio) when a discussion timer elapses (visible only to the initiator)
+- card badges and card detail badges, displaying:
+    - number of votes / list of voters
     - elapsed time for a discussion
-    - discussion status (ongoing, paused, ended)
-- card detail badges, displaying the same information, plus:
-    - the ability to vote on a paused discussion to determine the next step
+- card back sections, displaying:
+    - discussion status (when ongoing)
+    - a UI to vote on a discussion to determine the next step (when paused)
 
-Card Badges | Card Detail Badges | Menu
+Card Badges | Card Back Section | Menu
 ------------|--------------------| ----
-![Votes][CardBadgeVoting] | ![Votes][CardDetailsBadgePaused] | ![Votes][PowerUpButtons]
-![Votes][CardBadgeOngoing] | | 
+![Votes][CardBadgeVoting]  | ![Votes][CardBackSectionOngoing] | ![Votes][PowerUpButtons]
+![Votes][CardBadgeOngoing] | ![Votes][CardBackSectionPaused] | 
 
 [CardBadgeVoting]: ./assets/readme/card_badge_voting.png
 [CardBadgeOngoing]: ./assets/readme/card_badge_ongoing.png
-[CardDetailsBadgePaused]: ./assets/readme/card_details_badge_paused.png
-[PowerUpButtons]: ./assets/readme/powerup_buttons.png
+[CardBackSectionOngoing]: ./assets/readme/ongoing_discussion.png
+[CardBackSectionPaused]: ./assets/readme/paused_discussion.png
+[PowerUpButtons]: ./assets/readme/buttons.png
 
 ## Getting started
 Trello Power-Ups can be managed following [these instructions](https://developers.trello.com/docs/managing-power-ups).
@@ -88,6 +95,10 @@ Available commands after installation:
 4. Open a Trello board in the team you added the Power-Up to, and enable it in the board's settings.
 
 ### Deployment
+Before releasing a new version, make sure you run `npm version [major|minor|patch]`: this will bump the version number
+in both `package.json` and `package-lock.json`, create a commit with these changes, and a git tag with the same version
+number.
+
 The official version of this Power-Up is currently deployed to S3 by running `npm run deploy`, which behind
 the scenes executes the following:
 
