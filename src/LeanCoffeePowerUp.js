@@ -90,7 +90,7 @@ class LeanCoffeePowerUp {
   }];
 
   showSettings = t => t.popup({
-    title: 'Lean Coffee Settings',
+    title: `Leaner Coffee v${process.env.VERSION}`,
     url: `${this.baseUrl}/settings.html`,
     height: 184
   });

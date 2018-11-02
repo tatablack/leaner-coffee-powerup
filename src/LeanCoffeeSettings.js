@@ -7,7 +7,6 @@ class LeanCoffeeSettings {
   constructor(window, environment, version) {
     this.w = window;
     this.t = window.TrelloPowerUp.iframe();
-    this.version = version;
     this.Promise = window.TrelloPowerUp.Promise;
     this.isProduction = environment === 'production';
     this.boardStorage = new BoardStorage();
@@ -19,7 +18,7 @@ class LeanCoffeeSettings {
       this.w.document.querySelector('.dev-only').style.display = 'block';
     }
 
-    this.w.document.querySelector('.title').innerText = `Jeeves v${this.version}`;
+    this.t.sizeTo('#settings');
   }
 
   showData = async () => {
