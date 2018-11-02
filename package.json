@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx webpack-serve ./webpack.dev.js",
+    "start": "npx webpack-dev-server --config ./webpack.dev.js",
     "lint": "npx eslint -c .eslintrc ./src",
     "dist": "export NODE_ENV=production && webpack --config webpack.prod.js",
     "deploy": "npm run dist && npx s3-deploy './dist/**' --cwd './dist/' --gzip html,js,svg --deleteRemoved --etag --region=eu-west-1 --bucket $TRELLO_POWERUPS_BUCKET_NAME --profile $TRELLO_POWERUPS_PROFILE"
@@ -28,7 +28,7 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
     "clean-webpack-plugin": "^0.1.19",
-    "copy-webpack-plugin": "^4.5.2",
+    "copy-webpack-plugin": "^4.6.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-babel": "^5.1.0",
@@ -36,9 +36,9 @@
     "fast-async": "^6.3.7",
     "html-webpack-plugin": "^3.2.0",
     "uglifyjs-webpack-plugin": "^1.2.7",
-    "webpack": "^4.14.0",
-    "webpack-cli": "^3.0.1",
-    "webpack-merge": "^4.1.3",
-    "webpack-serve": "^1.0.4"
+    "webpack": "^4.24.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10",
+    "webpack-merge": "^4.1.4"
   }
 }

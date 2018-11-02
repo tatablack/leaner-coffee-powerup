@@ -21,8 +21,7 @@ module.exports = merge(common, {
     })
   ],
 
-  serve: {
-    logTime: true,
+  devServer: {
     open: true,
     https: {
       key: fs.readFileSync('localhost.key'),
