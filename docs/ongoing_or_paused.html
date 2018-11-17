@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" type="text/css" />
+</head>
+
+<body>
+    <div id="message"></div>
+
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script>
+        const t = window.TrelloPowerUp.iframe();
+
+        const messageText = `
+            <div>Only one card can be discussed at any given time!</div><br/>
+            <div>A conversation about <b>$CARD</b> $STATUS.</div>
+            <hr/>
+            <div>Once that ends, you can start a new one.</div>
+        `;
+
+        const currentCardBeingDiscussed = t.arg('currentCardBeingDiscussed');
+        const currentDiscussionStatus = t.arg('currentDiscussionStatus');
+
+        document.getElementById('message').innerHTML = messageText.
+            replace('$CARD', currentCardBeingDiscussed).
+            replace('$STATUS', currentDiscussionStatus ==='ONGOING' ?
+                'is currently taking place' :
+                'has already been started and is currently on hold');
+
+        t.sizeTo('#message');
+    </script>
+</body>
+
+</html>
