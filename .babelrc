@@ -1,13 +1,13 @@
 {
     "presets": [
-        ["env", {
-            exclude: ["transform-regenerator"]
+        ["@babel/preset-env", {
+              exclude: ["transform-async-to-generator"]
         }]
     ],
 
     "plugins": [
-        "transform-class-properties",
-        ["fast-async",{
+        "@babel/plugin-proposal-class-properties",
+        ["module:fast-async",{
            "runtimePattern": "LeanCoffeePowerUp\\.js"
         }]
     ]

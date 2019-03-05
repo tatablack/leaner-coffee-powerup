@@ -7,8 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx webpack-dev-server --config ./webpack.dev.js",
     "lint": "npx eslint -c .eslintrc ./src",
-    "dist": "export NODE_ENV=production && webpack --config webpack.prod.js",
-    "deploy": "npm run dist && npx s3-deploy './dist/**' --cwd './dist/' --gzip html,js,svg --deleteRemoved --etag --region=eu-west-1 --bucket $TRELLO_POWERUPS_BUCKET_NAME --profile $TRELLO_POWERUPS_PROFILE"
+    "dist": "export NODE_ENV=production && webpack --config webpack.prod.js"
+  },
+  "engines": {
+    "node": "^10.15.3",
+    "npm": "^6.4.1"
   },
   "keywords": [
     "trello",
@@ -17,28 +20,28 @@
   "author": "Angelo Tata <angelo.tata@gmail.com>",
   "license": "Apache-2.0",
   "dependencies": {
-    "format-duration": "^1.1.0",
-    "s3-deploy": "^1.1.0"
+    "format-duration": "^1.1.0"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.5",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.7.0",
-    "clean-webpack-plugin": "^0.1.19",
-    "copy-webpack-plugin": "^4.6.0",
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-babel": "^5.1.0",
-    "eslint-plugin-import": "^2.13.0",
-    "fast-async": "^6.3.7",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/plugin-transform-runtime": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.5",
+    "clean-webpack-plugin": "^2.0.0",
+    "copy-webpack-plugin": "^5.0.0",
+    "eslint": "^5.15.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.16.0",
+    "fast-async": "^7.0.6",
     "html-webpack-plugin": "^3.2.0",
-    "uglifyjs-webpack-plugin": "^1.2.7",
-    "webpack": "^4.24.0",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10",
-    "webpack-merge": "^4.1.4"
+    "terser-webpack-plugin": "^1.2.3",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1",
+    "webpack-merge": "^4.2.1"
   }
 }

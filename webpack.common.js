@@ -4,7 +4,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const OUTPUT_FOLDER = 'dist/leancoffee-powerup';
+const OUTPUT_FOLDER = 'docs';
 
 
 module.exports = {
@@ -31,7 +31,7 @@ module.exports = {
   },
 
   plugins: [
-    new CleanWebpackPlugin([OUTPUT_FOLDER]),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: 'Lean Coffee Trello Power-up',
       template: '_index.html',

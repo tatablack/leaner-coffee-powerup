@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const merge = require('webpack-merge');
 
 const PACKAGE_JSON = require('./package.json');
@@ -21,7 +21,13 @@ module.exports = merge(common, {
       hashFunction: 'sha256',
       hashDigest: 'hex',
       hashDigestLength: 20
-    }),
-    new UglifyJsPlugin({ sourceMap: true })
-  ]
+    })
+  ],
+
+  optimization: {
+    minimizer: [new TerserPlugin({
+      sourceMap: true,
+      parallel: true
+    })]
+  }
 });
