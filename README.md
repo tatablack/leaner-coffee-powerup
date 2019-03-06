@@ -15,7 +15,7 @@ From the [official page](http://leancoffee.org/):
 
 The following is an example of a Lean Coffee session:
 1. 5 minutes to add new cards to a "Discussion topics" list
-2. 5 minutes to vote for individual topics (each person gets a fixed number of votes, [based on the number of topics](http://www.leanmath.com/blog-entry/multi-voting-math-or-n3))
+2. 5 minutes to vote for individual topics (each person gets a fixed number of votes, usually [based on the number of topics](http://www.leanmath.com/blog-entry/multi-voting-math-or-n3))
 3. The moderator sorts the topics list by votes, and moves the top card to the "Discussing" list
 4. 5 minutes to discuss the card, starting with its creator setting the context
 5. There’s a timer: when it goes off, everybody can vote to keep discussing the same topic or move on. Based on the vote, the card may be moved to the “Done” list, and a new one put in its place
@@ -30,7 +30,7 @@ Once enabled for a board, this Power-Up implements:
     - displaying list of voters
     - sorting a list by number of votes
     - (Lean Coffee bonus!) ensuring people can only vote for as many cards as
-    [the rules](http://www.leanmath.com/blog-entry/multi-voting-math-or-n3) allow
+    [these rules](http://www.leanmath.com/blog-entry/multi-voting-math-or-n3) allow
 - discussion management
     - start/pause/end a timer for a discussion about a card
     - notifications (visual + audio) when a discussion timer elapses (visible only to the initiator)
@@ -39,7 +39,7 @@ Once enabled for a board, this Power-Up implements:
     - elapsed time for a discussion
 - card back sections, displaying:
     - discussion status (when ongoing)
-    - a UI to vote on a discussion to determine the next step (when paused)
+    - a simple UI to vote on a discussion to determine the next step (when paused)
 
 Card Badges | Card Back Section | Menu
 ------------|--------------------| ----
@@ -63,14 +63,14 @@ you can add it to one of your Trello teams by going to [this page](https://trell
 ### Prerequisites
 Power-ups are built using web technologies. Specifically, this project is written in ES6 and transpiled to ES5 for release.
 
-The build toolchain is, unsurprisingly, Node.js-based (tested with Node.js v8.10 and `npm` v5.6.0).
+The build toolchain is, unsurprisingly, Node.js-based (tested with Node.js v10.15.3 and `npm` v6.4.1).
 
 ### Installing
 Ensure you have a compatible version of Node.js installed. Then run `npm install`.
 
 In order to load your power-up in a Trello board, its files need to be served via HTTPS - which means you'll
 need to create a self-signed certificate and configure a local HTTP server to use it. This is easy enough, thanks
-to `webpack-serve` and, say, `devcert-cli`.
+to `webpack-dev-server` and, say, `devcert-cli`.
 
 The former is already part of the dependencies; the latter is just a recommendation to easily generate the necessary
 certificate files. See [its GitHub page](https://github.com/davewasmer/devcert-cli#usage) for more information.
@@ -79,35 +79,26 @@ The provided npm scripts assume you have generated a `localhost.cert` certificat
 key file in the root of the project. Tweak as needed.
 
 Available commands after installation:
-- `npm start` → stars a development server with hot reloading (specifically,
-[`webpack-serve`](https://github.com/webpack-contrib/webpack-serve)).
-- `npm run dist` → builds a production release of the project; output is in the `dist` folder
-- `npm run deploy` → builds a production release of the project and uploads it to s3
+- `npm start` → stars a development server with hot reloading (using `webpack-dev-server`)
+- `npm run dist` → builds a production release of the project; output is in the `docs` folder
 
 ### Running
-1. Create a local configuration file in the root folder
-
-2. Enable the Power-Up for one of your Trello teams (see "Getting started"), and make sure to fill in the following values:
+1. Enable the Power-Up for one of your Trello teams (see "Getting started", above), and make sure to fill in the following values:
 - *Power-Up icon URL*: `https://localhost:8080/assets/coffee.svg`
 - *Iframe connector URL*: `https://localhost:8080/index.html`
 
-3. Start the development server: `npm start`
-4. Open a Trello board in the team you added the Power-Up to, and enable it in the board's settings.
+2. Start the development server: `npm start`
+3. Open a Trello board in the team you added the Power-Up to, and enable it in the board's settings.
 
-### Deployment
-Before releasing a new version, make sure you run `npm version [major|minor|patch]`: this will bump the version number
-in both `package.json` and `package-lock.json`, create a commit with these changes, and a git tag with the same version
-number.
+### Releasing
+The official version of this Power-Up is currently made available through GitHub Pages, based on the contents of the `docs` folder.
 
-The official version of this Power-Up is currently deployed to S3 by running `npm run deploy`, which behind
-the scenes executes the following:
-
-```
-s3-deploy './dist/**' --cwd './dist/' --region SOME_AWS_REGION --bucket SOME_BUCKET_NAME --gzip --deleteRemoved --etag --profile SOME_AWS_PROFILE
-```
-In order to execute `npm run deploy`, the `$TRELLO_POWERUPS_PROFILE` and `$TRELLO_POWERUPS_BUCKET_NAME` environment
-variables will have to be exported in your shell. The former is the name of a profile in your `~/.aws/credentials` file
-with the necessary privileges to upload and modify files in your S3 bucket, and the latter is the name of your bucket.
+A new version can be released by executing `npm version [major|minor|patch]`.
+This will:
+- bump the version number in both `package.json` and `package-lock.json`
+- trigger a production build (output in the `docs` folder)
+- create a commit with these changes
+- create a git tag with the same version number
 
 
 ## Contributing

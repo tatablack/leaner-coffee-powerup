@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx webpack-dev-server --config ./webpack.dev.js",
     "lint": "npx eslint -c .eslintrc ./src",
-    "dist": "export NODE_ENV=production && webpack --config webpack.prod.js"
+    "dist": "export NODE_ENV=production && webpack --config webpack.prod.js",
+    "version": "npm run dist && git add -A docs"
   },
   "engines": {
     "node": "^10.15.3",
