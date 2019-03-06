@@ -31,7 +31,9 @@ module.exports = {
   },
 
   plugins: [
-    new CleanWebpackPlugin(),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ['**/*', '!CNAME']
+    }),
     new HtmlWebpackPlugin({
       title: 'Lean Coffee Trello Power-up',
       template: '_index.html',
