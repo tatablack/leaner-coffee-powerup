@@ -49,7 +49,7 @@ class Discussion {
     const elapsed = Date.now() - startedAt;
 
     if (elapsed > this.maxDiscussionDuration) {
-      this.pause(t);
+      this.pause(t, true);
     } else {
       this.saveElapsed(t);
     }
@@ -76,7 +76,7 @@ class Discussion {
     await this.cardStorage.deleteDiscussionThumbs(t);
   };
 
-  pause = async (t) => {
+  pause = async (t, notify = false) => {
     const intervalId = await this.boardStorage.getDiscussionIntervalId(t);
     const cardId = await this.boardStorage.getDiscussionCardId(t);
     const cardName = (await t.cards('id', 'name')).find(card => card.id === cardId).name;
@@ -92,8 +92,10 @@ class Discussion {
       [BoardStorage.DISCUSSION_INTERVAL_ID]: null
     });
 
-    this.notifications.play(this.notifications.Types.ELAPSED);
-    this.notifications.show(this.notifications.Types.ELAPSED, cardName);
+    if (notify) {
+      this.notifications.play(this.notifications.Types.ELAPSED);
+      this.notifications.show(this.notifications.Types.ELAPSED, cardName);
+    }
   };
 
   end = async (t) => {
