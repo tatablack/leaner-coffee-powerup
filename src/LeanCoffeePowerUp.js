@@ -9,7 +9,9 @@ import Voting from './Voting';
 
 
 class LeanCoffeePowerUp {
-  constructor({ window, TrelloPowerUp, baseUrl, maxDiscussionDuration }) {
+  constructor({
+    window, TrelloPowerUp, baseUrl, maxDiscussionDuration
+  }) {
     this.w = window;
     this.trello = TrelloPowerUp;
     this.baseUrl = baseUrl;
@@ -53,17 +55,15 @@ class LeanCoffeePowerUp {
     return badges.filter(badge => badge);
   };
 
-  handleCardBackSection = async (t) => {
-    return {
-      title: 'Discussion',
-      icon: `${this.baseUrl}/assets/powerup/timer.svg`,
-      content: {
-        type: 'iframe',
-        url: t.signUrl(`${this.baseUrl}/discussion-ui.html`),
-        height: 120
-      }
-    };
-  };
+  handleCardBackSection = async t => ({
+    title: 'Discussion',
+    icon: `${this.baseUrl}/assets/powerup/timer.svg`,
+    content: {
+      type: 'iframe',
+      url: t.signUrl(`${this.baseUrl}/discussion-ui.html`),
+      height: 120
+    }
+  });
 
   handleListSorters = () => [{
     text: 'Most Votes',
@@ -74,12 +74,8 @@ class LeanCoffeePowerUp {
       }));
 
       const sortedCards = countedCards.sort((cardA, cardB) => {
-        if (cardA.leanCoffeeVotes < cardB.leanCoffeeVotes) {
-          return 1;
-        } else if (cardB.leanCoffeeVotes < cardA.leanCoffeeVotes) {
-          return -1;
-        }
-
+        if (cardA.leanCoffeeVotes < cardB.leanCoffeeVotes) { return 1; }
+        if (cardB.leanCoffeeVotes < cardA.leanCoffeeVotes) { return -1; }
         return 0;
       });
 
