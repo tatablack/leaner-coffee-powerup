@@ -18,7 +18,7 @@
     "trello",
     "power-up"
   ],
-  "author": "Angelo Tata <angelo.tata@gmail.com>",
+  "author": "Angelo Tata <leanercoffee@tatablack.net>",
   "license": "Apache-2.0",
   "dependencies": {
     "format-duration": "^1.1.0"
