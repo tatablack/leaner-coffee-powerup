@@ -28,8 +28,7 @@ class Discussion {
     const boardStatus = await this.boardStorage.getDiscussionStatus(t);
     const cardId = await this.boardStorage.getDiscussionCardId(t);
 
-    return [Statuses.ONGOING, Statuses.PAUSED].includes(boardStatus) &&
-      cardId !== t.getContext().card;
+    return [Statuses.ONGOING, Statuses.PAUSED].includes(boardStatus) && cardId !== t.getContext().card;
   };
 
   isOngoingFor = async (t) => {

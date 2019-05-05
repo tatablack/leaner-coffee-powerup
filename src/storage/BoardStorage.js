@@ -3,9 +3,13 @@ import Storage from './Storage';
 
 class BoardStorage extends Storage {
     static DISCUSSION_STATUS = 'leancoffeeDiscussionStatus';
+
     static DISCUSSION_CARD_ID = 'leancoffeeDiscussionCardId';
+
     static DISCUSSION_STARTED_AT = 'leancoffeeDiscussionStartedAt';
+
     static DISCUSSION_PREVIOUS_ELAPSED = 'leancoffeeDiscussionPreviousElapsed';
+
     static DISCUSSION_INTERVAL_ID = 'leancoffeeDiscussionIntervalId';
 
     constructor() {
@@ -34,4 +38,3 @@ class BoardStorage extends Storage {
 }
 
 export default BoardStorage;
-

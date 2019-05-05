@@ -30,6 +30,7 @@ class Notifications {
   }
 
   open(type, cardName) {
+    // eslint-disable-next-line no-new
     new this.w.Notification(cardName, {
       body: type.text,
       icon: `${this.baseUrl}/assets/timer.png`
