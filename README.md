@@ -75,5 +75,8 @@ We use [SemVer](http://semver.org/) for versioning.
 ## Authors
 Angelo Tata @tatablack
 
+## Disclaimer
+Lean Coffee(tm) is a trademark of Modus Cooperandi (as mentioned [here](http://leancoffee.org/)); we are not affiliated with them, or with the original creators of the technique, in any way. We just happened to run plenty of Lean Coffee sessions on Trello, and we wanted to make our own lives easier. Once this proved useful, well, sharing was the next step.
+
 ## License
 Apache-2.0. See [LICENSE](./LICENSE).

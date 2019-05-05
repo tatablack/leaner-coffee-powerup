@@ -17,7 +17,13 @@ You can use [GitHub](https://github.com/tatablack/leaner-coffee-powerup/issues) 
 
 **Feedback**
 
-If you have a question which you'd rather not ask publicly using [GitHub Issues](https://github.com/tatablack/leaner-coffee-powerup/issues), you can e-mail me using [leanercoffee@tatablack.net](mailto:leanercoffee@tatablack.net).
+If you have a question which you'd rather not ask publicly using [GitHub Issues](https://github.com/tatablack/leaner-coffee-powerup/issues), you can e-mail us using [leanercoffee@tatablack.net](mailto:leanercoffee@tatablack.net).
+
+---
+
+**Disclaimer**
+
+Lean Coffee(tm) is a trademark of Modus Cooperandi (as mentioned [here](http://leancoffee.org/)); we are not affiliated with them, or with the original creators of the technique, in any way. We just happened to run plenty of Lean Coffee sessions on Trello, and we wanted to make our own lives easier. Once this proved useful, well, sharing was the next step.
 
 ---
 
