@@ -4,7 +4,7 @@ import Debug from './Debug';
 
 
 class LeanCoffeeSettings {
-  constructor(window, environment, version) {
+  constructor(window, environment) {
     this.w = window;
     this.t = window.TrelloPowerUp.iframe();
     this.Promise = window.TrelloPowerUp.Promise;
@@ -18,7 +18,7 @@ class LeanCoffeeSettings {
       this.w.document.querySelector('.dev-only').style.display = 'block';
     }
 
-    this.t.sizeTo('#settings');
+    this.t.sizeTo('#leanCoffeeSettingsForm');
   }
 
   showData = async () => {

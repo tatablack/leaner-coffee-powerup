@@ -11,32 +11,31 @@
         .dev-only {
             display: none;
         }
+
+        h3 {
+            margin-top: 1em;
+            margin-bottom: 0.2em;
+        }
     </style>
 </head>
 
 <body>
     <form id="leanCoffeeSettingsForm">
         <section>
-            <div class="dev-only">
-                <button onclick="window.settingsInstance.showData()">Show data</button>
-                <button class="mod-danger" onclick="window.settingsInstance.wipeData()">Wipe data</button>
+            <h3>About</h3>
+            <div>Nothing is configurable yet!</div>
+            <br>
+            <div>
+                If you have any suggestion, please use
+                <a target="_blank" href="https://github.com/tatablack/leaner-coffee-powerup/issues">GitHub issues</a>
+                to share them with us!
             </div>
         </section>
-        <section>
-            <h2 class="title"></h2>
-            <h3>Credits</h3>
+        <section class="dev-only">
+            <h3>Debug information</h3>
             <div>
-                Coffee cup icon made by
-                <a
-                    href="http://www.freepik.com"
-                    title="Freepik">Freepik</a>
-                from <a
-                    href="https://www.flaticon.com/"
-                    title="Flaticon">www.flaticon.com</a>
-                is licensed by <a
-                    href="http://creativecommons.org/licenses/by/3.0/"
-                    title="Creative Commons BY 3.0"
-                    target="_blank">CC 3.0 BY</a>
+                <button onclick="window.settingsInstance.showData()">Show data</button>
+                <button class="mod-danger" onclick="window.settingsInstance.wipeData()">Wipe data</button>
             </div>
         </section>
     </form>
