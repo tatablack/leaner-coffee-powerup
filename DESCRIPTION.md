@@ -1,10 +1,47 @@
-The main characteristics of a Lean-Coffee-based meeting are the dynamically built agenda and the discussion time limits.
+**What is Lean Coffee**
 
-This powerup offers:
-- **voting** and sorting of cards based on votes
-- a configurable **timer** on the back of every card
-- **badges** showing the amount of time spent discussing a topic
-- a UI to let board members vote, when the timer expires, to decide whether to switch topic or keep going
+From the [official page](http://leancoffee.org/):
+
+    Lean Coffee is a structured, but agenda-less meeting.
+
+The following is an example of a Lean Coffee session:
+1. 5 minutes to add new cards to a "Discussion topics" list
+2. 5 minutes to vote for individual topics (each person gets a fixed number of votes, usually based on the number of topics)
+3. The moderator sorts the topics list by votes, and moves the top card to the "Discussing" list
+4. 5 minutes to discuss the card, starting with its creator setting the context
+5. There’s a timer: when it goes off, everybody can vote to keep discussing the same topic or move on. Based on the vote, the card may be moved to the “Done” list, and a new one put in its place
+6. Go back to #4, rinse and repeat
+
+It can be made simpler or more complicated, but that's the gist of it.
+
+**How does this Power-Up help?**
+
+Once enabled for a board, this Power-Up implements:
+- voting capabilities (similar to the official [Voting Power-Up](http://info.trello.com/power-ups/voting))
+    - click to vote (duh!)
+    - displaying list of voters
+    - sorting a list by number of votes
+    - (Lean Coffee bonus!) ensuring people can only vote for as many cards as the rules of multivoting (aka N/3 voting) allow	
+- discussion management
+    - start/pause/end a timer for a discussion about a card
+    - notifications (visual + audio) when a discussion timer elapses (visible only to the initiator)
+- card badges and card detail badges, displaying:
+    - number of votes / list of voters
+    - elapsed time for a discussion
+- card back sections, displaying:
+    - discussion status (when ongoing)
+    - a simple UI to vote on a discussion, to decide whether to switch topic or keep going
+
+Card Badges | Card Back Section | Menu
+------------|--------------------| ----
+![Votes][CardBadgeVoting]  | ![Votes][CardBackSectionOngoing] | ![Votes][PowerUpButtons]
+![Votes][CardBadgeOngoing] | ![Votes][CardBackSectionPaused] | 
+
+[CardBadgeVoting]: https://leaner-coffee.tatablack.net/assets/readme/card_badge_voting.png
+[CardBadgeOngoing]: https://leaner-coffee.tatablack.net/assets/readme/card_badge_ongoing.png
+[CardBackSectionOngoing]: https://leaner-coffee.tatablack.net/assets/readme/ongoing_discussion.png
+[CardBackSectionPaused]: https://leaner-coffee.tatablack.net/assets/readme/paused_discussion.png
+[PowerUpButtons]: https://leaner-coffee.tatablack.net/assets/readme/buttons.png
 
 ---
 

@@ -53,7 +53,7 @@ module.exports = {
       chunks: ['discussion_ui']
     }),
     new CopyWebpackPlugin([
-      { from: './assets/**/*', ignore: [{ glob: 'assets/readme/**/*' }] },
+      { from: './assets/**/*' },
       { from: './*.html', ignore: ['_*'] }
     ])
   ]
