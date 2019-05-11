@@ -27,15 +27,20 @@ class LeanCoffeePowerUp {
     this.votingCardDetailBadge = new VotingCardDetailBadge(this.baseUrl, this.voting);
   }
 
-  handleCardButtons = async t => [{
-    icon: `${this.baseUrl}/assets/powerup/timer.svg`,
-    text: 'Discussion',
-    callback: this.handleDiscussion
-  }, {
-    icon: `${this.baseUrl}/assets/powerup/heart.svg`,
-    text: `Vote    ${await this.voting.hasCurrentMemberVoted(t) ? '☑' : '☐'}`,
-    callback: this.handleVoting
-  }];
+  handleCardBackSection = async (t) => {
+    const discussionStatus = await this.discussion.cardStorage.getDiscussionStatus(t);
+    if (discussionStatus === undefined) { return null; }
+
+    return {
+      title: 'Discussion',
+      icon: `${this.baseUrl}/assets/powerup/timer.svg`,
+      content: {
+        type: 'iframe',
+        url: t.signUrl(`${this.baseUrl}/discussion-ui.html`),
+        height: 64
+      }
+    };
+  };
 
   handleCardBadges = async (t) => {
     const badges = [
@@ -46,6 +51,16 @@ class LeanCoffeePowerUp {
     return badges.filter(badge => badge);
   };
 
+  handleCardButtons = async t => [{
+    icon: `${this.baseUrl}/assets/powerup/timer.svg`,
+    text: 'Discussion',
+    callback: this.handleDiscussion
+  }, {
+    icon: `${this.baseUrl}/assets/powerup/heart.svg`,
+    text: `Vote    ${await this.voting.hasCurrentMemberVoted(t) ? '☑' : '☐'}`,
+    callback: this.handleVoting
+  }];
+
   handleCardDetailBadges = async (t) => {
     const badges = [
       await this.elapsedCardDetailBadge.render(t),
@@ -54,16 +69,6 @@ class LeanCoffeePowerUp {
 
     return badges.filter(badge => badge);
   };
-
-  handleCardBackSection = async t => ({
-    title: 'Discussion',
-    icon: `${this.baseUrl}/assets/powerup/timer.svg`,
-    content: {
-      type: 'iframe',
-      url: t.signUrl(`${this.baseUrl}/discussion-ui.html`),
-      height: 120
-    }
-  });
 
   handleListSorters = () => [{
     text: 'Most Votes',
@@ -91,21 +96,10 @@ class LeanCoffeePowerUp {
     height: 184
   });
 
-  start() {
-    this.trello.initialize({
-      'card-buttons': this.handleCardButtons,
-      'card-badges': this.handleCardBadges,
-      'card-detail-badges': this.handleCardDetailBadges,
-      'card-back-section': this.handleCardBackSection,
-      'list-sorters': this.handleListSorters,
-      'show-settings': this.showSettings
-    });
-  }
-
   handleVoting = async (t) => {
     if (!await this.voting.canCurrentMemberVote(t)) {
       t.popup({
-        title: 'Lean Coffee',
+        title: 'Leaner Coffee',
         url: `${this.baseUrl}/too_many_votes.html`,
         args: {
           maxVotes: await this.voting.getMaxVotes(t)
@@ -139,7 +133,7 @@ class LeanCoffeePowerUp {
       const cardName = (await t.cards('id', 'name')).find(card => card.id === cardId).name;
 
       t.popup({
-        title: 'Lean Coffee',
+        title: 'Leaner Coffee',
         url: `${this.baseUrl}/ongoing_or_paused.html`,
         args: {
           currentCardBeingDiscussed: cardName,
@@ -192,11 +186,22 @@ class LeanCoffeePowerUp {
       }
 
       t.popup({
-        title: 'Lean Coffee',
+        title: 'Leaner Coffee',
         items
       });
     }
   };
+
+  start() {
+    this.trello.initialize({
+      'card-back-section': this.handleCardBackSection,
+      'card-badges': this.handleCardBadges,
+      'card-buttons': this.handleCardButtons,
+      'card-detail-badges': this.handleCardDetailBadges,
+      'list-sorters': this.handleListSorters,
+      'show-settings': this.showSettings
+    });
+  }
 }
 
 export default LeanCoffeePowerUp;
