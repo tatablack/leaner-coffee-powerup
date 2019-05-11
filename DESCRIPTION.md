@@ -5,6 +5,7 @@ From the [official page](http://leancoffee.org/):
     Lean Coffee is a structured, but agenda-less meeting.
 
 The following is an example of a Lean Coffee session:
+
 1. 5 minutes to add new cards to a "Discussion topics" list
 2. 5 minutes to vote for individual topics (each person gets a fixed number of votes, usually based on the number of topics)
 3. The moderator sorts the topics list by votes, and moves the top card to the "Discussing" list
@@ -17,11 +18,12 @@ It can be made simpler or more complicated, but that's the gist of it.
 **How does this Power-Up help?**
 
 Once enabled for a board, this Power-Up implements:
+
 - voting capabilities (similar to the official [Voting Power-Up](http://info.trello.com/power-ups/voting))
     - click to vote (duh!)
     - displaying list of voters
     - sorting a list by number of votes
-    - (Lean Coffee bonus!) ensuring people can only vote for as many cards as the rules of multivoting (aka N/3 voting) allow	
+    - (Lean Coffee bonus!) ensuring people can only vote for as many cards as the rules of multivoting (aka N/3 voting) allow
 - discussion management
     - start/pause/end a timer for a discussion about a card
     - notifications (visual + audio) when a discussion timer elapses (visible only to the initiator)
@@ -32,10 +34,39 @@ Once enabled for a board, this Power-Up implements:
     - discussion status (when ongoing)
     - a simple UI to vote on a discussion, to decide whether to switch topic or keep going
 
-Card Badges | Card Back Section | Menu
-------------|--------------------| ----
-![Votes][CardBadgeVoting]  | ![Votes][CardBackSectionOngoing] | ![Votes][PowerUpButtons]
-![Votes][CardBadgeOngoing] | ![Votes][CardBackSectionPaused] | 
+---
+
+**Card Badges**
+
+Badge showing votes in favour of discussing this card.
+
+![Votes][CardBadgeVoting]
+
+Badge showing elapsed time for an ongoing discussion.
+
+![Votes][CardBadgeOngoing]
+
+---
+
+**Card Back Section**
+
+On the back of the card, just under the description, you can find a "Discussion" section. This shows the status and elapsed time of an ongoing discussion:
+
+![Votes][CardBackSectionOngoing]
+
+Or, when the timer elapses or the discussion is paused, it shows a simple UI so that any board member can vote to continue or end the discussion.
+
+![Votes][CardBackSectionPaused]
+
+---
+
+**Menu**
+
+Also on the back of the card, you can find a "Discussion" button which opens a submenu allowing you to start, pause or end a discussion.
+
+Next to it there's a "Vote" button toggle, to express interest in discussing the currently selected card.
+
+![Votes][PowerUpButtons]
 
 [CardBadgeVoting]: https://leaner-coffee.tatablack.net/assets/readme/card_badge_voting.png
 [CardBadgeOngoing]: https://leaner-coffee.tatablack.net/assets/readme/card_badge_ongoing.png
