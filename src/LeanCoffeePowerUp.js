@@ -164,11 +164,11 @@ class LeanCoffeePowerUp {
           break;
         case await this.discussion.isPausedFor(t):
           items = [{
-            text: '▶ Restart timer', // BLACK RIGHT-POINTING TRIANGLE
+            text: '▶ Resume discussion', // BLACK RIGHT-POINTING TRIANGLE
             callback: async (t2) => {
               this.discussion.start(t2);
               t2.closePopup();
-              await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Starting ▶');
+              await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Resuming ▶');
             }
           }, {
             text: '■ End discussion', // BLACK SQUARE
