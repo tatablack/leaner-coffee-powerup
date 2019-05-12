@@ -53,7 +53,7 @@ class LeanCoffeePowerUp {
 
   handleCardButtons = async t => [{
     icon: `${this.baseUrl}/assets/powerup/timer.svg`,
-    text: 'Discussion',
+    text: await this.getButtonLabel(t),
     callback: this.handleDiscussion
   }, {
     icon: `${this.baseUrl}/assets/powerup/heart.svg`,
@@ -147,40 +147,45 @@ class LeanCoffeePowerUp {
       switch (true) {
         case await this.discussion.isOngoingFor(t):
           items = [{
-            text: 'Pause timer',
-            callback: (t2) => {
+            text: '❙ ❙  Pause timer', // MEDIUM VERTICAL BAR + NARROW NO-BREAK SPACE
+            callback: async (t2) => {
               this.discussion.pause(t2);
               t2.closePopup();
+              await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Pausing ❙ ❙');
             }
           }, {
-            text: 'End discussion',
-            callback: (t2) => {
+            text: '■ End discussion', // BLACK SQUARE
+            callback: async (t2) => {
               this.discussion.end(t2);
               t2.closePopup();
+              await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Stopping ■');
             }
           }];
           break;
         case await this.discussion.isPausedFor(t):
           items = [{
-            text: 'Restart timer',
-            callback: (t2) => {
+            text: '▶ Restart timer', // BLACK RIGHT-POINTING TRIANGLE
+            callback: async (t2) => {
               this.discussion.start(t2);
               t2.closePopup();
+              await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Starting ▶');
             }
           }, {
-            text: 'End discussion',
-            callback: (t2) => {
+            text: '■ End discussion', // BLACK SQUARE
+            callback: async (t2) => {
               this.discussion.end(t2);
               t2.closePopup();
+              await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Stopping ■');
             }
           }];
           break;
         default:
           items = [{
-            text: 'Start timer',
-            callback: (t2) => {
+            text: '▶ Start timer', // BLACK RIGHT-POINTING TRIANGLE
+            callback: async (t2) => {
               this.discussion.start(t2);
               t2.closePopup();
+              await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Starting ▶');
             }
           }];
       }
@@ -190,6 +195,20 @@ class LeanCoffeePowerUp {
         items
       });
     }
+  };
+
+  getButtonLabel = async (t) => {
+    let label = await this.discussion.cardStorage.getDiscussionButtonLabel(t);
+
+    if (label) {
+      setTimeout(() => {
+        this.discussion.cardStorage.saveDiscussionButtonLabel(t);
+      }, 2000);
+    }
+
+    label = label || 'Discussion';
+
+    return label;
   };
 
   start() {
