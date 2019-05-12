@@ -48,6 +48,7 @@ class Discussion {
     const elapsed = Date.now() - startedAt;
 
     if (elapsed > this.maxDiscussionDuration) {
+      clearInterval(await this.boardStorage.getDiscussionIntervalId(t));
       this.pause(t, true);
     } else {
       this.saveElapsed(t);

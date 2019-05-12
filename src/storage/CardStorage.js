@@ -10,6 +10,8 @@ class CardStorage extends Storage {
 
   static VOTES = 'leancoffeeVotes';
 
+  static DISCUSSION_BUTTON_LABEL = 'discussionButtonLabel';
+
   constructor() {
     super(StorageScope.CARD, StorageVisibility.SHARED);
   }
@@ -26,6 +28,10 @@ class CardStorage extends Storage {
     return this.read(t, CardStorage.DISCUSSION_THUMBS);
   }
 
+  getDiscussionButtonLabel(t) {
+    return this.read(t, CardStorage.DISCUSSION_BUTTON_LABEL);
+  }
+
   saveDiscussionStatus(t, newStatus) {
     return this.write(t, CardStorage.DISCUSSION_STATUS, newStatus);
   }
@@ -40,6 +46,10 @@ class CardStorage extends Storage {
 
   saveVotes(t, newVotes) {
     return this.write(t, CardStorage.VOTES, newVotes);
+  }
+
+  saveDiscussionButtonLabel(t, newLabel) {
+    return this.write(t, CardStorage.DISCUSSION_BUTTON_LABEL, newLabel);
   }
 
   deleteDiscussionThumbs(t) {

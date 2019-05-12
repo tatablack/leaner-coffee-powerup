@@ -9,7 +9,6 @@ class Notifications {
   constructor(window, baseUrl) {
     this.w = window;
     this.baseUrl = baseUrl;
-    this.audioContext = new (this.w.AudioContext || this.w.webkitAudioContext)();
   }
 
   load(url) {
@@ -25,6 +24,7 @@ class Notifications {
   }
 
   async play(type) {
+    this.audioContext = this.audioContext || new (this.w.AudioContext || this.w.webkitAudioContext)();
     const audio = await this.load(`${this.baseUrl}/${type.audio}`);
     audio.start();
   }

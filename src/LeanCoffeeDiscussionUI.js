@@ -148,6 +148,7 @@ class LeanCoffeeDiscussionUI {
   updateMessage = (message) => {
     this.message.innerText = message;
     this.message.style.display = 'block';
+    this.t.sizeTo('body');
   };
 }
 
