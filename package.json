@@ -1,6 +1,6 @@
 {
   "name": "leancoffee-powerup",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Everything you need to conduct a lean coffee session in Trello!",
   "private": true,
   "scripts": {
