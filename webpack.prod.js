@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const merge = require('webpack-merge');
 
@@ -12,6 +13,9 @@ module.exports = merge(common, {
   devtool: 'source-map',
 
   plugins: [
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ['**/*', '!CNAME']
+    }),
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
       CONFIG: Config,

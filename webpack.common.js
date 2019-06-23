@@ -1,6 +1,5 @@
 const path = require('path');
 
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -31,9 +30,6 @@ module.exports = {
   },
 
   plugins: [
-    new CleanWebpackPlugin({
-      cleanOnceBeforeBuildPatterns: ['**/*', '!CNAME']
-    }),
     new HtmlWebpackPlugin({
       title: 'Lean Coffee Trello Power-up',
       template: '_index.html',
