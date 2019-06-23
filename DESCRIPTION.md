@@ -1,4 +1,4 @@
-**What is Lean Coffee**
+**What is Lean Coffee?**
 
 From the [official page](http://leancoffee.org/):
 
@@ -97,4 +97,4 @@ Lean Coffee(tm) is a trademark of Modus Cooperandi (as mentioned [here](http://l
 
 **Credits**
 
-Logo and logotype by [Dave Taylor](https://www.drtdesign.co.uk/ "DRT Design").
+[Moka Pot](https://thenounproject.com/ralfschmitzer/collection/coffee-bar/?i=628401 "Moka Pot") by Ralf Schmitzer from [the Noun Project](http://thenounproject.com/ "The Noun Project").
