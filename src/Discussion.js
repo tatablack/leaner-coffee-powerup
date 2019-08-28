@@ -31,6 +31,11 @@ class Discussion {
     return [Statuses.ONGOING, Statuses.PAUSED].includes(boardStatus) && cardId !== t.getContext().card;
   };
 
+  hasNotBeenArchived = async (t, cardId) => {
+    const allCards = await t.cards('id', 'name');
+    return !!allCards.find(card => card.id === cardId);
+  };
+
   isOngoingFor = async (t) => {
     const cardStatus = await this.cardStorage.getDiscussionStatus(t);
     return Statuses.ONGOING === cardStatus;

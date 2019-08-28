@@ -130,71 +130,87 @@ class LeanCoffeePowerUp {
     if (await this.discussion.isOngoingOrPausedForAnotherCard(t)) {
       const boardStatus = await this.boardStorage.getDiscussionStatus(t);
       const cardId = await this.boardStorage.getDiscussionCardId(t);
-      const cardName = (await t.cards('id', 'name')).find(card => card.id === cardId).name;
 
-      t.popup({
-        title: 'Leaner Coffee',
-        url: `${this.baseUrl}/ongoing_or_paused.html`,
-        args: {
-          currentCardBeingDiscussed: cardName,
-          currentDiscussionStatus: boardStatus
-        },
-        height: 120
-      });
-    } else {
-      let items = [];
+      if (await this.discussion.hasNotBeenArchived(t, cardId)) {
+        const allCards = await t.cards('id', 'name');
+        const cardBeingDiscussed = allCards.find(card => card.id === cardId);
 
-      switch (true) {
-        case await this.discussion.isOngoingFor(t):
-          items = [{
-            text: '❙ ❙  Pause timer', // MEDIUM VERTICAL BAR + NARROW NO-BREAK SPACE
-            callback: async (t2) => {
-              this.discussion.pause(t2);
-              t2.closePopup();
-              await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Pausing ❙ ❙');
-            }
-          }, {
-            text: '■ End discussion', // BLACK SQUARE
-            callback: async (t2) => {
-              this.discussion.end(t2);
-              t2.closePopup();
-              await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Stopping ■');
-            }
-          }];
-          break;
-        case await this.discussion.isPausedFor(t):
-          items = [{
-            text: '▶ Resume discussion', // BLACK RIGHT-POINTING TRIANGLE
-            callback: async (t2) => {
-              this.discussion.start(t2);
-              t2.closePopup();
-              await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Resuming ▶');
-            }
-          }, {
-            text: '■ End discussion', // BLACK SQUARE
-            callback: async (t2) => {
-              this.discussion.end(t2);
-              t2.closePopup();
-              await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Stopping ■');
-            }
-          }];
-          break;
-        default:
-          items = [{
-            text: '▶ Start timer', // BLACK RIGHT-POINTING TRIANGLE
-            callback: async (t2) => {
-              this.discussion.start(t2);
-              t2.closePopup();
-              await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Starting ▶');
-            }
-          }];
+        t.popup({
+          title: 'Leaner Coffee',
+          url: `${this.baseUrl}/ongoing_or_paused.html`,
+          args: {
+            currentCardBeingDiscussed: cardBeingDiscussed.name,
+            currentDiscussionStatus: boardStatus
+          },
+          height: 120
+        });
+
+        return;
       }
 
-      t.popup({
-        title: 'Leaner Coffee',
-        items
-      });
+      console.warn(`Card with id ${cardId} not found in current board, most likely archived. Cleaning up.`);
+
+      await this.boardStorage.deleteMultiple(t, [
+        BoardStorage.DISCUSSION_STATUS,
+        BoardStorage.DISCUSSION_CARD_ID,
+        BoardStorage.DISCUSSION_STARTED_AT,
+        BoardStorage.DISCUSSION_PREVIOUS_ELAPSED,
+        BoardStorage.DISCUSSION_INTERVAL_ID
+      ]);
     }
+
+    let items = [];
+
+    switch (true) {
+      case await this.discussion.isOngoingFor(t):
+        items = [{
+          text: '❙ ❙  Pause timer', // MEDIUM VERTICAL BAR + NARROW NO-BREAK SPACE
+          callback: async (t2) => {
+            this.discussion.pause(t2);
+            t2.closePopup();
+            await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Pausing ❙ ❙');
+          }
+        }, {
+          text: '■ End discussion', // BLACK SQUARE
+          callback: async (t2) => {
+            this.discussion.end(t2);
+            t2.closePopup();
+            await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Stopping ■');
+          }
+        }];
+        break;
+      case await this.discussion.isPausedFor(t):
+        items = [{
+          text: '▶ Resume discussion', // BLACK RIGHT-POINTING TRIANGLE
+          callback: async (t2) => {
+            this.discussion.start(t2);
+            t2.closePopup();
+            await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Resuming ▶');
+          }
+        }, {
+          text: '■ End discussion', // BLACK SQUARE
+          callback: async (t2) => {
+            this.discussion.end(t2);
+            t2.closePopup();
+            await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Stopping ■');
+          }
+        }];
+        break;
+      default:
+        items = [{
+          text: '▶ Start timer', // BLACK RIGHT-POINTING TRIANGLE
+          callback: async (t2) => {
+            this.discussion.start(t2);
+            t2.closePopup();
+            await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Starting ▶');
+          }
+        }];
+    }
+
+    t.popup({
+      title: 'Leaner Coffee',
+      items
+    });
   };
 
   getButtonLabel = async (t) => {
