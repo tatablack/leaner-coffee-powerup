@@ -70,6 +70,17 @@ class LeanCoffeePowerUp {
     return badges.filter(badge => badge);
   };
 
+  handleListActions = () => [{
+    text: 'Clear All Votes',
+    callback: async (t) => {
+      const result = await t.list('cards');
+      result.cards.forEach(({ id }) => {
+        this.cardStorage.deleteMultipleById(t, [CardStorage.VOTES], id);
+      });
+      t.closePopup();
+    }
+  }];
+
   handleListSorters = () => [{
     text: 'Most Votes',
     callback: async (t, opts) => {
@@ -233,6 +244,7 @@ class LeanCoffeePowerUp {
       'card-badges': this.handleCardBadges,
       'card-buttons': this.handleCardButtons,
       'card-detail-badges': this.handleCardDetailBadges,
+      'list-actions': this.handleListActions,
       'list-sorters': this.handleListSorters,
       'show-settings': this.showSettings
     });
