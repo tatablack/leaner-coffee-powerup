@@ -98,3 +98,5 @@ Lean Coffee(tm) is a trademark of Modus Cooperandi (as mentioned [here](http://l
 **Credits**
 
 [Moka Pot](https://thenounproject.com/ralfschmitzer/collection/coffee-bar/?i=628401 "Moka Pot") by Ralf Schmitzer from [the Noun Project](http://thenounproject.com/ "The Noun Project").
+
+[External Link](https://thenounproject.com/term/external-link/189137/ "External Link") by Laurent Canivet from [the Noun Project](http://thenounproject.com/ "The Noun Project").

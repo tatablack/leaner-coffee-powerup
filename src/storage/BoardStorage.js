@@ -12,6 +12,8 @@ class BoardStorage extends Storage {
 
     static DISCUSSION_INTERVAL_ID = 'leancoffeeDiscussionIntervalId';
 
+    static POWER_UP_VERSION = 'powerUpVersion';
+
     constructor() {
       super(StorageScope.BOARD, StorageVisibility.SHARED);
     }
@@ -34,6 +36,14 @@ class BoardStorage extends Storage {
 
     getDiscussionIntervalId(t) {
       return this.read(t, BoardStorage.DISCUSSION_INTERVAL_ID);
+    }
+
+    getPowerUpVersion(t) {
+      return this.read(t, BoardStorage.POWER_UP_VERSION);
+    }
+
+    setPowerUpVersion(t, version) {
+      return this.write(t, BoardStorage.POWER_UP_VERSION, version);
     }
 }
 

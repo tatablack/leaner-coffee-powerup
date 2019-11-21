@@ -6,6 +6,7 @@ import VotingCardBadge from './badges/VotingCardBadge';
 import VotingCardDetailBadge from './badges/VotingCardDetailBadge';
 import Discussion from './Discussion';
 import Voting from './Voting';
+import UpdateChecker from './UpdateChecker';
 
 
 class LeanCoffeePowerUp {
@@ -20,12 +21,28 @@ class LeanCoffeePowerUp {
     this.cardStorage = new CardStorage();
     this.discussion = new Discussion(this.w, this.baseUrl, maxDiscussionDuration);
     this.voting = new Voting(this.trello);
+    this.updateChecker = new UpdateChecker(this.boardStorage);
 
     this.elapsedCardBadge = new ElapsedCardBadge(this.discussion);
     this.elapsedCardDetailBadge = new ElapsedCardDetailBadge(this.discussion);
     this.votingCardBadge = new VotingCardBadge(this.baseUrl, this.voting);
     this.votingCardDetailBadge = new VotingCardDetailBadge(this.baseUrl, this.voting);
   }
+
+  handleBoardButtons = async (t) => {
+    if (!await this.updateChecker.hasBeenUpdated(t)) {
+      return [];
+    }
+
+    return [{
+      icon: {
+        dark: `${this.baseUrl}/assets/moka_white.svg`,
+        light: `${this.baseUrl}/assets/moka.svg`
+      },
+      text: 'Leaner Coffee update!',
+      callback: this.updateChecker.showMenu
+    }];
+  };
 
   handleCardBackSection = async (t) => {
     const discussionStatus = await this.discussion.cardStorage.getDiscussionStatus(t);
@@ -100,6 +117,10 @@ class LeanCoffeePowerUp {
       };
     }
   }];
+
+  handleEnable = (t) => {
+    this.boardStorage.setPowerUpVersion(t, process.env.VERSION);
+  };
 
   showSettings = t => t.popup({
     title: `Leaner Coffee v${process.env.VERSION}`,
@@ -240,12 +261,14 @@ class LeanCoffeePowerUp {
 
   start() {
     this.trello.initialize({
+      'board-buttons': this.handleBoardButtons,
       'card-back-section': this.handleCardBackSection,
       'card-badges': this.handleCardBadges,
       'card-buttons': this.handleCardButtons,
       'card-detail-badges': this.handleCardDetailBadges,
       'list-actions': this.handleListActions,
       'list-sorters': this.handleListSorters,
+      'on-enable': this.handleEnable,
       'show-settings': this.showSettings
     });
   }
