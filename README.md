@@ -1,4 +1,16 @@
-# Lean Coffee Power-Up for Trello
+# Leaner Coffee Power-Up for Trello
+
+<a href="https://trello.com/power-ups/5d1249acb16eef6f790f2af9/enable">
+  <img
+    alt="Add Leaner Coffee to Trello"
+    title="Add Leaner Coffee to Trello"
+    height="40" width="144"
+    src="https://p.trellocdn.com/add_to_trello.png"
+    srcSet="https://p.trellocdn.com/add_to_trello.png 1x,
+      https://p.trellocdn.com/add_to_trello@2x.png 2x"
+  />
+</a>
+
 ## What _is_ Trello?
 [Trello](https://trello.com/) is a project management web application based on the concepts of boards, lists and cards.
 
