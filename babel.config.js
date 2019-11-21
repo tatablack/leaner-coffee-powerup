@@ -6,10 +6,8 @@ module.exports = function babelConfiguration(api) {
   }]];
 
   const plugins = [
-    ['module:fast-async', {
-      runtimePattern: 'LeanCoffeePowerUp\\.js'
-    }],
-    '@babel/plugin-proposal-class-properties'
+    '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-transform-async-to-generator'
   ];
 
   return {
