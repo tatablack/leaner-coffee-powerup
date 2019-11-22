@@ -48,7 +48,7 @@ Include details about your configuration and environment:
 #### Prerequisites
 Power-ups are built using web technologies. Specifically, this project is written in ES6 and transpiled to ES5 for release.
 
-The build toolchain is, unsurprisingly, Node.js-based (tested with Node.js v10.15.3 and `npm` v6.4.1).
+The build toolchain is, unsurprisingly, Node.js-based (check the `engines` section in `package.json` for the supported environment).
 
 #### Preparing your local environment
 Ensure you have a compatible version of Node.js installed. Then run `npm install`.
