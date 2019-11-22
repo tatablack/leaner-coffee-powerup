@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <title>Release notes</title>
+    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" type="text/css" />
+
+    <style>
+        a > img {
+            width: 1em;
+            vertical-align: middle;
+        }
+
+        a {
+            cursor: pointer;
+            display: block;
+            font-weight: 400;
+            padding: 6px 12px;
+            position: relative;
+            margin: 0 -12px;
+            text-decoration: none;
+        }
+
+        a:hover {
+            background-color: rgba(9,30,66,.04);
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li id="dismiss"><a href="#">Dismiss Notification</a></li>
+        <li id="open">
+            <a href="#">
+                Open Release Notes
+                <img src="./assets/powerup/external_link.svg" alt="External link" />
+            </a>
+        </li>
+    </ul>
+
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script>
+        const t = window.TrelloPowerUp.iframe();
+
+        document.getElementById('dismiss').addEventListener('click', () => {
+          t.notifyParent('done');
+          t.closePopup();
+          return false;
+        });
+
+        document.getElementById('open').addEventListener('click', () => {
+          window.open(`https://github.com/tatablack/leaner-coffee-powerup/releases/tag/v${t.arg('version')}`);
+          t.closePopup();
+          return false;
+        });
+
+        t.sizeTo('body');
+    </script>
+</body>
+
+</html>
