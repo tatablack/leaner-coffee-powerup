@@ -64,7 +64,7 @@ Card Badges | Card Back Section | Menu
 [PowerUpButtons]: ./assets/readme/buttons.png
 
 ## Installation
-The Power-Up will be (hopefully!) soon available, for free, through the official Trello Marketplace.
+The Power-Up is free, and available through the official Trello Power-Up listing.
 
 For reference, here's our [privacy policy](PRIVACY.md).
 
@@ -77,6 +77,8 @@ This will:
 - trigger a production build (output in the `docs` folder)
 - create a commit with these changes
 - create a git tag with the same version number
+
+The Release Drafter GitHub App will take care of drafting/updating a GitHub release every time a PR gets merged; after the steps above the current draft release can be published (tied to the tag just created).
 
 ## Contributing
 See the [CONTRIBUTING](CONTRIBUTING.md) document.
