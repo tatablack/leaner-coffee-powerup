@@ -1,4 +1,4 @@
-import { StorageScope, StorageVisibility } from '../TrelloConstants';
+import { StorageScope, StorageVisibility } from '../utils/TrelloConstants';
 import Storage from './Storage';
 
 class CardStorage extends Storage {

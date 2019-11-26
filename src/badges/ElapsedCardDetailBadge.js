@@ -1,4 +1,4 @@
-import { Statuses } from '../Discussion';
+import { Statuses } from '../utils/Discussion';
 import ElapsedCardBadge from './ElapsedCardBadge';
 
 

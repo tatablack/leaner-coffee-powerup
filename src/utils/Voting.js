@@ -1,4 +1,4 @@
-import CardStorage from './storage/CardStorage';
+import CardStorage from '../storage/CardStorage';
 
 class Voting {
   constructor(trello) {

@@ -1,4 +1,4 @@
-import { StorageScope, StorageVisibility } from '../TrelloConstants';
+import { StorageScope, StorageVisibility } from '../utils/TrelloConstants';
 
 class Storage {
   constructor(scope = StorageScope.MEMBER, visibility = StorageVisibility.PRIVATE) {

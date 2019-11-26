@@ -1,5 +1,5 @@
-import BoardStorage from './storage/BoardStorage';
-import CardStorage from './storage/CardStorage';
+import BoardStorage from '../storage/BoardStorage';
+import CardStorage from '../storage/CardStorage';
 import Notifications from './Notifications';
 
 export const Statuses = {

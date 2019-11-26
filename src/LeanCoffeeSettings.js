@@ -1,6 +1,6 @@
 import BoardStorage from './storage/BoardStorage';
 import CardStorage from './storage/CardStorage';
-import Debug from './Debug';
+import Debug from './utils/Debug';
 
 
 class LeanCoffeeSettings {

@@ -1,6 +1,6 @@
 import formatDuration from 'format-duration';
 
-import { BadgeColors } from '../TrelloConstants';
+import { BadgeColors } from '../utils/TrelloConstants';
 
 
 class ElapsedCardBadge {

@@ -4,9 +4,9 @@ import ElapsedCardBadge from './badges/ElapsedCardBadge';
 import ElapsedCardDetailBadge from './badges/ElapsedCardDetailBadge';
 import VotingCardBadge from './badges/VotingCardBadge';
 import VotingCardDetailBadge from './badges/VotingCardDetailBadge';
-import Discussion from './Discussion';
-import Voting from './Voting';
-import UpdateChecker from './UpdateChecker';
+import Discussion from './utils/Discussion';
+import Voting from './utils/Voting';
+import UpdateChecker from './utils/UpdateChecker';
 
 
 class LeanCoffeePowerUp {

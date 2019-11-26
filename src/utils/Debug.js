@@ -1,6 +1,6 @@
 import { StorageVisibility } from './TrelloConstants';
-import BoardStorage from './storage/BoardStorage';
-import CardStorage from './storage/CardStorage';
+import BoardStorage from '../storage/BoardStorage';
+import CardStorage from '../storage/CardStorage';
 
 /* eslint-disable no-console */
 class Debug {

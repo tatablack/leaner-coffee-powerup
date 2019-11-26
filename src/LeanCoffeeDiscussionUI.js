@@ -2,7 +2,7 @@ import formatDuration from 'format-duration';
 
 import BoardStorage from './storage/BoardStorage';
 import CardStorage from './storage/CardStorage';
-import { Statuses, Thumbs } from './Discussion';
+import { Statuses, Thumbs } from './utils/Discussion';
 
 const MESSAGES = {
   NONE: 'This card is not being discussed at the moment.',
