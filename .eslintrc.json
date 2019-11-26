@@ -1,0 +1,61 @@
+{
+  "env": {
+    "browser": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "extends": [
+    "airbnb-base"
+  ],
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "comma-dangle": 0,
+    "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["element"] }],
+    "no-useless-constructor": 0,
+    "max-len": [
+      "error", 120
+    ],
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["webpack.*.js"]}],
+    "import/no-mutable-exports": 0,
+    "import/prefer-default-export": 0
+  },
+  "overrides": [
+    {
+      "files": "*.d.ts",
+      "rules": {
+        "import/no-extraneous-dependencies": 0,
+        "@typescript-eslint/explicit-member-accessibility": 0
+      }
+    },
+    {
+      "files": ["*.ts"],
+      "parser": "@typescript-eslint/parser",
+      "extends": [
+        "airbnb-base",
+        "plugin:@typescript-eslint/recommended"
+      ],
+      "rules": {
+        "comma-dangle": 0,
+        "import/prefer-default-export": 0,
+        "no-restricted-syntax": [
+          "error",
+          {
+            "selector": "TSEnumDeclaration",
+            "message": "Prefer union types over enums"
+          }
+        ],
+        "@typescript-eslint/no-explicit-any": 0
+      }
+    }
+  ],
+  "settings": {
+    "import/resolver": {
+      "node": { "extensions": [".js", ".ts", ".json"] },
+      "typescript": {}
+    },
+    "import/extensions": [".js", ".ts", ".json"]
+  }
+}

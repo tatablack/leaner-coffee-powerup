@@ -8,9 +8,9 @@ const OUTPUT_FOLDER = 'docs';
 
 module.exports = {
   entry: {
-    main: './src/index.js',
-    settings: './src/settings.js',
-    discussion_ui: './src/discussion-ui.js'
+    main: './src/index.ts',
+    settings: './src/settings.ts',
+    discussion_ui: './src/discussion-ui.ts'
   },
 
   output: {
@@ -18,15 +18,18 @@ module.exports = {
     path: path.resolve(__dirname, OUTPUT_FOLDER)
   },
 
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
+
   module: {
-    rules: [{
-      test: /\.js$/,
-      exclude: /(node_modules)/,
-      use: {
-        loader: 'babel-loader'
-      },
-      sideEffects: false
-    }]
+    rules: [
+      {
+        test: /\.([tj])s$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      }
+    ]
   },
 
   plugins: [
