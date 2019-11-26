@@ -65,10 +65,10 @@ class LeanCoffeePowerUp {
       await this.votingCardBadge.render(t)
     ];
 
-    return badges.filter(badge => badge);
+    return badges.filter((badge) => badge);
   };
 
-  handleCardButtons = async t => [{
+  handleCardButtons = async (t) => [{
     icon: `${this.baseUrl}/assets/powerup/timer.svg`,
     text: await this.getButtonLabel(t),
     callback: this.handleDiscussion
@@ -84,7 +84,7 @@ class LeanCoffeePowerUp {
       await this.votingCardDetailBadge.render(t)
     ];
 
-    return badges.filter(badge => badge);
+    return badges.filter((badge) => badge);
   };
 
   handleListActions = () => [{
@@ -103,7 +103,7 @@ class LeanCoffeePowerUp {
     callback: async (t, opts) => {
       const countedCards = await this.trello.Promise.all(opts.cards.map(async (card) => {
         const leanCoffeeVotes = await this.voting.countVotesByCard(t, card.id);
-        return Object.assign({ leanCoffeeVotes }, card);
+        return { leanCoffeeVotes, ...card };
       }));
 
       const sortedCards = countedCards.sort((cardA, cardB) => {
@@ -113,7 +113,7 @@ class LeanCoffeePowerUp {
       });
 
       return {
-        sortedIds: sortedCards.map(card => card.id)
+        sortedIds: sortedCards.map((card) => card.id)
       };
     }
   }];
@@ -122,7 +122,7 @@ class LeanCoffeePowerUp {
     this.boardStorage.setPowerUpVersion(t, process.env.VERSION);
   };
 
-  showSettings = t => t.popup({
+  showSettings = (t) => t.popup({
     title: `Leaner Coffee v${process.env.VERSION}`,
     url: `${this.baseUrl}/settings.html`,
     height: 184
@@ -165,7 +165,7 @@ class LeanCoffeePowerUp {
 
       if (await this.discussion.hasNotBeenArchived(t, cardId)) {
         const allCards = await t.cards('id', 'name');
-        const cardBeingDiscussed = allCards.find(card => card.id === cardId);
+        const cardBeingDiscussed = allCards.find((card) => card.id === cardId);
 
         t.popup({
           title: 'Leaner Coffee',
@@ -180,6 +180,7 @@ class LeanCoffeePowerUp {
         return;
       }
 
+      // eslint-disable-next-line no-console
       console.warn(`Card with id ${cardId} not found in current board, most likely archived. Cleaning up.`);
 
       await this.boardStorage.deleteMultiple(t, [

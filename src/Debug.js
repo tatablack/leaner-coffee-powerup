@@ -16,9 +16,9 @@ class Debug {
     console.log(JSON.stringify(boardData, null, 2));
     console.groupEnd();
 
-    const cardsPromises = Promise.map(cards, card => t.get(card.id, StorageVisibility.SHARED));
+    const cardsPromises = Promise.map(cards, (card) => t.get(card.id, StorageVisibility.SHARED));
 
-    cardsPromises.then(cardsData => cardsData.forEach((card) => {
+    cardsPromises.then((cardsData) => cardsData.forEach((card) => {
       console.groupCollapsed('Card data');
       console.log(JSON.stringify(card, null, 2));
       console.groupEnd();

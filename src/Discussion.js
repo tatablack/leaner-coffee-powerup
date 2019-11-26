@@ -33,7 +33,7 @@ class Discussion {
 
   hasNotBeenArchived = async (t, cardId) => {
     const allCards = await t.cards('id', 'name');
-    return !!allCards.find(card => card.id === cardId);
+    return !!allCards.find((card) => card.id === cardId);
   };
 
   isOngoingFor = async (t) => {
@@ -46,7 +46,7 @@ class Discussion {
     return Statuses.PAUSED === cardStatus;
   };
 
-  getElapsed = t => this.cardStorage.getDiscussionElapsed(t);
+  getElapsed = (t) => this.cardStorage.getDiscussionElapsed(t);
 
   updateElapsed = async (t) => {
     const startedAt = await this.boardStorage.getDiscussionStartedAt(t);
@@ -84,7 +84,7 @@ class Discussion {
   pause = async (t, notify = false) => {
     const intervalId = await this.boardStorage.getDiscussionIntervalId(t);
     const cardId = await this.boardStorage.getDiscussionCardId(t);
-    const cardName = (await t.cards('id', 'name')).find(card => card.id === cardId).name;
+    const cardName = (await t.cards('id', 'name')).find((card) => card.id === cardId).name;
 
     clearInterval(intervalId);
 

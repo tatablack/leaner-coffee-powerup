@@ -110,7 +110,7 @@ class LeanCoffeeDiscussionUI {
     const currentMemberThumbs = thumbs[currentMember];
 
     Object.keys(Thumbs).forEach((thumbsType) => {
-      const count = Object.keys(thumbs).filter(key => thumbs[key] === Thumbs[thumbsType]).length;
+      const count = Object.keys(thumbs).filter((key) => thumbs[key] === Thumbs[thumbsType]).length;
       const thumbsBadge = this.w.document.querySelector(`.voting-${thumbsType.toLowerCase()}`);
       thumbsBadge.innerText = count;
 

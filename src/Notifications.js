@@ -13,8 +13,8 @@ class Notifications {
 
   load(url) {
     return fetch(url)
-      .then(response => response.arrayBuffer())
-      .then(arrayBuffer => this.audioContext.decodeAudioData(arrayBuffer))
+      .then((response) => response.arrayBuffer())
+      .then((arrayBuffer) => this.audioContext.decodeAudioData(arrayBuffer))
       .then((audioBuffer) => {
         const sourceNode = this.audioContext.createBufferSource();
         sourceNode.buffer = audioBuffer;

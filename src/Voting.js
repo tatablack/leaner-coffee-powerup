@@ -14,14 +14,14 @@ class Voting {
     return !!votes[currentMember];
   };
 
-  getVotes = async t => this.cardStorage.read(t, CardStorage.VOTES);
+  getVotes = async (t) => this.cardStorage.read(t, CardStorage.VOTES);
 
   countVotesByCard = async (t, cardId) => {
     const votes = await this.cardStorage.readById(t, CardStorage.VOTES, cardId);
 
     if (!votes) { return 0; }
 
-    return Object.keys(votes).filter(key => votes[key]).length;
+    return Object.keys(votes).filter((key) => votes[key]).length;
   };
 
   getMaxVotes = async (t) => {
@@ -35,7 +35,7 @@ class Voting {
     if (await this.hasCurrentMemberVoted(t)) { return true; }
 
     const currentList = await t.list('cards');
-    const cardIds = currentList.cards.map(card => card.id);
+    const cardIds = currentList.cards.map((card) => card.id);
     const currentMemberVotes = await this.countVotesByMember(t, cardIds);
     const maxVotes = await this.getMaxVotes(t);
 
