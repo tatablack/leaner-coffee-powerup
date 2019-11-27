@@ -1,4 +1,6 @@
+import Bluebird from 'bluebird';
 import VotingCardBadge from './VotingCardBadge';
+import { CardDetailBadge } from '../utils/TrelloConstants';
 
 class VotingCardDetailBadge extends VotingCardBadge {
   showVoters = async (t) => {
@@ -12,8 +14,8 @@ class VotingCardDetailBadge extends VotingCardBadge {
     });
   };
 
-  render = async (t) => {
-    const commonData = await super.render(t);
+  render = async (t): Bluebird<CardDetailBadge> => {
+    const commonData = await super.render(t) as CardDetailBadge;
 
     if (commonData) {
       commonData.title = 'Voters';

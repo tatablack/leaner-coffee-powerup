@@ -1,4 +1,11 @@
+import Bluebird from 'bluebird';
+import Voting from '../utils/Voting';
+import { CardBadge } from '../utils/TrelloConstants';
+
 class VotingCardBadge {
+  baseUrl: string;
+  voting: Voting;
+
   constructor(baseUrl, voting) {
     this.baseUrl = baseUrl;
     this.voting = voting;
@@ -22,14 +29,14 @@ class VotingCardBadge {
   // https://github.com/babel/babel/issues/5104
   //
   // Upgrading to Babel 7.x should solve it.
-  async render(t) {
+  async render(t): Bluebird<CardBadge> {
     const voters = await this.getVoters(t);
     if (!voters.length) { return null; }
 
     const hasVoted = await this.voting.hasCurrentMemberVoted(t);
 
     return {
-      text: voters.length,
+      text: voters.length.toString(),
       color: hasVoted ? 'blue' : null,
       icon: `${this.baseUrl}/assets/powerup/${hasVoted ? 'heart_white.svg' : 'heart.svg'}`,
     };
