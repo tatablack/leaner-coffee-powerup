@@ -1,10 +1,11 @@
 import formatDuration from 'format-duration';
 
 import { BadgeColors } from '../utils/TrelloConstants';
+import Bluebird from 'bluebird';
 
-
-class ElapsedCardBadge {
+class ElapsedCardBadge implements ElapsedCardBadge {
   EMPTY_TITLE = '';
+  discussion: any;
 
   constructor(discussion) {
     this.discussion = discussion;
@@ -15,14 +16,14 @@ class ElapsedCardBadge {
     return this.EMPTY_TITLE;
   }
 
-  getText = async (t, elapsed) => formatDuration(elapsed);
+  getText = async (t, elapsed): Bluebird<string> => formatDuration(elapsed);
 
-  getColor = async (t) => {
+  getColor = async (t): Bluebird<BadgeColors> => {
     const isOngoing = await this.discussion.isOngoingFor(t);
 
-    if (isOngoing) { return BadgeColors.ORANGE; }
+    if (isOngoing) { return 'orange'; }
 
-    return await this.discussion.isPausedFor(t) ? BadgeColors.YELLOW : BadgeColors.LIGHTGRAY;
+    return await this.discussion.isPausedFor(t) ? 'yellow' : 'light-gray';
   };
 
 
@@ -36,7 +37,7 @@ class ElapsedCardBadge {
     if (!elapsed) { return null; }
 
     return {
-      title: this.getTitle(t),
+      title: this.getTitle(),
       text: await this.getText(t, elapsed),
       color: await this.getColor(t)
     };

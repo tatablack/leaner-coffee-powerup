@@ -1,7 +1,13 @@
-import { StorageScope, StorageVisibility } from '../utils/TrelloConstants';
+import {
+  StorageScope,
+  StorageVisibility
+} from '../utils/TrelloConstants';
 
 class Storage {
-  constructor(scope = StorageScope.MEMBER, visibility = StorageVisibility.PRIVATE) {
+  scope: StorageScope;
+  visibility: StorageVisibility;
+
+  constructor(scope: StorageScope = 'member', visibility: StorageVisibility = 'private') {
     Object.assign(this, { scope, visibility });
   }
 
