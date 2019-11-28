@@ -1,22 +1,30 @@
 import formatDuration from 'format-duration';
 
-import BoardStorage from './storage/BoardStorage';
-import CardStorage from './storage/CardStorage';
-import { Statuses, Thumbs } from './utils/Discussion';
+import Bluebird from 'bluebird';
+import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
 
 const MESSAGES = {
   NONE: 'This card is not being discussed at the moment.',
   ENDED: 'The discussion on this card has ended.'
 };
 
+enum ThumbDirection {
+  'UP' = 'UP',
+  'DOWN' = 'DOWN',
+  'MIDDLE' = 'MIDDLE'
+}
 
-class LeanCoffeeDiscussionUI {
-  constructor(window) {
-    this.w = window;
-    this.t = window.TrelloPowerUp.iframe();
-    this.Promise = window.TrelloPowerUp.Promise;
-    this.boardStorage = new BoardStorage();
-    this.cardStorage = new CardStorage();
+class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
+  badges: HTMLElement;
+  badgeElapsed: HTMLElement;
+  badgeHeaderElapsed: HTMLElement;
+  message: HTMLElement;
+  voting: NodeListOf<HTMLElement>;
+  intervalId: number;
+  previousStatus: DiscussionStatus;
+
+  constructor({ w }: LeanCoffeeBaseParams) {
+    super({ w, t: w.TrelloPowerUp.iframe() });
 
     this.badges = this.w.document.querySelector('.badges');
     this.badgeElapsed = this.w.document.querySelector('.badge-elapsed');
@@ -25,45 +33,45 @@ class LeanCoffeeDiscussionUI {
     this.voting = this.w.document.querySelectorAll('.voting');
   }
 
-  async init() {
+  async init(): Bluebird<void> {
     this.monitorDiscussion();
-    this.intervalId = setInterval(this.monitorDiscussion, 1000);
+    this.intervalId = this.w.setInterval(this.monitorDiscussion, 1000);
   }
 
-  monitorDiscussion = async () => {
+  monitorDiscussion = async (): Bluebird<void> => {
     const discussionStatus = await this.cardStorage.getDiscussionStatus(this.t);
-    const isOngoingOrPausedForThisCard = [Statuses.ONGOING, Statuses.PAUSED].includes(discussionStatus);
+    const isOngoingOrPausedForThisCard = ['ONGOING', 'PAUSED'].includes(discussionStatus);
 
     if (!!discussionStatus && this.previousStatus === discussionStatus && !isOngoingOrPausedForThisCard) {
       return;
     }
 
     switch (discussionStatus) {
-      case Statuses.ENDED: {
+      case 'ENDED': {
         // when discussion ends, hide badge and display message
         this.toggleBadges(false);
         this.updateMessage(MESSAGES.ENDED);
         break;
-      } case Statuses.ONGOING: {
+      } case 'ONGOING': {
         // when discussion is ongoing, update badge (display ongoing and 1-sec res timer)
         if (this.previousStatus !== discussionStatus) {
           this.toggleVoting(false);
           this.toggleBadges(true);
           this.updateMessage('');
 
-          this.updateStatusHeader(Statuses.ONGOING);
+          this.updateStatusHeader('ONGOING');
         }
 
-        this.updateElapsed(Statuses.ONGOING);
+        this.updateElapsed('ONGOING');
         break;
-      } case Statuses.PAUSED: {
+      } case 'PAUSED': {
         // when discussion is paused, update badge (display elapsed and three buttons to deal with discussion)
         if (this.previousStatus !== discussionStatus) {
           this.updateMessage('');
           this.toggleVoting(true);
           this.toggleBadges(true);
-          this.updateStatusHeader(Statuses.PAUSED);
-          this.updateElapsed(Statuses.PAUSED);
+          this.updateStatusHeader('PAUSED');
+          this.updateElapsed('PAUSED');
         }
 
         this.updateThumbs();
@@ -78,43 +86,46 @@ class LeanCoffeeDiscussionUI {
     this.previousStatus = discussionStatus;
   };
 
-  updateElapsed = async (status) => {
-    if (status === Statuses.ONGOING) {
+  updateElapsed = async (status: DiscussionStatus): Bluebird<void> => {
+    if (status === 'ONGOING') {
       const startedAt = await this.boardStorage.getDiscussionStartedAt(this.t);
       const previousElapsed = await this.boardStorage.getDiscussionPreviousElapsed(this.t) || 0;
       const elapsed = startedAt ? Date.now() - startedAt : 0;
 
       this.badgeElapsed.classList.add(status.toLowerCase());
-      this.badgeElapsed.classList.remove(Statuses.PAUSED.toLowerCase());
+      this.badgeElapsed.classList.remove('paused');
       this.badgeElapsed.textContent = `Ongoing → ${formatDuration(elapsed + previousElapsed)}`;
     } else {
       const elapsed = await this.cardStorage.getDiscussionElapsed(this.t);
 
       this.badgeElapsed.classList.add(status.toLowerCase());
-      this.badgeElapsed.classList.remove(Statuses.ONGOING.toLowerCase());
+      this.badgeElapsed.classList.remove('ongoing');
       this.badgeElapsed.textContent = `Elapsed → ${formatDuration(elapsed)}`;
     }
   };
 
-  updateStatusHeader = (status) => {
-    if (status === Statuses.PAUSED) {
+  updateStatusHeader = (status: DiscussionStatus): void => {
+    if (status === 'PAUSED') {
       this.badgeHeaderElapsed.innerText = 'Should we keep discussing?';
     } else {
       this.badgeHeaderElapsed.innerText = 'Status';
     }
   };
 
-  updateThumbs = async () => {
-    const thumbs = await this.cardStorage.getDiscussionThumbs(this.t) || {};
+  updateThumbs = async (): Bluebird<void> => {
+    const savedThumbs = await this.cardStorage.getDiscussionThumbs(this.t) || {};
     const currentMember = this.t.getContext().member;
-    const currentMemberThumbs = thumbs[currentMember];
+    const currentMemberThumb = savedThumbs[currentMember];
 
-    Object.keys(Thumbs).forEach((thumbsType) => {
-      const count = Object.keys(thumbs).filter((key) => thumbs[key] === Thumbs[thumbsType]).length;
-      const thumbsBadge = this.w.document.querySelector(`.voting-${thumbsType.toLowerCase()}`);
-      thumbsBadge.innerText = count;
+    Object.keys(ThumbDirection).forEach((thumbType) => {
+      const countByThumbType = Object.keys(savedThumbs).filter(
+        (memberId) => savedThumbs[memberId] === thumbType
+      ).length;
 
-      if (thumbsType === currentMemberThumbs) {
+      const thumbsBadge = this.w.document.querySelector(`.voting-${thumbType.toLowerCase()}`) as HTMLElement;
+      thumbsBadge.innerText = countByThumbType.toString();
+
+      if (thumbType === currentMemberThumb) {
         thumbsBadge.classList.add('own');
       } else {
         thumbsBadge.classList.remove('own');
@@ -122,14 +133,14 @@ class LeanCoffeeDiscussionUI {
     });
   };
 
-  handleThumbs = async (thumbsType) => {
+  handleThumbs = async (thumb: Thumb): Bluebird<void> => {
     const thumbs = await this.cardStorage.getDiscussionThumbs(this.t) || {};
     const currentMember = this.t.getContext().member;
 
-    if (thumbs[currentMember] === thumbsType) {
+    if (thumbs[currentMember] === thumb) {
       delete thumbs[currentMember];
     } else {
-      thumbs[currentMember] = thumbsType;
+      thumbs[currentMember] = thumb;
     }
 
     this.cardStorage.saveDiscussionThumbs(this.t, thumbs);

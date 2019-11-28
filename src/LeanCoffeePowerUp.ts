@@ -7,20 +7,29 @@ import VotingCardDetailBadge from './badges/VotingCardDetailBadge';
 import Discussion from './utils/Discussion';
 import Voting from './utils/Voting';
 import UpdateChecker from './utils/UpdateChecker';
+import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
 
+interface LeanCoffeePowerUpParams extends LeanCoffeeBaseParams {
+  baseUrl: string;
+  maxDiscussionDuration: number;
+}
 
-class LeanCoffeePowerUp {
-  constructor({
-    window, TrelloPowerUp, baseUrl, maxDiscussionDuration
-  }) {
-    this.w = window;
-    this.trello = TrelloPowerUp;
+class LeanCoffeePowerUp extends LeanCoffeeBase {
+  baseUrl: string;
+  discussion: Discussion;
+  voting: Voting;
+  elapsedCardBadge: ElapsedCardBadge;
+  elapsedCardDetailBadge: ElapsedCardDetailBadge;
+  votingCardBadge: VotingCardBadge;
+  votingCardDetailBadge: VotingCardDetailBadge;
+  updateChecker: UpdateChecker;
+
+  constructor({ w, baseUrl, maxDiscussionDuration }: LeanCoffeePowerUpParams) {
+    super({ w });
     this.baseUrl = baseUrl;
 
-    this.boardStorage = new BoardStorage();
-    this.cardStorage = new CardStorage();
     this.discussion = new Discussion(this.w, this.baseUrl, maxDiscussionDuration);
-    this.voting = new Voting(this.trello);
+    this.voting = new Voting(this.t);
     this.updateChecker = new UpdateChecker(this.boardStorage);
 
     this.elapsedCardBadge = new ElapsedCardBadge(this.discussion);
@@ -101,7 +110,7 @@ class LeanCoffeePowerUp {
   handleListSorters = () => [{
     text: 'Most Votes',
     callback: async (t, opts) => {
-      const countedCards = await this.trello.Promise.all(opts.cards.map(async (card) => {
+      const countedCards: any[] = await this.Promise.all(opts.cards.map(async (card) => {
         const leanCoffeeVotes = await this.voting.countVotesByCard(t, card.id);
         return { leanCoffeeVotes, ...card };
       }));
@@ -155,6 +164,7 @@ class LeanCoffeePowerUp {
       };
     }
 
+    console.log(votes);
     this.cardStorage.saveVotes(t, votes);
   };
 
@@ -261,7 +271,7 @@ class LeanCoffeePowerUp {
   };
 
   start() {
-    this.trello.initialize({
+    this.t.initialize({
       'board-buttons': this.handleBoardButtons,
       'card-back-section': this.handleCardBackSection,
       'card-badges': this.handleCardBadges,

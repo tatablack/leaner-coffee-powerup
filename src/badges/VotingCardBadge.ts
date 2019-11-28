@@ -1,6 +1,5 @@
 import Bluebird from 'bluebird';
 import Voting from '../utils/Voting';
-import { CardBadge } from '../utils/TrelloConstants';
 
 class VotingCardBadge {
   baseUrl: string;

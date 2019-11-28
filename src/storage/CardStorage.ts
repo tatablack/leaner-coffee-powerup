@@ -1,4 +1,4 @@
-import { StorageScope, StorageVisibility } from '../utils/TrelloConstants';
+import Bluebird from 'bluebird';
 import Storage from './Storage';
 
 class CardStorage extends Storage {
@@ -12,15 +12,15 @@ class CardStorage extends Storage {
     super('card', 'shared');
   }
 
-  getDiscussionStatus(t) {
+  getDiscussionStatus(t): Bluebird<DiscussionStatus> {
     return super.read(t, CardStorage.DISCUSSION_STATUS);
   }
 
-  getDiscussionElapsed(t) {
+  getDiscussionElapsed(t): Bluebird<number> {
     return super.read(t, CardStorage.DISCUSSION_ELAPSED);
   }
 
-  getDiscussionThumbs(t) {
+  getDiscussionThumbs(t): Bluebird<Thumbs> {
     return super.read(t, CardStorage.DISCUSSION_THUMBS);
   }
 
@@ -28,27 +28,27 @@ class CardStorage extends Storage {
     return super.read(t, CardStorage.DISCUSSION_BUTTON_LABEL);
   }
 
-  saveDiscussionStatus(t, newStatus) {
+  saveDiscussionStatus(t, newStatus: DiscussionStatus): Bluebird<void> {
     return super.write(t, CardStorage.DISCUSSION_STATUS, newStatus);
   }
 
-  saveDiscussionElapsed(t, newElapsed) {
+  saveDiscussionElapsed(t, newElapsed): Bluebird<void> {
     return super.write(t, CardStorage.DISCUSSION_ELAPSED, newElapsed);
   }
 
-  saveDiscussionThumbs(t, newThumbs) {
+  saveDiscussionThumbs(t, newThumbs: Thumbs): Bluebird<void> {
     return super.write(t, CardStorage.DISCUSSION_THUMBS, newThumbs);
   }
 
-  saveVotes(t, newVotes) {
+  saveVotes(t, newVotes): Bluebird<void> {
     return super.write(t, CardStorage.VOTES, newVotes);
   }
 
-  saveDiscussionButtonLabel(t, newLabel) {
+  saveDiscussionButtonLabel(t, newLabel?): Bluebird<void> {
     return super.write(t, CardStorage.DISCUSSION_BUTTON_LABEL, newLabel);
   }
 
-  deleteDiscussionThumbs(t) {
+  deleteDiscussionThumbs(t): Bluebird<void> {
     return super.delete(t, CardStorage.DISCUSSION_THUMBS);
   }
 }

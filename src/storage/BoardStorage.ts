@@ -1,4 +1,4 @@
-import { StorageScope, StorageVisibility } from '../utils/TrelloConstants';
+import Bluebird from 'bluebird';
 import Storage from './Storage';
 
 class BoardStorage extends Storage {
@@ -13,31 +13,31 @@ class BoardStorage extends Storage {
       super('board', 'shared');
     }
 
-    getDiscussionStatus(t) {
+    getDiscussionStatus(t): Bluebird<DiscussionStatus> {
       return super.read(t, BoardStorage.DISCUSSION_STATUS);
     }
 
-    getDiscussionCardId(t) {
+    getDiscussionCardId(t): Bluebird<string> {
       return super.read(t, BoardStorage.DISCUSSION_CARD_ID);
     }
 
-    getDiscussionStartedAt(t) {
+    getDiscussionStartedAt(t): Bluebird<DiscussionStartedAt> {
       return super.read(t, BoardStorage.DISCUSSION_STARTED_AT);
     }
 
-    getDiscussionPreviousElapsed(t) {
+    getDiscussionPreviousElapsed(t): Bluebird<DiscussionPreviousElapsed> {
       return super.read(t, BoardStorage.DISCUSSION_PREVIOUS_ELAPSED);
     }
 
-    getDiscussionIntervalId(t) {
+    getDiscussionIntervalId(t): Bluebird<DiscussionIntervalId> {
       return super.read(t, BoardStorage.DISCUSSION_INTERVAL_ID);
     }
 
-    getPowerUpVersion(t) {
+    getPowerUpVersion(t): Bluebird<string> {
       return super.read(t, BoardStorage.POWER_UP_VERSION);
     }
 
-    setPowerUpVersion(t, version) {
+    setPowerUpVersion(t, version: string): Bluebird<void> {
       return super.write(t, BoardStorage.POWER_UP_VERSION, version);
     }
 }

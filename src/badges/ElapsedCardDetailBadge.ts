@@ -1,15 +1,14 @@
-import { Statuses } from '../utils/Discussion';
+import Bluebird from 'bluebird';
 import ElapsedCardBadge from './ElapsedCardBadge';
 
-
 class ElapsedCardDetailBadge extends ElapsedCardBadge {
-  getTitle = () => 'Discussion time';
+  render = async (t): Bluebird<CardDetailBadge> => {
+    const discussionStatus: DiscussionStatus = await this.discussion.cardStorage.getDiscussionStatus(t);
+    if (discussionStatus !== 'ENDED') { return null; }
 
-  render = async (t) => {
-    const discussionStatus = await this.discussion.cardStorage.getDiscussionStatus(t);
-    if (discussionStatus !== Statuses.ENDED) { return null; }
-
-    return super.render(t);
+    const badge = await super.render(t) as CardDetailBadge;
+    badge.title = 'Discussion time';
+    return badge;
   };
 }
 

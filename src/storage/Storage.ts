@@ -1,8 +1,3 @@
-import {
-  StorageScope,
-  StorageVisibility
-} from '../utils/TrelloConstants';
-
 class Storage {
   scope: StorageScope;
   visibility: StorageVisibility;

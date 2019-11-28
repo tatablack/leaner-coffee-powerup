@@ -1,10 +1,10 @@
-import { StorageVisibility } from './TrelloConstants';
+import Bluebird from 'bluebird';
 import BoardStorage from '../storage/BoardStorage';
 import CardStorage from '../storage/CardStorage';
 
 /* eslint-disable no-console */
 class Debug {
-  static async showData(t, Promise) {
+  static async showData(t, Promise): Bluebird<void> {
     const boardData = await t.getAll();
     const cards = await t.cards('all');
 

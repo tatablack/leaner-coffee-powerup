@@ -53,10 +53,11 @@ overrides:
       max-len:
         - error
         - 120
-      no-restricted-syntax:
+      no-param-reassign:
         - error
-        - selector: TSEnumDeclaration
-          message: Prefer union types over enums
+        - props: true
+          ignorePropertyModificationsFor:
+            - element
       "@typescript-eslint/no-explicit-any": 0
 settings:
   import/resolver:

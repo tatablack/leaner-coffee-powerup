@@ -1,9 +1,8 @@
 import Bluebird from 'bluebird';
 import VotingCardBadge from './VotingCardBadge';
-import { CardDetailBadge } from '../utils/TrelloConstants';
 
 class VotingCardDetailBadge extends VotingCardBadge {
-  showVoters = async (t) => {
+  showVoters = async (t): Bluebird<void> => {
     const items = await this.getVoters(t);
 
     if (!items.length) { return; }

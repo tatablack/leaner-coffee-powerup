@@ -1,14 +1,6 @@
 import Bluebird from 'bluebird';
 import CardStorage from '../storage/CardStorage';
 
-interface Votes {
- [key: string]: {
-   username: string;
-   fullName: string;
-   avatar: string;
- };
-}
-
 class Voting {
   cardStorage: CardStorage;
   promise: typeof Bluebird;
@@ -18,7 +10,7 @@ class Voting {
     this.promise = trello.Promise;
   }
 
-  hasCurrentMemberVoted = async (t) => {
+  hasCurrentMemberVoted = async (t): Bluebird<boolean> => {
     const votes = await this.cardStorage.read(t, CardStorage.VOTES);
     if (!votes) { return false; }
 
