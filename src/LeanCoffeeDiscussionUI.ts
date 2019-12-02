@@ -15,6 +15,7 @@ enum ThumbDirection {
 }
 
 class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
+  t: Trello.TrelloIFrame;
   badges: HTMLElement;
   badgeElapsed: HTMLElement;
   badgeHeaderElapsed: HTMLElement;
@@ -24,7 +25,8 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
   previousStatus: DiscussionStatus;
 
   constructor({ w }: LeanCoffeeBaseParams) {
-    super({ w, t: w.TrelloPowerUp.iframe() });
+    super({ w });
+    this.t = w.TrelloPowerUp.iframe();
 
     this.badges = this.w.document.querySelector('.badges');
     this.badgeElapsed = this.w.document.querySelector('.badge-elapsed');

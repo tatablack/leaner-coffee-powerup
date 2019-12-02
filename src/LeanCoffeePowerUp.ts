@@ -8,6 +8,7 @@ import Discussion from './utils/Discussion';
 import Voting from './utils/Voting';
 import UpdateChecker from './utils/UpdateChecker';
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
+import Trello from './@types/TrelloPowerUp';
 
 interface LeanCoffeePowerUpParams extends LeanCoffeeBaseParams {
   baseUrl: string;
@@ -15,6 +16,7 @@ interface LeanCoffeePowerUpParams extends LeanCoffeeBaseParams {
 }
 
 class LeanCoffeePowerUp extends LeanCoffeeBase {
+  t: Trello.TrelloPowerUp;
   baseUrl: string;
   discussion: Discussion;
   voting: Voting;

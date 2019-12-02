@@ -8,9 +8,11 @@ interface LeanCoffeeSettingsParams extends LeanCoffeeBaseParams {
 
 class LeanCoffeeSettings extends LeanCoffeeBase {
   isProduction: boolean;
+  t: Trello.TrelloIFrame;
 
   constructor({ w, environment }: LeanCoffeeSettingsParams) {
-    super({ w, t: w.TrelloPowerUp.iframe() });
+    super({ w });
+    this.t = w.TrelloPowerUp.iframe();
     this.isProduction = environment === 'production';
   }
 

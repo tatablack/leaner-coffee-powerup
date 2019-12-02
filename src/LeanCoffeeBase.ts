@@ -15,7 +15,6 @@ export class LeanCoffeeBase {
 
   constructor({ w, t }: LeanCoffeeBaseParams) {
     this.w = w;
-    this.t = t || w.TrelloPowerUp;
     this.Promise = w.TrelloPowerUp.Promise;
     this.boardStorage = new BoardStorage();
     this.cardStorage = new CardStorage();
