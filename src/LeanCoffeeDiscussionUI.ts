@@ -1,7 +1,7 @@
 import formatDuration from 'format-duration';
 
-import Bluebird from 'bluebird';
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
+import Trello from './@types/TrelloPowerUp';
 
 const MESSAGES = {
   NONE: 'This card is not being discussed at the moment.',
@@ -33,12 +33,12 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
     this.voting = this.w.document.querySelectorAll('.voting');
   }
 
-  async init(): Bluebird<void> {
+  async init(): Trello.Promise<void> {
     this.monitorDiscussion();
     this.intervalId = this.w.setInterval(this.monitorDiscussion, 1000);
   }
 
-  monitorDiscussion = async (): Bluebird<void> => {
+  monitorDiscussion = async (): Trello.Promise<void> => {
     const discussionStatus = await this.cardStorage.getDiscussionStatus(this.t);
     const isOngoingOrPausedForThisCard = ['ONGOING', 'PAUSED'].includes(discussionStatus);
 
@@ -86,7 +86,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
     this.previousStatus = discussionStatus;
   };
 
-  updateElapsed = async (status: DiscussionStatus): Bluebird<void> => {
+  updateElapsed = async (status: DiscussionStatus): Trello.Promise<void> => {
     if (status === 'ONGOING') {
       const startedAt = await this.boardStorage.getDiscussionStartedAt(this.t);
       const previousElapsed = await this.boardStorage.getDiscussionPreviousElapsed(this.t) || 0;
@@ -112,7 +112,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
     }
   };
 
-  updateThumbs = async (): Bluebird<void> => {
+  updateThumbs = async (): Trello.Promise<void> => {
     const savedThumbs = await this.cardStorage.getDiscussionThumbs(this.t) || {};
     const currentMember = this.t.getContext().member;
     const currentMemberThumb = savedThumbs[currentMember];
@@ -133,7 +133,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
     });
   };
 
-  handleThumbs = async (thumb: Thumb): Bluebird<void> => {
+  handleThumbs = async (thumb: Thumb): Trello.Promise<void> => {
     const thumbs = await this.cardStorage.getDiscussionThumbs(this.t) || {};
     const currentMember = this.t.getContext().member;
 

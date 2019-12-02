@@ -1,4 +1,4 @@
-import Bluebird from 'bluebird';
+import Trello from '../@types/TrelloPowerUp';
 import BoardStorage from '../storage/BoardStorage';
 import CardStorage from '../storage/CardStorage';
 import Notifications from './Notifications';
@@ -20,31 +20,31 @@ class Discussion {
     this.cardStorage = new CardStorage();
   }
 
-  isOngoingOrPausedForAnotherCard = async (t): Bluebird<boolean> => {
+  isOngoingOrPausedForAnotherCard = async (t): Trello.Promise<boolean> => {
     const boardStatus = await this.boardStorage.getDiscussionStatus(t);
     const cardId = await this.boardStorage.getDiscussionCardId(t);
 
     return ['ONGOING', 'PAUSED'].includes(boardStatus) && cardId !== t.getContext().card;
   };
 
-  hasNotBeenArchived = async (t, cardId): Bluebird<boolean> => {
+  hasNotBeenArchived = async (t, cardId): Trello.Promise<boolean> => {
     const allCards = await t.cards('id', 'name');
     return !!allCards.find((card) => card.id === cardId);
   };
 
-  isOngoingFor = async (t): Bluebird<boolean> => {
+  isOngoingFor = async (t): Trello.Promise<boolean> => {
     const cardStatus = await this.cardStorage.getDiscussionStatus(t);
     return cardStatus === 'ONGOING';
   };
 
-  isPausedFor = async (t): Bluebird<boolean> => {
+  isPausedFor = async (t): Trello.Promise<boolean> => {
     const cardStatus = await this.cardStorage.getDiscussionStatus(t);
     return cardStatus === 'PAUSED';
   };
 
   getElapsed = (t) => this.cardStorage.getDiscussionElapsed(t);
 
-  updateElapsed = async (t): Bluebird<void> => {
+  updateElapsed = async (t): Trello.Promise<void> => {
     const startedAt = await this.boardStorage.getDiscussionStartedAt(t);
     const elapsed = Date.now() - startedAt;
 
@@ -56,7 +56,7 @@ class Discussion {
     }
   };
 
-  saveElapsed = async (t): Bluebird<void> => {
+  saveElapsed = async (t): Trello.Promise<void> => {
     const startedAt = await this.boardStorage.getDiscussionStartedAt(t);
     const previousElapsed = await this.boardStorage.getDiscussionPreviousElapsed(t) || 0;
     const elapsed = startedAt ? Date.now() - startedAt : 0;
@@ -64,7 +64,7 @@ class Discussion {
     this.cardStorage.saveDiscussionElapsed(t, (elapsed + previousElapsed));
   };
 
-  start = async (t): Bluebird<void> => {
+  start = async (t): Trello.Promise<void> => {
     this.boardStorage.writeMultiple(t, {
       [BoardStorage.DISCUSSION_STATUS]: 'ONGOING',
       [BoardStorage.DISCUSSION_CARD_ID]: t.getContext().card,

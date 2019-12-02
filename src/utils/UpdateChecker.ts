@@ -1,4 +1,4 @@
-import Bluebird from 'bluebird';
+import Trello from '../@types/TrelloPowerUp';
 import BoardStorage from '../storage/BoardStorage';
 
 const LAST_UNCHECKED_VERSION = '0.6.2';
@@ -11,12 +11,12 @@ class UpdateChecker {
     this.storage = storage;
   }
 
-  hasBeenUpdated = async (t): Bluebird<boolean> => {
+  hasBeenUpdated = async (t): Trello.Promise<boolean> => {
     this.storedVersion = await this.storage.getPowerUpVersion(t);
     return !this.storedVersion || (this.storedVersion !== process.env.VERSION);
   };
 
-  showMenu = async (t): Bluebird<void> => {
+  showMenu = async (t): Trello.Promise<void> => {
     const storedVersion = await this.storage.getPowerUpVersion(t);
 
     t.popup({
@@ -28,7 +28,7 @@ class UpdateChecker {
     });
   };
 
-  storeNewVersion = async (t): Bluebird<void> => {
+  storeNewVersion = async (t): Trello.Promise<void> => {
     await this.storage.setPowerUpVersion(t, process.env.VERSION);
   };
 }

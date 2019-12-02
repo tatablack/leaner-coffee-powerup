@@ -1,4 +1,4 @@
-import Bluebird from 'bluebird';
+import Trello from '../@types/TrelloPowerUp';
 import Storage from './Storage';
 
 class BoardStorage extends Storage {
@@ -13,31 +13,31 @@ class BoardStorage extends Storage {
       super('board', 'shared');
     }
 
-    getDiscussionStatus(t): Bluebird<DiscussionStatus> {
+    getDiscussionStatus(t): Trello.Promise<DiscussionStatus> {
       return super.read(t, BoardStorage.DISCUSSION_STATUS);
     }
 
-    getDiscussionCardId(t): Bluebird<string> {
+    getDiscussionCardId(t): Trello.Promise<string> {
       return super.read(t, BoardStorage.DISCUSSION_CARD_ID);
     }
 
-    getDiscussionStartedAt(t): Bluebird<DiscussionStartedAt> {
+    getDiscussionStartedAt(t): Trello.Promise<DiscussionStartedAt> {
       return super.read(t, BoardStorage.DISCUSSION_STARTED_AT);
     }
 
-    getDiscussionPreviousElapsed(t): Bluebird<DiscussionPreviousElapsed> {
+    getDiscussionPreviousElapsed(t): Trello.Promise<DiscussionPreviousElapsed> {
       return super.read(t, BoardStorage.DISCUSSION_PREVIOUS_ELAPSED);
     }
 
-    getDiscussionIntervalId(t): Bluebird<DiscussionIntervalId> {
+    getDiscussionIntervalId(t): Trello.Promise<DiscussionIntervalId> {
       return super.read(t, BoardStorage.DISCUSSION_INTERVAL_ID);
     }
 
-    getPowerUpVersion(t): Bluebird<string> {
+    getPowerUpVersion(t): Trello.Promise<string> {
       return super.read(t, BoardStorage.POWER_UP_VERSION);
     }
 
-    setPowerUpVersion(t, version: string): Bluebird<void> {
+    setPowerUpVersion(t, version: string): Trello.Promise<void> {
       return super.write(t, BoardStorage.POWER_UP_VERSION, version);
     }
 }

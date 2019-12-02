@@ -1,5 +1,5 @@
-import Bluebird from 'bluebird';
 import Voting from '../utils/Voting';
+import Trello from '../@types/TrelloPowerUp';
 
 class VotingCardBadge {
   baseUrl: string;
@@ -28,7 +28,7 @@ class VotingCardBadge {
   // https://github.com/babel/babel/issues/5104
   //
   // Upgrading to Babel 7.x should solve it.
-  async render(t): Bluebird<CardBadge> {
+  async render(t): Trello.Promise<Trello.CardBadge> {
     const voters = await this.getVoters(t);
     if (!voters.length) { return null; }
 

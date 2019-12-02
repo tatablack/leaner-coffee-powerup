@@ -1,4 +1,4 @@
-import Bluebird from 'bluebird';
+import Trello from './@types/TrelloPowerUp';
 import Debug from './utils/Debug';
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
 
@@ -22,13 +22,13 @@ class LeanCoffeeSettings extends LeanCoffeeBase {
     this.t.sizeTo('#leanCoffeeSettingsForm');
   }
 
-  showData = async (): Bluebird<void> => {
+  showData = async (): Trello.Promise<void> => {
     if (this.isProduction) { return; }
 
     await Debug.showData(this.t, this.Promise);
   };
 
-  wipeData = async (): Bluebird<void> => {
+  wipeData = async (): Trello.Promise<void> => {
     if (this.isProduction) { return; }
 
     await Debug.wipeData(this.t, this.Promise, this.cardStorage, this.boardStorage);

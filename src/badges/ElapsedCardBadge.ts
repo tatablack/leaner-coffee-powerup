@@ -1,5 +1,5 @@
-import Bluebird from 'bluebird';
 import formatDuration from 'format-duration';
+import Trello from '../@types/TrelloPowerUp';
 
 class ElapsedCardBadge implements ElapsedCardBadge {
   discussion: any;
@@ -9,9 +9,9 @@ class ElapsedCardBadge implements ElapsedCardBadge {
     this.render = this.render.bind(this);
   }
 
-  getText = async (t, elapsed): Bluebird<string> => formatDuration(elapsed);
+  getText = async (t, elapsed): Trello.Promise<string> => formatDuration(elapsed);
 
-  getColor = async (t): Bluebird<TrelloColors> => {
+  getColor = async (t): Trello.Promise<Trello.TrelloColors> => {
     const isOngoing = await this.discussion.isOngoingFor(t);
 
     if (isOngoing) { return 'orange'; }
@@ -24,7 +24,7 @@ class ElapsedCardBadge implements ElapsedCardBadge {
   // https://github.com/babel/babel/issues/5104
   //
   // Upgrading to Babel 7.x should solve it.
-  async render(t): Bluebird<CardBadge> {
+  async render(t): Trello.Promise<Trello.CardBadge> {
     const elapsed = await this.discussion.getElapsed(t);
     if (!elapsed) { return null; }
 

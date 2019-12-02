@@ -1,8 +1,8 @@
-import Bluebird from 'bluebird';
+import Trello from '../@types/TrelloPowerUp';
 import VotingCardBadge from './VotingCardBadge';
 
 class VotingCardDetailBadge extends VotingCardBadge {
-  showVoters = async (t): Bluebird<void> => {
+  showVoters = async (t): Trello.Promise<void> => {
     const items = await this.getVoters(t);
 
     if (!items.length) { return; }
@@ -13,8 +13,8 @@ class VotingCardDetailBadge extends VotingCardBadge {
     });
   };
 
-  render = async (t): Bluebird<CardDetailBadge> => {
     const commonData = await super.render(t) as CardDetailBadge;
+  render = async (t): Trello.Promise<Trello.CardDetailBadge> => {
 
     if (commonData) {
       commonData.title = 'Voters';

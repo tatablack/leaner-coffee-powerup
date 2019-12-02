@@ -1,4 +1,4 @@
-import Bluebird from 'bluebird';
+import Trello from './@types/TrelloPowerUp';
 import BoardStorage from './storage/BoardStorage';
 import CardStorage from './storage/CardStorage';
 
@@ -9,8 +9,7 @@ export interface LeanCoffeeBaseParams {
 
 export class LeanCoffeeBase {
   w: Window;
-  t: any;
-  Promise: typeof Bluebird;
+  Promise: Trello.Promise<any>;
   boardStorage: BoardStorage;
   cardStorage: CardStorage;
 

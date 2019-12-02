@@ -1,4 +1,4 @@
-import Bluebird from 'bluebird';
+import Trello from '../@types/TrelloPowerUp';
 import Storage from './Storage';
 
 class CardStorage extends Storage {
@@ -12,15 +12,15 @@ class CardStorage extends Storage {
     super('card', 'shared');
   }
 
-  getDiscussionStatus(t): Bluebird<DiscussionStatus> {
+  getDiscussionStatus(t): Trello.Promise<DiscussionStatus> {
     return super.read(t, CardStorage.DISCUSSION_STATUS);
   }
 
-  getDiscussionElapsed(t): Bluebird<number> {
+  getDiscussionElapsed(t): Trello.Promise<number> {
     return super.read(t, CardStorage.DISCUSSION_ELAPSED);
   }
 
-  getDiscussionThumbs(t): Bluebird<Thumbs> {
+  getDiscussionThumbs(t): Trello.Promise<Thumbs> {
     return super.read(t, CardStorage.DISCUSSION_THUMBS);
   }
 
@@ -28,27 +28,27 @@ class CardStorage extends Storage {
     return super.read(t, CardStorage.DISCUSSION_BUTTON_LABEL);
   }
 
-  saveDiscussionStatus(t, newStatus: DiscussionStatus): Bluebird<void> {
+  saveDiscussionStatus(t, newStatus: DiscussionStatus): Trello.Promise<void> {
     return super.write(t, CardStorage.DISCUSSION_STATUS, newStatus);
   }
 
-  saveDiscussionElapsed(t, newElapsed): Bluebird<void> {
+  saveDiscussionElapsed(t, newElapsed): Trello.Promise<void> {
     return super.write(t, CardStorage.DISCUSSION_ELAPSED, newElapsed);
   }
 
-  saveDiscussionThumbs(t, newThumbs: Thumbs): Bluebird<void> {
+  saveDiscussionThumbs(t, newThumbs: Thumbs): Trello.Promise<void> {
     return super.write(t, CardStorage.DISCUSSION_THUMBS, newThumbs);
   }
 
-  saveVotes(t, newVotes): Bluebird<void> {
+  saveVotes(t, newVotes): Trello.Promise<void> {
     return super.write(t, CardStorage.VOTES, newVotes);
   }
 
-  saveDiscussionButtonLabel(t, newLabel?): Bluebird<void> {
+  saveDiscussionButtonLabel(t, newLabel?): Trello.Promise<void> {
     return super.write(t, CardStorage.DISCUSSION_BUTTON_LABEL, newLabel);
   }
 
-  deleteDiscussionThumbs(t): Bluebird<void> {
+  deleteDiscussionThumbs(t): Trello.Promise<void> {
     return super.delete(t, CardStorage.DISCUSSION_THUMBS);
   }
 }

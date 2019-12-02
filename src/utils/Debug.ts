@@ -1,10 +1,10 @@
-import Bluebird from 'bluebird';
+import Trello from '../@types/TrelloPowerUp';
 import BoardStorage from '../storage/BoardStorage';
 import CardStorage from '../storage/CardStorage';
 
 /* eslint-disable no-console */
 class Debug {
-  static async showData(t, Promise): Bluebird<void> {
+  static async showData(t, Promise): Trello.Promise<void> {
     const boardData = await t.getAll();
     const cards = await t.cards('all');
 

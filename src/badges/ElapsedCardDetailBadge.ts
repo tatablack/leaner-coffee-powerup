@@ -1,8 +1,8 @@
-import Bluebird from 'bluebird';
+import Trello from '../@types/TrelloPowerUp';
 import ElapsedCardBadge from './ElapsedCardBadge';
 
 class ElapsedCardDetailBadge extends ElapsedCardBadge {
-  render = async (t): Bluebird<CardDetailBadge> => {
+  render = async (t): Trello.Promise<Trello.CardDetailBadge> => {
     const discussionStatus: DiscussionStatus = await this.discussion.cardStorage.getDiscussionStatus(t);
     if (discussionStatus !== 'ENDED') { return null; }
 

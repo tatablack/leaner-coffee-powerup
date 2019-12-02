@@ -1,4 +1,4 @@
-import Bluebird from 'bluebird';
+import Trello from '../@types/TrelloPowerUp';
 
 class Notifications {
   w: Window;
@@ -17,7 +17,7 @@ class Notifications {
     this.baseUrl = baseUrl;
   }
 
-  async load(url): Bluebird<AudioBufferSourceNode> {
+  async load(url): Trello.Promise<AudioBufferSourceNode> {
     const remoteAudioFile = await fetch(url);
     const audioData = await remoteAudioFile.arrayBuffer();
     const audioBuffer = await this.audioContext.decodeAudioData(audioData);
@@ -27,7 +27,7 @@ class Notifications {
     return sourceNode;
   }
 
-  async play(type): Bluebird<void> {
+  async play(type): Trello.Promise<void> {
     this.audioContext = this.audioContext || new (AudioContext || this.w.webkitAudioContext)();
     const audio = await this.load(`${this.baseUrl}/${type.audio}`);
     audio.start();
