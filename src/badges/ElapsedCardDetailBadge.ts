@@ -6,7 +6,7 @@ class ElapsedCardDetailBadge extends ElapsedCardBadge {
     const discussionStatus: DiscussionStatus = await this.discussion.cardStorage.getDiscussionStatus(t);
     if (discussionStatus !== 'ENDED') { return null; }
 
-    const badge = await super.render(t) as CardDetailBadge;
+    const badge = await super.render(t) as Trello.CardDetailBadge;
     badge.title = 'Discussion time';
     return badge;
   };

@@ -1,8 +1,10 @@
-class Storage {
-  scope: StorageScope;
-  visibility: StorageVisibility;
+import Trello from '../@types/TrelloPowerUp';
 
-  constructor(scope: StorageScope = 'member', visibility: StorageVisibility = 'private') {
+class Storage {
+  scope: Trello.StorageScope;
+  visibility: Trello.StorageVisibility;
+
+  constructor(scope: Trello.StorageScope = 'member', visibility: Trello.StorageVisibility = 'private') {
     Object.assign(this, { scope, visibility });
   }
 

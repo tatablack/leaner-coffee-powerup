@@ -13,8 +13,8 @@ class VotingCardDetailBadge extends VotingCardBadge {
     });
   };
 
-    const commonData = await super.render(t) as CardDetailBadge;
   render = async (t): Trello.Promise<Trello.CardDetailBadge> => {
+    const commonData = await super.render(t) as Trello.CardDetailBadge;
 
     if (commonData) {
       commonData.title = 'Voters';

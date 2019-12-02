@@ -12,9 +12,9 @@ class VotingCardBadge {
   }
 
   getVoters = async (t) => {
-    const votes = await this.voting.getVotes(t) || {};
+    const votes: Votes = await this.voting.getVotes(t) || {};
 
-    return Object.values(votes).reduce((knownVoters, vote) => {
+    return Object.values(votes).reduce((knownVoters: any[], vote) => {
       if (vote.username) {
         knownVoters.push({ text: `${vote.username} (${vote.fullName})` });
       }
