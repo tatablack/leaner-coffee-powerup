@@ -2,7 +2,6 @@ import LeanCoffeeSettings from './LeanCoffeeSettings';
 
 declare global {
   interface Window {
-    TrelloPowerUp: any;
     settingsInstance: LeanCoffeeSettings;
   }
 }

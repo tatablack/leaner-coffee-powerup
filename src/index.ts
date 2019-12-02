@@ -2,7 +2,6 @@ import LeanCoffeePowerUp from './LeanCoffeePowerUp';
 
 declare global {
   interface Window {
-    TrelloPowerUp: any;
     webkitAudioContext?: typeof AudioContext;
   }
 }

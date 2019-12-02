@@ -2,7 +2,6 @@ import LeanCoffeeDiscussionUI from './LeanCoffeeDiscussionUI';
 
 declare global {
   interface Window {
-    TrelloPowerUp: any;
     discussionUIInstance: LeanCoffeeDiscussionUI;
   }
 }
