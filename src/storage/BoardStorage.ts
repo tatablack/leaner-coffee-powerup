@@ -1,4 +1,4 @@
-import Trello from '../@types/TrelloPowerUp';
+import { Trello } from '../types/TrelloPowerUp';
 import Storage from './Storage';
 
 class BoardStorage extends Storage {
@@ -13,31 +13,31 @@ class BoardStorage extends Storage {
       super('board', 'shared');
     }
 
-    getDiscussionStatus(t): Trello.Promise<DiscussionStatus> {
+    async getDiscussionStatus(t: Trello.PowerUp.IFrame): Promise<DiscussionStatus> {
       return super.read(t, BoardStorage.DISCUSSION_STATUS);
     }
 
-    getDiscussionCardId(t): Trello.Promise<string> {
+    async getDiscussionCardId(t: Trello.PowerUp.IFrame): Promise<string> {
       return super.read(t, BoardStorage.DISCUSSION_CARD_ID);
     }
 
-    getDiscussionStartedAt(t): Trello.Promise<DiscussionStartedAt> {
+    async getDiscussionStartedAt(t: Trello.PowerUp.IFrame): Promise<DiscussionStartedAt> {
       return super.read(t, BoardStorage.DISCUSSION_STARTED_AT);
     }
 
-    getDiscussionPreviousElapsed(t): Trello.Promise<DiscussionPreviousElapsed> {
+    async getDiscussionPreviousElapsed(t: Trello.PowerUp.IFrame): Promise<DiscussionPreviousElapsed> {
       return super.read(t, BoardStorage.DISCUSSION_PREVIOUS_ELAPSED);
     }
 
-    getDiscussionIntervalId(t): Trello.Promise<DiscussionIntervalId> {
+    async getDiscussionIntervalId(t: Trello.PowerUp.IFrame): Promise<DiscussionIntervalId> {
       return super.read(t, BoardStorage.DISCUSSION_INTERVAL_ID);
     }
 
-    getPowerUpVersion(t): Trello.Promise<string> {
+    async getPowerUpVersion(t: Trello.PowerUp.IFrame): Promise<string> {
       return super.read(t, BoardStorage.POWER_UP_VERSION);
     }
 
-    setPowerUpVersion(t, version: string): Trello.Promise<void> {
+    setPowerUpVersion(t: Trello.PowerUp.IFrame, version: string): PromiseLike<void> {
       return super.write(t, BoardStorage.POWER_UP_VERSION, version);
     }
 }

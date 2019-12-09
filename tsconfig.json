@@ -1,23 +1,29 @@
 {
   "compilerOptions": {
-    "allowJs": true,
+    "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "module": "ESNext",
+    "module": "esnext",
     "moduleResolution": "node",
-    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "outDir": "dist",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "noImplicitAny": false,
     "strictNullChecks": false,
-    "target": "es5",
+    "target": "es2018",
     "typeRoots" : [
-      "./src/@types",
+      "./src/types",
       "./node_modules/@types"
     ]
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "config",
+    "docs",
+    "dist"
+  ]
 }

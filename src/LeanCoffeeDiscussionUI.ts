@@ -1,7 +1,7 @@
 import formatDuration from 'format-duration';
+import { Trello } from './types/TrelloPowerUp';
 
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
-import Trello from './@types/TrelloPowerUp';
 
 const MESSAGES = {
   NONE: 'This card is not being discussed at the moment.',
@@ -15,7 +15,7 @@ enum ThumbDirection {
 }
 
 class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
-  t: Trello.TrelloIFrame;
+  t: Trello.PowerUp.IFrame;
   badges: HTMLElement;
   badgeElapsed: HTMLElement;
   badgeHeaderElapsed: HTMLElement;
@@ -35,12 +35,21 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
     this.voting = this.w.document.querySelectorAll('.voting');
   }
 
-  async init(): Trello.Promise<void> {
+  init(): void {
+    this.w.document.querySelector('.voting-up').addEventListener(
+      'click', () => this.handleThumbs('UP')
+    );
+    this.w.document.querySelector('.voting-middle').addEventListener(
+      'click', () => this.handleThumbs('MIDDLE')
+    );
+    this.w.document.querySelector('.voting-down').addEventListener(
+      'click', () => this.handleThumbs('DOWN')
+    );
     this.monitorDiscussion();
     this.intervalId = this.w.setInterval(this.monitorDiscussion, 1000);
   }
 
-  monitorDiscussion = async (): Trello.Promise<void> => {
+  monitorDiscussion = async (): Promise<void> => {
     const discussionStatus = await this.cardStorage.getDiscussionStatus(this.t);
     const isOngoingOrPausedForThisCard = ['ONGOING', 'PAUSED'].includes(discussionStatus);
 
@@ -88,7 +97,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
     this.previousStatus = discussionStatus;
   };
 
-  updateElapsed = async (status: DiscussionStatus): Trello.Promise<void> => {
+  updateElapsed = async (status: DiscussionStatus): Promise<void> => {
     if (status === 'ONGOING') {
       const startedAt = await this.boardStorage.getDiscussionStartedAt(this.t);
       const previousElapsed = await this.boardStorage.getDiscussionPreviousElapsed(this.t) || 0;
@@ -114,7 +123,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
     }
   };
 
-  updateThumbs = async (): Trello.Promise<void> => {
+  updateThumbs = async (): Promise<void> => {
     const savedThumbs = await this.cardStorage.getDiscussionThumbs(this.t) || {};
     const currentMember = this.t.getContext().member;
     const currentMemberThumb = savedThumbs[currentMember];
@@ -135,7 +144,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
     });
   };
 
-  handleThumbs = async (thumb: Thumb): Trello.Promise<void> => {
+  handleThumbs = async (thumb: Thumb): Promise<void> => {
     const thumbs = await this.cardStorage.getDiscussionThumbs(this.t) || {};
     const currentMember = this.t.getContext().member;
 
@@ -145,20 +154,20 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
       thumbs[currentMember] = thumb;
     }
 
-    this.cardStorage.saveDiscussionThumbs(this.t, thumbs);
+    return this.cardStorage.saveDiscussionThumbs(this.t, thumbs);
   };
 
-  toggleBadges = (visible) => {
+  toggleBadges = (visible: boolean): void => {
     this.badges.style.display = visible ? 'grid' : 'none';
   };
 
-  toggleVoting = (visible) => {
+  toggleVoting = (visible: boolean): void => {
     this.voting.forEach((element) => {
       element.style.visibility = visible ? 'visible' : 'hidden';
     });
   };
 
-  updateMessage = (message) => {
+  updateMessage = (message: string): void => {
     this.message.innerText = message;
     this.message.style.display = 'block';
     this.t.sizeTo('body');

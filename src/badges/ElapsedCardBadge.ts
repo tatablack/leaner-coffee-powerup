@@ -1,17 +1,18 @@
 import formatDuration from 'format-duration';
-import Trello from '../@types/TrelloPowerUp';
+import { Trello } from '../types/TrelloPowerUp';
+import Discussion from '../utils/Discussion';
 
 class ElapsedCardBadge implements ElapsedCardBadge {
-  discussion: any;
+  discussion: Discussion;
 
-  constructor(discussion) {
+  constructor(discussion: Discussion) {
     this.discussion = discussion;
     this.render = this.render.bind(this);
   }
 
-  getText = async (t, elapsed): Trello.Promise<string> => formatDuration(elapsed);
+  getText = async (t: Trello.PowerUp.IFrame, elapsed: number): Promise<string> => formatDuration(elapsed);
 
-  getColor = async (t): Trello.Promise<Trello.TrelloColors> => {
+  getColor = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.Colors> => {
     const isOngoing = await this.discussion.isOngoingFor(t);
 
     if (isOngoing) { return 'orange'; }
@@ -24,7 +25,8 @@ class ElapsedCardBadge implements ElapsedCardBadge {
   // https://github.com/babel/babel/issues/5104
   //
   // Upgrading to Babel 7.x should solve it.
-  async render(t): Trello.Promise<Trello.CardBadge> {
+  // NOTE: CHECK whether this is still relevant for ts-loader
+  async render(t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBadge> {
     const elapsed = await this.discussion.getElapsed(t);
     if (!elapsed) { return null; }
 

@@ -1,38 +1,41 @@
-import Trello from '../@types/TrelloPowerUp';
+import { Trello } from '../types/TrelloPowerUp';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 class Storage {
-  scope: Trello.StorageScope;
-  visibility: Trello.StorageVisibility;
+  scope: Trello.PowerUp.Scope;
+  visibility: Trello.PowerUp.Visibility;
 
-  constructor(scope: Trello.StorageScope = 'member', visibility: Trello.StorageVisibility = 'private') {
+  constructor(scope: Trello.PowerUp.Scope = 'member', visibility: Trello.PowerUp.Visibility = 'private') {
     Object.assign(this, { scope, visibility });
   }
 
-  readById(t, key, cardId) {
+  readById(t: Trello.PowerUp.IFrame, key: string, cardId: string): PromiseLike<any> {
     return t.get(cardId, this.visibility, key);
   }
 
-  read(t, key) {
+  read(t: Trello.PowerUp.IFrame, key: string): PromiseLike<any> {
     return t.get(this.scope, this.visibility, key);
   }
 
-  write(t, key, value) {
+  write(t: Trello.PowerUp.IFrame, key: string, value: any): PromiseLike<void> {
     return t.set(this.scope, this.visibility, key, value);
   }
 
-  writeMultiple(t, entries) {
+  writeMultiple(t: Trello.PowerUp.IFrame, entries: {
+    [ key: string]: any;
+  }): PromiseLike<void> {
     return t.set(this.scope, this.visibility, entries);
   }
 
-  delete(t, key) {
+  delete(t: Trello.PowerUp.IFrame, key: string): PromiseLike<void> {
     return t.remove(this.scope, this.visibility, key);
   }
 
-  deleteMultiple(t, entries) {
+  deleteMultiple(t: Trello.PowerUp.IFrame, entries: string[]): PromiseLike<void> {
     return t.remove(this.scope, this.visibility, entries);
   }
 
-  deleteMultipleById(t, entries, cardId) {
+  deleteMultipleById(t: Trello.PowerUp.IFrame, entries: string[], cardId: string): PromiseLike<void> {
     return t.remove(cardId, this.visibility, entries);
   }
 }

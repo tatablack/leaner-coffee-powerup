@@ -19,7 +19,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.js']
   },
 
   module: {
@@ -27,7 +27,7 @@ module.exports = {
       {
         test: /\.([tj])s$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
+        exclude: /node_modules/
       }
     ]
   },

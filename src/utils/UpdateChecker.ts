@@ -1,4 +1,4 @@
-import Trello from '../@types/TrelloPowerUp';
+import { Trello } from '../types/TrelloPowerUp';
 import BoardStorage from '../storage/BoardStorage';
 
 const LAST_UNCHECKED_VERSION = '0.6.2';
@@ -7,19 +7,19 @@ class UpdateChecker {
   storage: BoardStorage;
   storedVersion: string;
 
-  constructor(storage) {
+  constructor(storage: BoardStorage) {
     this.storage = storage;
   }
 
-  hasBeenUpdated = async (t): Trello.Promise<boolean> => {
+  hasBeenUpdated = async (t: Trello.PowerUp.IFrame): Promise<boolean> => {
     this.storedVersion = await this.storage.getPowerUpVersion(t);
     return !this.storedVersion || (this.storedVersion !== process.env.VERSION);
   };
 
-  showMenu = async (t): Trello.Promise<void> => {
+  showMenu = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     const storedVersion = await this.storage.getPowerUpVersion(t);
 
-    t.popup({
+    return t.popup({
       title: `Updated from ${storedVersion || LAST_UNCHECKED_VERSION} to ${process.env.VERSION}`,
       url: './release-notes.html',
       args: { version: process.env.VERSION },
@@ -28,7 +28,7 @@ class UpdateChecker {
     });
   };
 
-  storeNewVersion = async (t): Trello.Promise<void> => {
+  storeNewVersion = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     await this.storage.setPowerUpVersion(t, process.env.VERSION);
   };
 }

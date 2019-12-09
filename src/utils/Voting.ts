@@ -1,16 +1,14 @@
+import { Trello } from '../types/TrelloPowerUp';
 import CardStorage from '../storage/CardStorage';
-import Trello from '../@types/TrelloPowerUp';
 
 class Voting {
   cardStorage: CardStorage;
-  promise: Trello.Promise<any>;
 
-  constructor(trello) {
+  constructor() {
     this.cardStorage = new CardStorage();
-    this.promise = trello.Promise;
   }
 
-  hasCurrentMemberVoted = async (t): Trello.Promise<boolean> => {
+  hasCurrentMemberVoted = async (t: Trello.PowerUp.IFrame): Promise<boolean> => {
     const votes = await this.cardStorage.read(t, CardStorage.VOTES);
     if (!votes) { return false; }
 
@@ -18,9 +16,9 @@ class Voting {
     return !!votes[currentMember];
   };
 
-  getVotes = async (t): Trello.Promise<Votes> => this.cardStorage.read(t, CardStorage.VOTES);
+  getVotes = async (t: Trello.PowerUp.IFrame): Promise<Votes> => this.cardStorage.read(t, CardStorage.VOTES);
 
-  countVotesByCard = async (t, cardId): Trello.Promise<number> => {
+  countVotesByCard = async (t: Trello.PowerUp.IFrame, cardId: string): Promise<number> => {
     const votes = await this.cardStorage.readById(t, CardStorage.VOTES, cardId);
 
     if (!votes) { return 0; }
@@ -28,14 +26,14 @@ class Voting {
     return Object.keys(votes).filter((key) => votes[key]).length;
   };
 
-  getMaxVotes = async (t): Trello.Promise<number> => {
+  getMaxVotes = async (t: Trello.PowerUp.IFrame): Promise<number> => {
     const currentList = await t.list('cards');
 
     // http://www.leanmath.com/blog-entry/multi-voting-math-or-n3
     return Math.ceil(currentList.cards.length / 3);
   };
 
-  canCurrentMemberVote = async (t): Trello.Promise<boolean> => {
+  canCurrentMemberVote = async (t: Trello.PowerUp.IFrame): Promise<boolean> => {
     if (await this.hasCurrentMemberVoted(t)) { return true; }
 
     const currentList = await t.list('cards');
@@ -46,8 +44,8 @@ class Voting {
     return currentMemberVotes < maxVotes;
   };
 
-  countVotesByMember = async (t, cardIds): Trello.Promise<number> => {
-    const listVotes: number[] = await this.promise.all(cardIds.map(async (cardId): Trello.Promise<number> => {
+  countVotesByMember = async (t: Trello.PowerUp.IFrame, cardIds: string[]): Promise<number> => {
+    const listVotes: number[] = await Promise.all(cardIds.map(async (cardId): Promise<number> => {
       const votes = await this.cardStorage.readById(t, CardStorage.VOTES, cardId);
       if (!votes) { return 0; }
 

@@ -1,15 +1,15 @@
-import Trello from '../@types/TrelloPowerUp';
+type NotificationType = {
+  [key in 'audio' | 'text']: string;
+};
 
 class Notifications {
   w: Window;
   baseUrl: string;
   audioContext: AudioContext;
 
-  Types = {
-    ELAPSED: {
-      audio: 'assets/looking_down.mp3',
-      text: 'The timer has elapsed'
-    }
+  Elapsed: NotificationType = {
+    audio: 'assets/looking_down.mp3',
+    text: 'The timer has elapsed'
   };
 
   constructor(window: Window, baseUrl: string) {
@@ -17,7 +17,7 @@ class Notifications {
     this.baseUrl = baseUrl;
   }
 
-  async load(url): Trello.Promise<AudioBufferSourceNode> {
+  async load(url: string): Promise<AudioBufferSourceNode> {
     const remoteAudioFile = await fetch(url);
     const audioData = await remoteAudioFile.arrayBuffer();
     const audioBuffer = await this.audioContext.decodeAudioData(audioData);
@@ -27,13 +27,13 @@ class Notifications {
     return sourceNode;
   }
 
-  async play(type): Trello.Promise<void> {
+  async play(type: NotificationType): Promise<void> {
     this.audioContext = this.audioContext || new (AudioContext || this.w.webkitAudioContext)();
     const audio = await this.load(`${this.baseUrl}/${type.audio}`);
     audio.start();
   }
 
-  open(type, cardName): void {
+  open(type: NotificationType, cardName: string): void {
     // eslint-disable-next-line no-new
     new Notification(cardName, {
       body: type.text,
@@ -41,7 +41,7 @@ class Notifications {
     });
   }
 
-  show(type, cardName) {
+  show(type: NotificationType, cardName: string): void {
     if ((!('Notification' in this.w)) || Notification.permission === 'denied') { return; }
 
     if (Notification.permission === 'granted') {

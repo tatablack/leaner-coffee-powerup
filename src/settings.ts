@@ -1,13 +1,7 @@
 import LeanCoffeeSettings from './LeanCoffeeSettings';
 
-declare global {
-  interface Window {
-    settingsInstance: LeanCoffeeSettings;
-  }
-}
-
-window.settingsInstance = new LeanCoffeeSettings({
+const settings = new LeanCoffeeSettings({
   w: window,
   environment: process.env.NODE_ENV as Environment
 });
-window.settingsInstance.init();
+settings.init();

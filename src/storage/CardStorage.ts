@@ -1,4 +1,4 @@
-import Trello from '../@types/TrelloPowerUp';
+import { Trello } from '../types/TrelloPowerUp';
 import Storage from './Storage';
 
 class CardStorage extends Storage {
@@ -12,43 +12,43 @@ class CardStorage extends Storage {
     super('card', 'shared');
   }
 
-  getDiscussionStatus(t): Trello.Promise<DiscussionStatus> {
+  getDiscussionStatus(t: Trello.PowerUp.IFrame): PromiseLike<DiscussionStatus> {
     return super.read(t, CardStorage.DISCUSSION_STATUS);
   }
 
-  getDiscussionElapsed(t): Trello.Promise<number> {
+  getDiscussionElapsed(t: Trello.PowerUp.IFrame): PromiseLike<number> {
     return super.read(t, CardStorage.DISCUSSION_ELAPSED);
   }
 
-  getDiscussionThumbs(t): Trello.Promise<Thumbs> {
+  getDiscussionThumbs(t: Trello.PowerUp.IFrame): PromiseLike<Thumbs> {
     return super.read(t, CardStorage.DISCUSSION_THUMBS);
   }
 
-  getDiscussionButtonLabel(t) {
+  getDiscussionButtonLabel(t: Trello.PowerUp.IFrame): PromiseLike<string> {
     return super.read(t, CardStorage.DISCUSSION_BUTTON_LABEL);
   }
 
-  saveDiscussionStatus(t, newStatus: DiscussionStatus): Trello.Promise<void> {
+  saveDiscussionStatus(t: Trello.PowerUp.IFrame, newStatus: DiscussionStatus): PromiseLike<void> {
     return super.write(t, CardStorage.DISCUSSION_STATUS, newStatus);
   }
 
-  saveDiscussionElapsed(t, newElapsed): Trello.Promise<void> {
+  saveDiscussionElapsed(t: Trello.PowerUp.IFrame, newElapsed: number): PromiseLike<void> {
     return super.write(t, CardStorage.DISCUSSION_ELAPSED, newElapsed);
   }
 
-  saveDiscussionThumbs(t, newThumbs: Thumbs): Trello.Promise<void> {
+  saveDiscussionThumbs(t: Trello.PowerUp.IFrame, newThumbs: Thumbs): PromiseLike<void> {
     return super.write(t, CardStorage.DISCUSSION_THUMBS, newThumbs);
   }
 
-  saveVotes(t, newVotes): Trello.Promise<void> {
+  saveVotes(t: Trello.PowerUp.IFrame, newVotes: Votes): PromiseLike<void> {
     return super.write(t, CardStorage.VOTES, newVotes);
   }
 
-  saveDiscussionButtonLabel(t, newLabel?): Trello.Promise<void> {
+  saveDiscussionButtonLabel(t: Trello.PowerUp.IFrame, newLabel?: string): PromiseLike<void> {
     return super.write(t, CardStorage.DISCUSSION_BUTTON_LABEL, newLabel);
   }
 
-  deleteDiscussionThumbs(t): Trello.Promise<void> {
+  deleteDiscussionThumbs(t: Trello.PowerUp.IFrame): PromiseLike<void> {
     return super.delete(t, CardStorage.DISCUSSION_THUMBS);
   }
 }

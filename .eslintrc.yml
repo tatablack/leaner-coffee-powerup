@@ -7,7 +7,9 @@ parserOptions:
 extends:
   - airbnb-base
 rules:
-  comma-dangle: 0
+  comma-dangle:
+    - error
+    - never
   no-param-reassign:
     - error
     - props: true
@@ -19,20 +21,14 @@ rules:
     - 120
   import/no-mutable-exports: 0
   import/prefer-default-export: 0
+  import/no-extraneous-dependencies:
+    - error
+    - devDependencies:
+      - webpack.*.js
 overrides:
   - files: "webpack.*.js"
-    rules:
-      import/no-extraneous-dependencies:
-        - error
-        - devDependencies:
-            - webpack.*.js
     settings:
       import/resolver: 'node'
-  - files: "*.d.ts"
-    parser: "@typescript-eslint/parser"
-    rules:
-      import/no-extraneous-dependencies: 0
-      "@typescript-eslint/explicit-member-accessibility": 0
   - files:
       - "*.ts"
     parser: "@typescript-eslint/parser"
@@ -58,18 +54,33 @@ overrides:
         - props: true
           ignorePropertyModificationsFor:
             - element
+      "@typescript-eslint/no-explicit-any": 1
+    settings:
+      import/resolver:
+        webpack:
+          config: 'webpack.dev.js'
+  - files: "*.d.ts"
+    parser: "@typescript-eslint/parser"
+    extends:
+      - airbnb-base
+      - plugin:import/typescript
+      - plugin:@typescript-eslint/recommended
+    rules:
+      import/no-extraneous-dependencies: 0
+      import/prefer-default-export: 0
+      max-len:
+        - error
+        - 120
+      "@typescript-eslint/explicit-member-accessibility": 0
       "@typescript-eslint/no-explicit-any": 0
+    settings:
+      import/resolver:
+        webpack:
+          config: 'webpack.dev.js'
 settings:
-  import/resolver:
-    webpack:
-      extensions:
-        - ".js"
-        - ".ts"
-        - ".json"
   import/parsers:
     "@typescript-eslint/parser":
       - ".ts"
   import/extensions:
     - ".js"
     - ".ts"
-    - ".json"

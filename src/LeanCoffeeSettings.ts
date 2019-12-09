@@ -1,4 +1,4 @@
-import Trello from './@types/TrelloPowerUp';
+import { Trello } from './types/TrelloPowerUp';
 import Debug from './utils/Debug';
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
 
@@ -8,7 +8,7 @@ interface LeanCoffeeSettingsParams extends LeanCoffeeBaseParams {
 
 class LeanCoffeeSettings extends LeanCoffeeBase {
   isProduction: boolean;
-  t: Trello.TrelloIFrame;
+  t: Trello.PowerUp.IFrame;
 
   constructor({ w, environment }: LeanCoffeeSettingsParams) {
     super({ w });
@@ -19,21 +19,25 @@ class LeanCoffeeSettings extends LeanCoffeeBase {
   init(): void {
     if (!this.isProduction) {
       (this.w.document.querySelector('.dev-only') as HTMLElement).style.display = 'block';
+      this.w.document.getElementById('showData').addEventListener('click', this.showData.bind(this));
+      this.w.document.getElementById('wipeData').addEventListener('click', this.wipeData.bind(this));
     }
 
     this.t.sizeTo('#leanCoffeeSettingsForm');
   }
 
-  showData = async (): Trello.Promise<void> => {
+  showData = (evt: Event): void => {
+    evt.preventDefault();
     if (this.isProduction) { return; }
 
-    await Debug.showData(this.t, this.Promise);
+    Debug.showData(this.t);
   };
 
-  wipeData = async (): Trello.Promise<void> => {
+  wipeData = (evt: Event): void => {
+    evt.preventDefault();
     if (this.isProduction) { return; }
 
-    await Debug.wipeData(this.t, this.Promise, this.cardStorage, this.boardStorage);
+    Debug.wipeData(this.t, this.cardStorage, this.boardStorage);
   };
 }
 

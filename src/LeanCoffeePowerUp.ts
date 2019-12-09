@@ -1,3 +1,4 @@
+import { Trello } from './types/TrelloPowerUp';
 import BoardStorage from './storage/BoardStorage';
 import CardStorage from './storage/CardStorage';
 import ElapsedCardBadge from './badges/ElapsedCardBadge';
@@ -8,7 +9,6 @@ import Discussion from './utils/Discussion';
 import Voting from './utils/Voting';
 import UpdateChecker from './utils/UpdateChecker';
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
-import Trello from './@types/TrelloPowerUp';
 
 interface LeanCoffeePowerUpParams extends LeanCoffeeBaseParams {
   baseUrl: string;
@@ -16,7 +16,7 @@ interface LeanCoffeePowerUpParams extends LeanCoffeeBaseParams {
 }
 
 class LeanCoffeePowerUp extends LeanCoffeeBase {
-  t: Trello.TrelloPowerUp;
+  t: Trello.PowerUp;
   baseUrl: string;
   discussion: Discussion;
   voting: Voting;
@@ -28,10 +28,11 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
 
   constructor({ w, baseUrl, maxDiscussionDuration }: LeanCoffeePowerUpParams) {
     super({ w });
+    this.t = w.TrelloPowerUp;
     this.baseUrl = baseUrl;
 
     this.discussion = new Discussion(this.w, this.baseUrl, maxDiscussionDuration);
-    this.voting = new Voting(this.t);
+    this.voting = new Voting();
     this.updateChecker = new UpdateChecker(this.boardStorage);
 
     this.elapsedCardBadge = new ElapsedCardBadge(this.discussion);
@@ -40,7 +41,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     this.votingCardDetailBadge = new VotingCardDetailBadge(this.baseUrl, this.voting);
   }
 
-  handleBoardButtons = async (t) => {
+  handleBoardButtons = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.BoardButtonCallback[]> => {
     if (!await this.updateChecker.hasBeenUpdated(t)) {
       return [];
     }
@@ -55,7 +56,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     }];
   };
 
-  handleCardBackSection = async (t) => {
+  handleCardBackSection = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBackSection> => {
     const discussionStatus = await this.discussion.cardStorage.getDiscussionStatus(t);
     if (discussionStatus === undefined) { return null; }
 
@@ -70,7 +71,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     };
   };
 
-  handleCardBadges = async (t) => {
+  handleCardBadges = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBadge[]> => {
     const badges = [
       await this.elapsedCardBadge.render(t),
       await this.votingCardBadge.render(t)
@@ -79,7 +80,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     return badges.filter((badge) => badge);
   };
 
-  handleCardButtons = async (t) => [{
+  handleCardButtons = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardButton[]> => [{
     icon: `${this.baseUrl}/assets/powerup/timer.svg`,
     text: await this.getButtonLabel(t),
     callback: this.handleDiscussion
@@ -89,7 +90,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     callback: this.handleVoting
   }];
 
-  handleCardDetailBadges = async (t) => {
+  handleCardDetailBadges = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardDetailBadge[]> => {
     const badges = [
       await this.elapsedCardDetailBadge.render(t),
       await this.votingCardDetailBadge.render(t)
@@ -98,26 +99,28 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     return badges.filter((badge) => badge);
   };
 
-  handleListActions = () => [{
+  handleListActions = (): Promise<Trello.PowerUp.ListAction[]> => Promise.resolve([{
     text: 'Clear All Votes',
-    callback: async (t) => {
+    callback: async (t): Promise<void> => {
       const result = await t.list('cards');
       result.cards.forEach(({ id }) => {
         this.cardStorage.deleteMultipleById(t, [CardStorage.VOTES], id);
       });
-      t.closePopup();
+      return t.closePopup();
     }
-  }];
+  }]);
 
-  handleListSorters = () => [{
+  handleListSorters = (): Promise<Trello.PowerUp.ListSorter[]> => Promise.resolve([{
     text: 'Most Votes',
-    callback: async (t, opts) => {
-      const countedCards: any[] = await this.Promise.all(opts.cards.map(async (card) => {
-        const leanCoffeeVotes = await this.voting.countVotesByCard(t, card.id);
-        return { leanCoffeeVotes, ...card };
-      }));
+    callback: async (t, opts): Promise<{ sortedIds: string[] }> => {
+      const votingData = await Promise.all(opts.cards.map(
+        async (card): Promise<{ leanCoffeeVotes: number; id: string }> => {
+          const leanCoffeeVotes = await this.voting.countVotesByCard(t, card.id);
+          return { leanCoffeeVotes, id: card.id };
+        }
+      ));
 
-      const sortedCards = countedCards.sort((cardA, cardB) => {
+      const sortedCards = votingData.sort((cardA, cardB) => {
         if (cardA.leanCoffeeVotes < cardB.leanCoffeeVotes) { return 1; }
         if (cardB.leanCoffeeVotes < cardA.leanCoffeeVotes) { return -1; }
         return 0;
@@ -127,21 +130,21 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
         sortedIds: sortedCards.map((card) => card.id)
       };
     }
-  }];
+  }]);
 
-  handleEnable = (t) => {
-    this.boardStorage.setPowerUpVersion(t, process.env.VERSION);
-  };
+  handleEnable = (t: Trello.PowerUp.IFrame): PromiseLike<void> => this.boardStorage.setPowerUpVersion(
+    t, process.env.VERSION
+  );
 
-  showSettings = (t) => t.popup({
+  showSettings = (t: Trello.PowerUp.IFrame): PromiseLike<void> => t.popup({
     title: `Leaner Coffee v${process.env.VERSION}`,
     url: `${this.baseUrl}/settings.html`,
     height: 184
   });
 
-  handleVoting = async (t) => {
+  handleVoting = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     if (!await this.voting.canCurrentMemberVote(t)) {
-      t.popup({
+      return t.popup({
         title: 'Leaner Coffee',
         url: `${this.baseUrl}/too_many_votes.html`,
         args: {
@@ -149,8 +152,6 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
         },
         height: 98
       });
-
-      return;
     }
 
     const votes = await this.voting.getVotes(t) || {};
@@ -166,11 +167,10 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       };
     }
 
-    console.log(votes);
-    this.cardStorage.saveVotes(t, votes);
+    return this.cardStorage.saveVotes(t, votes);
   };
 
-  handleDiscussion = async (t) => {
+  handleDiscussion = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     if (await this.discussion.isOngoingOrPausedForAnotherCard(t)) {
       const boardStatus = await this.boardStorage.getDiscussionStatus(t);
       const cardId = await this.boardStorage.getDiscussionCardId(t);
@@ -204,22 +204,22 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       ]);
     }
 
-    let items = [];
+    let items;
 
     switch (true) {
       case await this.discussion.isOngoingFor(t):
         items = [{
           text: '❙ ❙  Pause timer', // MEDIUM VERTICAL BAR + NARROW NO-BREAK SPACE
-          callback: async (t2) => {
-            this.discussion.pause(t2);
-            t2.closePopup();
+          callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+            await this.discussion.pause(t2);
+            await t2.closePopup();
             await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Pausing ❙ ❙');
           }
         }, {
           text: '■ End discussion', // BLACK SQUARE
-          callback: async (t2) => {
-            this.discussion.end(t2);
-            t2.closePopup();
+          callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+            await this.discussion.end(t2);
+            await t2.closePopup();
             await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Stopping ■');
           }
         }];
@@ -227,16 +227,16 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       case await this.discussion.isPausedFor(t):
         items = [{
           text: '▶ Resume discussion', // BLACK RIGHT-POINTING TRIANGLE
-          callback: async (t2) => {
-            this.discussion.start(t2);
-            t2.closePopup();
+          callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+            await this.discussion.start(t2);
+            await t2.closePopup();
             await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Resuming ▶');
           }
         }, {
           text: '■ End discussion', // BLACK SQUARE
-          callback: async (t2) => {
-            this.discussion.end(t2);
-            t2.closePopup();
+          callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+            await this.discussion.end(t2);
+            await t2.closePopup();
             await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Stopping ■');
           }
         }];
@@ -244,21 +244,21 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       default:
         items = [{
           text: '▶ Start timer', // BLACK RIGHT-POINTING TRIANGLE
-          callback: async (t2) => {
-            this.discussion.start(t2);
-            t2.closePopup();
+          callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+            await this.discussion.start(t2);
+            await t2.closePopup();
             await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Starting ▶');
           }
         }];
     }
 
-    t.popup({
+    await t.popup({
       title: 'Leaner Coffee',
       items
     });
   };
 
-  getButtonLabel = async (t) => {
+  getButtonLabel = async (t: Trello.PowerUp.IFrame): Promise<string> => {
     let label = await this.discussion.cardStorage.getDiscussionButtonLabel(t);
 
     if (label) {
@@ -272,7 +272,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     return label;
   };
 
-  start() {
+  start(): void {
     this.t.initialize({
       'board-buttons': this.handleBoardButtons,
       'card-back-section': this.handleCardBackSection,

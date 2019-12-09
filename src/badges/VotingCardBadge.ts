@@ -1,20 +1,20 @@
+import { Trello } from '../types/TrelloPowerUp';
 import Voting from '../utils/Voting';
-import Trello from '../@types/TrelloPowerUp';
 
 class VotingCardBadge {
   baseUrl: string;
   voting: Voting;
 
-  constructor(baseUrl, voting) {
+  constructor(baseUrl: string, voting: Voting) {
     this.baseUrl = baseUrl;
     this.voting = voting;
     this.render = this.render.bind(this);
   }
 
-  getVoters = async (t) => {
+  getVoters = async (t: Trello.PowerUp.IFrame): Promise<{ text: string }[]> => {
     const votes: Votes = await this.voting.getVotes(t) || {};
 
-    return Object.values(votes).reduce((knownVoters: any[], vote) => {
+    return Object.values(votes).reduce((knownVoters: { text: string }[], vote) => {
       if (vote.username) {
         knownVoters.push({ text: `${vote.username} (${vote.fullName})` });
       }
@@ -28,8 +28,9 @@ class VotingCardBadge {
   // https://github.com/babel/babel/issues/5104
   //
   // Upgrading to Babel 7.x should solve it.
-  async render(t): Trello.Promise<Trello.CardBadge> {
+  async render(t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBadge> {
     const voters = await this.getVoters(t);
+
     if (!voters.length) { return null; }
 
     const hasVoted = await this.voting.hasCurrentMemberVoted(t);

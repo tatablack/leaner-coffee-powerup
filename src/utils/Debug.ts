@@ -1,31 +1,36 @@
-import Trello from '../@types/TrelloPowerUp';
+import { Trello } from '../types/TrelloPowerUp';
+
 import BoardStorage from '../storage/BoardStorage';
 import CardStorage from '../storage/CardStorage';
 
 /* eslint-disable no-console */
 class Debug {
-  static async showData(t, Promise): Trello.Promise<void> {
-    const boardData = await t.getAll();
-    const cards = await t.cards('all');
-
+  static async showData(t: Trello.PowerUp.IFrame): Promise<void> {
     console.groupCollapsed('Current context');
     console.log(JSON.stringify(t.getContext(), null, 2));
     console.groupEnd();
 
+    const boardData = await t.getAll();
     console.groupCollapsed('Board data');
     console.log(JSON.stringify(boardData, null, 2));
     console.groupEnd();
 
-    const cardsPromises = Promise.map(cards, (card) => t.get(card.id, 'shared'));
+    const cards = await t.cards('id', 'name');
+    const cardsDataPromise = cards.map(async (card) => {
+      const cardData = await t.get(card.id, 'shared');
+      return { name: card.name, ...cardData };
+    });
 
-    cardsPromises.then((cardsData) => cardsData.forEach((card) => {
+    const cardsData = await Promise.all(cardsDataPromise);
+    cardsData.forEach((card) => {
       console.groupCollapsed('Card data');
+      // console.log(card);
       console.log(JSON.stringify(card, null, 2));
       console.groupEnd();
-    }));
+    });
   }
 
-  static async wipeData(t, Promise, cardStorage, boardStorage) {
+  static async wipeData(t: Trello.PowerUp.IFrame, cardStorage: CardStorage, boardStorage: BoardStorage): Promise<void> {
     boardStorage.deleteMultiple(t, [
       BoardStorage.DISCUSSION_STATUS,
       BoardStorage.DISCUSSION_CARD_ID,
