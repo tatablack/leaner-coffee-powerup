@@ -1,7 +1,8 @@
+import { Trello } from '../types/TrelloPowerUp';
 import VotingCardBadge from './VotingCardBadge';
 
 class VotingCardDetailBadge extends VotingCardBadge {
-  showVoters = async (t) => {
+  showVoters = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     const items = await this.getVoters(t);
 
     if (!items.length) { return; }
@@ -12,8 +13,8 @@ class VotingCardDetailBadge extends VotingCardBadge {
     });
   };
 
-  render = async (t) => {
-    const commonData = await super.render(t);
+  render = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardDetailBadge> => {
+    const commonData = await super.render(t) as Trello.PowerUp.CardDetailBadge;
 
     if (commonData) {
       commonData.title = 'Voters';

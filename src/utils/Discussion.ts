@@ -1,21 +1,17 @@
-import BoardStorage from './storage/BoardStorage';
-import CardStorage from './storage/CardStorage';
+import { Trello } from '../types/TrelloPowerUp';
+import BoardStorage from '../storage/BoardStorage';
+import CardStorage from '../storage/CardStorage';
 import Notifications from './Notifications';
 
-export const Statuses = {
-  ONGOING: 'ONGOING',
-  PAUSED: 'PAUSED',
-  ENDED: 'ENDED'
-};
-
-export const Thumbs = {
-  UP: 'UP',
-  DOWN: 'DOWN',
-  MIDDLE: 'MIDDLE'
-};
-
 class Discussion {
-  constructor(window, baseUrl, maxDiscussionDuration) {
+  w: Window;
+  baseUrl: string;
+  maxDiscussionDuration: number;
+  notifications: Notifications;
+  boardStorage: BoardStorage;
+  cardStorage: CardStorage;
+
+  constructor(window: Window, baseUrl: string, maxDiscussionDuration: number) {
     this.w = window;
     this.baseUrl = baseUrl;
     this.notifications = new Notifications(this.w, this.baseUrl);
@@ -24,31 +20,31 @@ class Discussion {
     this.cardStorage = new CardStorage();
   }
 
-  isOngoingOrPausedForAnotherCard = async (t) => {
+  isOngoingOrPausedForAnotherCard = async (t: Trello.PowerUp.IFrame): Promise<boolean> => {
     const boardStatus = await this.boardStorage.getDiscussionStatus(t);
     const cardId = await this.boardStorage.getDiscussionCardId(t);
 
-    return [Statuses.ONGOING, Statuses.PAUSED].includes(boardStatus) && cardId !== t.getContext().card;
+    return ['ONGOING', 'PAUSED'].includes(boardStatus) && cardId !== t.getContext().card;
   };
 
-  hasNotBeenArchived = async (t, cardId) => {
+  hasNotBeenArchived = async (t: Trello.PowerUp.IFrame, cardId: string): Promise<boolean> => {
     const allCards = await t.cards('id', 'name');
-    return !!allCards.find(card => card.id === cardId);
+    return !!allCards.find((card) => card.id === cardId);
   };
 
-  isOngoingFor = async (t) => {
+  isOngoingFor = async (t: Trello.PowerUp.IFrame): Promise<boolean> => {
     const cardStatus = await this.cardStorage.getDiscussionStatus(t);
-    return Statuses.ONGOING === cardStatus;
+    return cardStatus === 'ONGOING';
   };
 
-  isPausedFor = async (t) => {
+  isPausedFor = async (t: Trello.PowerUp.IFrame): Promise<boolean> => {
     const cardStatus = await this.cardStorage.getDiscussionStatus(t);
-    return Statuses.PAUSED === cardStatus;
+    return cardStatus === 'PAUSED';
   };
 
-  getElapsed = t => this.cardStorage.getDiscussionElapsed(t);
+  getElapsed = (t: Trello.PowerUp.IFrame): PromiseLike<number> => this.cardStorage.getDiscussionElapsed(t);
 
-  updateElapsed = async (t) => {
+  updateElapsed = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     const startedAt = await this.boardStorage.getDiscussionStartedAt(t);
     const elapsed = Date.now() - startedAt;
 
@@ -60,7 +56,7 @@ class Discussion {
     }
   };
 
-  saveElapsed = async (t) => {
+  saveElapsed = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     const startedAt = await this.boardStorage.getDiscussionStartedAt(t);
     const previousElapsed = await this.boardStorage.getDiscussionPreviousElapsed(t) || 0;
     const elapsed = startedAt ? Date.now() - startedAt : 0;
@@ -68,47 +64,47 @@ class Discussion {
     this.cardStorage.saveDiscussionElapsed(t, (elapsed + previousElapsed));
   };
 
-  start = async (t) => {
+  start = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     this.boardStorage.writeMultiple(t, {
-      [BoardStorage.DISCUSSION_STATUS]: Statuses.ONGOING,
+      [BoardStorage.DISCUSSION_STATUS]: 'ONGOING',
       [BoardStorage.DISCUSSION_CARD_ID]: t.getContext().card,
       [BoardStorage.DISCUSSION_STARTED_AT]: Date.now(),
       [BoardStorage.DISCUSSION_PREVIOUS_ELAPSED]: await this.getElapsed(t),
       [BoardStorage.DISCUSSION_INTERVAL_ID]: setInterval(this.updateElapsed, 5000, t)
     });
 
-    await this.cardStorage.saveDiscussionStatus(t, Statuses.ONGOING);
+    await this.cardStorage.saveDiscussionStatus(t, 'ONGOING');
     await this.cardStorage.deleteDiscussionThumbs(t);
   };
 
-  pause = async (t, notify = false) => {
+  pause = async (t: Trello.PowerUp.IFrame, notify = false): Promise<void> => {
     const intervalId = await this.boardStorage.getDiscussionIntervalId(t);
     const cardId = await this.boardStorage.getDiscussionCardId(t);
-    const cardName = (await t.cards('id', 'name')).find(card => card.id === cardId).name;
+    const cardName = (await t.cards('id', 'name')).find((card) => card.id === cardId).name;
 
     clearInterval(intervalId);
 
-    this.cardStorage.saveDiscussionStatus(t, Statuses.PAUSED);
+    this.cardStorage.saveDiscussionStatus(t, 'PAUSED');
     this.saveElapsed(t);
     this.boardStorage.writeMultiple(t, {
-      [BoardStorage.DISCUSSION_STATUS]: Statuses.PAUSED,
+      [BoardStorage.DISCUSSION_STATUS]: 'PAUSED',
       [BoardStorage.DISCUSSION_STARTED_AT]: null,
       [BoardStorage.DISCUSSION_PREVIOUS_ELAPSED]: await this.getElapsed(t),
       [BoardStorage.DISCUSSION_INTERVAL_ID]: null
     });
 
     if (notify) {
-      this.notifications.play(this.notifications.Types.ELAPSED);
-      this.notifications.show(this.notifications.Types.ELAPSED, cardName);
+      this.notifications.play(this.notifications.Elapsed);
+      this.notifications.show(this.notifications.Elapsed, cardName);
     }
   };
 
-  end = async (t) => {
+  end = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     const intervalId = await this.boardStorage.getDiscussionIntervalId(t);
     clearInterval(intervalId);
 
     try {
-      await this.cardStorage.saveDiscussionStatus(t, Statuses.ENDED);
+      await this.cardStorage.saveDiscussionStatus(t, 'ENDED');
       await this.saveElapsed(t);
       await this.cardStorage.deleteMultiple(t, [CardStorage.DISCUSSION_THUMBS]);
       await this.boardStorage.deleteMultiple(t, [
