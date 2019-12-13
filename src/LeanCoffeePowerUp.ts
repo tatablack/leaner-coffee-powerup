@@ -11,7 +11,6 @@ import UpdateChecker from './utils/UpdateChecker';
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
 
 interface LeanCoffeePowerUpParams extends LeanCoffeeBaseParams {
-  baseUrl: string;
   maxDiscussionDuration: number;
 }
 
@@ -26,11 +25,14 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   votingCardDetailBadge: VotingCardDetailBadge;
   updateChecker: UpdateChecker;
 
-  constructor({ w, baseUrl, maxDiscussionDuration }: LeanCoffeePowerUpParams) {
-    super({ w });
+  constructor({
+    w, config, maxDiscussionDuration
+  }: LeanCoffeePowerUpParams) {
+    super({ w, config });
     this.t = w.TrelloPowerUp;
-    this.baseUrl = baseUrl;
 
+    const { hostname, port } = config[process.env.NODE_ENV as Environment];
+    this.baseUrl = `${hostname}${port ? `:${port}` : ''}`;
     this.discussion = new Discussion(this.w, this.baseUrl, maxDiscussionDuration);
     this.voting = new Voting();
     this.updateChecker = new UpdateChecker(this.boardStorage);

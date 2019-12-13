@@ -4,6 +4,7 @@ import CardStorage from './storage/CardStorage';
 
 export interface LeanCoffeeBaseParams {
   w: Window;
+  config: Config;
   t?: Trello.PowerUp | Trello.PowerUp.IFrame;
 }
 
@@ -12,7 +13,7 @@ export class LeanCoffeeBase {
   boardStorage: BoardStorage;
   cardStorage: CardStorage;
 
-  constructor({ w }: LeanCoffeeBaseParams) {
+  constructor({ w, config }: LeanCoffeeBaseParams) {
     this.w = w;
     this.boardStorage = new BoardStorage();
     this.cardStorage = new CardStorage();

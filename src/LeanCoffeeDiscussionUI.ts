@@ -24,8 +24,8 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
   intervalId: number;
   previousStatus: DiscussionStatus;
 
-  constructor({ w }: LeanCoffeeBaseParams) {
-    super({ w });
+  constructor({ w, config }: LeanCoffeeBaseParams) {
+    super({ w, config });
     this.t = w.TrelloPowerUp.iframe();
 
     this.badges = this.w.document.querySelector('.badges');

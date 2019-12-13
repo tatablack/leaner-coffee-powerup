@@ -1,19 +1,15 @@
 import { Trello } from './types/TrelloPowerUp';
 import Debug from './utils/Debug';
-import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
-
-interface LeanCoffeeSettingsParams extends LeanCoffeeBaseParams {
-  environment: Environment;
-}
+import {LeanCoffeeBase, LeanCoffeeBaseParams} from './LeanCoffeeBase';
 
 class LeanCoffeeSettings extends LeanCoffeeBase {
   isProduction: boolean;
   t: Trello.PowerUp.IFrame;
 
-  constructor({ w, environment }: LeanCoffeeSettingsParams) {
-    super({ w });
+  constructor({ w, config }: LeanCoffeeBaseParams) {
+    super({ w, config });
     this.t = w.TrelloPowerUp.iframe();
-    this.isProduction = environment === 'production';
+    this.isProduction = process.env.NODE_ENV === 'production';
   }
 
   init(): void {

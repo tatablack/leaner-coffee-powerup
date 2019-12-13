@@ -4,6 +4,15 @@ type DiscussionStartedAt = number | null;
 type DiscussionPreviousElapsed = number | null;
 type Environment = 'production' | 'development';
 
+type Config = {
+  [key in Environment]: {
+    hostname: string;
+    port?: number;
+    defaultDuration?: number;
+    supportedLocales: string[];
+  };
+};
+
 interface Votes {
   [memberId: string]: {
     username: string;
