@@ -75,7 +75,7 @@ you can add it to one of your Trello teams by going to [this page](https://trell
 (you need to be a Team Admin).
 
 Make sure to fill in the following values:
-- *Power-Up icon URL*: `https://localhost:8080/assets/coffee.svg`
+- *Power-Up icon URL*: `https://localhost:8080/assets/moka.svg`
 - *Iframe connector URL*: `https://localhost:8080/index.html`
 
 ### Pull Requests
