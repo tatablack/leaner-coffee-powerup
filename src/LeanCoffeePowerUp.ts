@@ -31,8 +31,10 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     super({ w, config });
     this.t = w.TrelloPowerUp;
 
-    const { hostname, port } = config[process.env.NODE_ENV as Environment];
+    const { hostname, port, supportedLocales } = config[process.env.NODE_ENV as Environment];
     this.baseUrl = `${hostname}${port ? `:${port}` : ''}`;
+    this.supportedLocales = supportedLocales;
+
     this.discussion = new Discussion(this.w, this.baseUrl, maxDiscussionDuration);
     this.voting = new Voting();
     this.updateChecker = new UpdateChecker(this.boardStorage);
@@ -269,7 +271,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       }, 2000);
     }
 
-    label = label || 'Discussion';
+    label = label || await t.localizeKey('discussion');
 
     return label;
   };
@@ -285,6 +287,12 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       'list-sorters': this.handleListSorters,
       'on-enable': this.handleEnable,
       'show-settings': this.showSettings
+    }, {
+      localization: {
+        defaultLocale: 'en',
+        supportedLocales: this.supportedLocales,
+        resourceUrl: '/i18n/{locale}.json'
+      }
     });
   }
 }

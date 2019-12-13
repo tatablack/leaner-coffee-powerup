@@ -53,6 +53,7 @@ module.exports = {
     }),
     new CopyWebpackPlugin([
       { from: './assets/**/*' },
+      { from: './i18n/**/*' },
       { from: './*.html', ignore: ['_*'] }
     ])
   ]
