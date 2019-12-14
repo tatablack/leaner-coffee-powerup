@@ -150,6 +150,8 @@ export namespace Trello {
     type Colors = 'blue' | 'green' | 'orange' | 'red' | 'yellow' |
       'purple' | 'pink' | 'sky' | 'lime' | 'light-gray' | 'business-blue';
 
+    type AlertDisplay = 'info' | 'warning' | 'error' | 'success';
+
     // INTERNAL INTERFACES
     interface Localizer {
       resourceDictionary: ResourceDictionary;
@@ -229,7 +231,7 @@ export namespace Trello {
       alert(options: {
         message: string;
         duration?: number;
-        display?: 'infp' | 'warning' | 'error' | 'success';
+        display?: AlertDisplay;
       }): PromiseLike<void>;
       hideAlert(): PromiseLike<void>;
       popup(
@@ -301,6 +303,7 @@ export namespace Trello {
     interface IFrameOptions extends LocalizerOptions {
       context?: string;
       secret?: string;
+      helpfulStacks?: boolean;
     }
 
     // eslint-disable-next-line @typescript-eslint/interface-name-prefix
@@ -310,6 +313,13 @@ export namespace Trello {
       secret?: string;
       options: IFrameOptions;
       i18nPromise: PromiseLike<void>;
+      init(): any;
+      connect(): void;
+      request(command: string, options: any): PromiseLike<any>;
+      render(fxRender: () => void): any;
+      initApi(): void;
+      getRestApi(): unknown;
+      initSentry(): void;
     }
 
     interface PluginOptions extends LocalizerOptions {
@@ -327,12 +337,13 @@ export namespace Trello {
       authOrigin?: string;
       localStorage?: Storage;
       tokenStorageKey?: string;
+      helpfulStacks?: boolean;
     }
 
     interface Plugin extends AnonymousHostHandlers {
       options: PluginOptions;
       connect(): any; // return an instance of PostMessageIO
-      request(): any; //  // return PostMessageIO.request, whatever that is
+      request(command: string, options: any): PromiseLike<any>; //  // return PostMessageIO.request, whatever that is
       init(): any; // return an instance of PostMessageIO
       NotHandled(): any; // return PostMessageIO.NotHandled, whatever that is
     }
@@ -494,6 +505,16 @@ export namespace Trello {
       number?: string;
     }
 
+    type MemberType = 'admin' | 'normal' | 'observer'
+
+    interface Membership {
+      deactivated: boolean;
+      id: string;
+      idMember: string;
+      memberType: MemberType;
+      unconfirmed: boolean;
+    }
+
     interface Organization {
       id: string;
       name: string;
@@ -509,7 +530,7 @@ export namespace Trello {
       idOrganization: string;
       customFields: CustomField[];
       labels: Label[];
-      memberships: unknown[];
+      memberships: Membership[];
     }
 
     interface Card {
