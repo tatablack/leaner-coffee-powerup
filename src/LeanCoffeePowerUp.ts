@@ -14,6 +14,9 @@ interface LeanCoffeePowerUpParams extends LeanCoffeeBaseParams {
   maxDiscussionDuration: number;
 }
 
+// BLACK RIGHT-POINTING TRIANGLE, MEDIUM VERTICAL BAR + NARROW NO-BREAK SPACE, BLACK SQUARE
+type LifecycleSymbol = '▶' | '❙ ❙ ' | '■'
+
 class LeanCoffeePowerUp extends LeanCoffeeBase {
   t: Trello.PowerUp;
   baseUrl: string;
@@ -112,45 +115,61 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     switch (true) {
       case await this.discussion.isOngoingFor(t):
         items = [{
-          text: '❙ ❙  Pause timer', // MEDIUM VERTICAL BAR + NARROW NO-BREAK SPACE
+          // eslint-disable-next-line no-irregular-whitespace
+          text: this.i18nPrepend(t, '❙ ❙ ', 'pauseTimer'),
           callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
             await this.discussion.pause(t2);
             await t2.closePopup();
-            await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Pausing ❙ ❙');
+            await this.discussion.cardStorage.saveDiscussionButtonLabel(
+              t2,
+              this.i18nAppend(t2, '❙ ❙ ', 'pausingTimer')
+            );
           }
         }, {
-          text: '■ End discussion', // BLACK SQUARE
+          text: this.i18nPrepend(t, '■', 'endDiscussion'),
           callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
             await this.discussion.end(t2);
             await t2.closePopup();
-            await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Stopping ■');
+            await this.discussion.cardStorage.saveDiscussionButtonLabel(
+              t2,
+              this.i18nAppend(t2, '■', 'endingDiscussion')
+            );
           }
         }];
         break;
       case await this.discussion.isPausedFor(t):
         items = [{
-          text: '▶ Resume discussion', // BLACK RIGHT-POINTING TRIANGLE
+          text: this.i18nPrepend(t, '▶', 'resumeDiscussion'),
           callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
             await this.discussion.start(t2);
             await t2.closePopup();
-            await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Resuming ▶');
+            await this.discussion.cardStorage.saveDiscussionButtonLabel(
+              t2,
+              this.i18nAppend(t2, '▶', 'resumingDiscussion')
+            );
           }
         }, {
-          text: '■ End discussion', // BLACK SQUARE
+          text: this.i18nPrepend(t, '■', 'endDiscussion'),
           callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
             await this.discussion.end(t2);
             await t2.closePopup();
-            await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Stopping ■');
+            await this.discussion.cardStorage.saveDiscussionButtonLabel(
+              t2,
+              this.i18nAppend(t2, '■', 'endingDiscussion')
+            );
           }
         }];
         break;
       default:
         items = [{
-          text: '▶ Start timer', // BLACK RIGHT-POINTING TRIANGLE
+          text: this.i18nPrepend(t, '▶', 'startTimer'),
           callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
             await this.discussion.start(t2);
             await t2.closePopup();
-            await this.discussion.cardStorage.saveDiscussionButtonLabel(t2, 'Starting ▶');
+            await this.discussion.cardStorage.saveDiscussionButtonLabel(
+              t2,
+              this.i18nAppend(t2, '▶', 'startingTimer')
+            );
           }
         }];
     }
@@ -160,6 +179,18 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       items
     });
   };
+
+  i18nPrepend = (
+    t: Trello.PowerUp.IFrame,
+    symbol: LifecycleSymbol,
+    key: string
+  ) => `${symbol} ${t.localizeKey(key)}`;
+
+  i18nAppend = (
+    t: Trello.PowerUp.IFrame,
+    symbol: LifecycleSymbol,
+    key: string
+  ) => `${t.localizeKey(key)} ${symbol}`;
 
   getButtonLabel = async (t: Trello.PowerUp.IFrame): Promise<string> => {
     let label = await this.discussion.cardStorage.getDiscussionButtonLabel(t);

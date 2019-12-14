@@ -1,12 +1,17 @@
-discussion: Discussione
+# Card back
 status: Stato
 voters: Votanti
+
+# Menu (max length ~20 chars)
+discussion: Discussione
 startTimer: "Avvia timer"
 startingTimer: "Avvio in corso"
 pauseTimer: Sospendi
-pausingTimer: "Sospensione in corso"
+pausingTimer: "Sospensione..."
 endDiscussion: Termina
-endingDiscussion: "Interruzione in corso"
+endingDiscussion: "Interruzione..."
 resumeDiscussion: Riprendi
 resumingDiscussion: "Riavvio in corso"
+
+# Notifications
 elapsedNotification: "Tempo scaduto"

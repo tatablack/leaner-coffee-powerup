@@ -1,5 +1,9 @@
+---
+# Card back
 status: Status
 voters: Voters
+
+# Menu
 discussion: Discussion
 startTimer: "Start timer"
 startingTimer: Starting
@@ -9,4 +13,6 @@ endDiscussion: "End discussion"
 endingDiscussion: Stopping
 resumeDiscussion: "Resume discussion"
 resumingDiscussion: Resuming
+
+# Notifications
 elapsedNotification: "The timer has elapsed"
