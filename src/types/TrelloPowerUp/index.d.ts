@@ -4,6 +4,7 @@
 declare global {
   interface Window {
     TrelloPowerUp: Trello.PowerUp;
+    locale: string;
   }
 }
 
@@ -155,14 +156,16 @@ export namespace Trello {
       localize(key: string, args: readonly string[]): string;
     }
 
+    interface Localization {
+      defaultLocale: string;
+      supportedLocales: string[];
+      resourceUrl: string;
+    }
+
     interface LocalizerOptions {
       localizer?: Localizer;
       loadLocalizer?(): PromiseLike<Localizer>;
-      localization?: {
-        defaultLocale: string;
-        supportedLocales: string[];
-        resourceUrl: string;
-      };
+      localization?: Localization;
     }
 
     interface Util {
@@ -295,7 +298,7 @@ export namespace Trello {
     }
 
     // eslint-disable-next-line @typescript-eslint/interface-name-prefix
-    interface IFrameOptions {
+    interface IFrameOptions extends LocalizerOptions {
       context?: string;
       secret?: string;
     }
@@ -309,7 +312,7 @@ export namespace Trello {
       i18nPromise: PromiseLike<void>;
     }
 
-    interface PluginOptions {
+    interface PluginOptions extends LocalizerOptions {
       Sentry?: {
         configureScope(callback: (scope: {
           setTags(name: string, value: string): void;
@@ -326,7 +329,7 @@ export namespace Trello {
       tokenStorageKey?: string;
     }
 
-    interface Plugin {
+    interface Plugin extends AnonymousHostHandlers {
       options: PluginOptions;
       connect(): any; // return an instance of PostMessageIO
       request(): any; //  // return PostMessageIO.request, whatever that is

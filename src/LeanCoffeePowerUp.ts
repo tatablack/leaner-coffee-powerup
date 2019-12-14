@@ -288,11 +288,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       'on-enable': this.handleEnable,
       'show-settings': this.showSettings
     }, {
-      localization: {
-        defaultLocale: 'en',
-        supportedLocales: this.supportedLocales,
-        resourceUrl: '/i18n/{locale}.json'
-      }
+      localization: this.localization
     });
   }
 }

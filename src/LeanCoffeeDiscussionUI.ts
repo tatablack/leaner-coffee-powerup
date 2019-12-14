@@ -26,7 +26,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
 
   constructor({ w, config }: LeanCoffeeBaseParams) {
     super({ w, config });
-    this.t = w.TrelloPowerUp.iframe();
+    this.t = w.TrelloPowerUp.iframe({ localization: this.localization });
 
     this.badges = this.w.document.querySelector('.badges');
     this.badgeElapsed = this.w.document.querySelector('.badge-elapsed');
