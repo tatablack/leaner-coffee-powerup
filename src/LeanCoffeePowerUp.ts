@@ -277,7 +277,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   };
 
   start(): void {
-    this.t.initialize({
+    const trelloPlugin = this.t.initialize({
       'board-buttons': this.handleBoardButtons,
       'card-back-section': this.handleCardBackSection,
       'card-badges': this.handleCardBadges,
@@ -289,7 +289,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       'show-settings': this.showSettings
     }, {
       localization: this.localization
-    });
+    }) as Trello.PowerUp.Plugin;
+
+    this.discussion.init(trelloPlugin);
   }
 }
 

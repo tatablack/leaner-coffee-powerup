@@ -1,4 +1,4 @@
-type NotificationType = {
+export type NotificationType = {
   [key in 'audio' | 'text']: string;
 };
 
@@ -6,11 +6,6 @@ class Notifications {
   w: Window;
   baseUrl: string;
   audioContext: AudioContext;
-
-  Elapsed: NotificationType = {
-    audio: 'assets/looking_down.mp3',
-    text: 'The timer has elapsed'
-  };
 
   constructor(window: Window, baseUrl: string) {
     this.w = window;

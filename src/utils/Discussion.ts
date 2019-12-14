@@ -1,10 +1,11 @@
 import { Trello } from '../types/TrelloPowerUp';
 import BoardStorage from '../storage/BoardStorage';
 import CardStorage from '../storage/CardStorage';
-import Notifications from './Notifications';
+import Notifications, { NotificationType } from './Notifications';
 
 class Discussion {
   w: Window;
+  p: Trello.PowerUp.Plugin;
   baseUrl: string;
   maxDiscussionDuration: number;
   notifications: Notifications;
@@ -19,6 +20,15 @@ class Discussion {
     this.boardStorage = new BoardStorage();
     this.cardStorage = new CardStorage();
   }
+
+  init = (p: Trello.PowerUp.Plugin): void => {
+    this.p = p;
+  };
+
+  getElapsedNotification = (): NotificationType => ({
+    audio: 'assets/looking_down.mp3',
+    text: this.p.localizeKey('elapsedNotification')
+  });
 
   isOngoingOrPausedForAnotherCard = async (t: Trello.PowerUp.IFrame): Promise<boolean> => {
     const boardStatus = await this.boardStorage.getDiscussionStatus(t);
@@ -94,8 +104,9 @@ class Discussion {
     });
 
     if (notify) {
-      this.notifications.play(this.notifications.Elapsed);
-      this.notifications.show(this.notifications.Elapsed, cardName);
+      const elapsedNotification = this.getElapsedNotification();
+      this.notifications.play(elapsedNotification);
+      this.notifications.show(elapsedNotification, cardName);
     }
   };
 
