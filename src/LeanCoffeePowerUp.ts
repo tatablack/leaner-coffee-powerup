@@ -271,7 +271,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       }, 2000);
     }
 
-    label = label || await t.localizeKey('discussion');
+    label = label || t.localizeKey('discussion');
 
     return label;
   };

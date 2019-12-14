@@ -1,3 +1,6 @@
 {
-  "discussion": "Discussione"
+  "discussion": "Discussione",
+  "status": "Stato",
+  "voters": "Votanti",
+  "elapsedNotification": "Tempo scaduto"
 }

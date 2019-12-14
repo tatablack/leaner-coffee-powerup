@@ -1,3 +1,6 @@
 {
-  "discussion": "Discussion"
+  "discussion": "Discussion",
+  "status": "Status",
+  "voters": "Voters",
+  "elapsedNotification": "The timer has elapsed"
 }

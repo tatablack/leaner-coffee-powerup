@@ -119,7 +119,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
     if (status === 'PAUSED') {
       this.badgeHeaderElapsed.innerText = 'Should we keep discussing?';
     } else {
-      this.badgeHeaderElapsed.innerText = 'Status';
+      this.badgeHeaderElapsed.innerText = this.t.localizeKey('status');
     }
   };
 
