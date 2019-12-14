@@ -1,0 +1,12 @@
+status: Status
+voters: Voters
+discussion: Discussion
+startTimer: "Start timer"
+startingTimer: Starting
+pauseTimer: "Pause timer"
+pausingTimer: Pausing
+endDiscussion: "End discussion"
+endingDiscussion: Stopping
+resumeDiscussion: "Resume discussion"
+resumingDiscussion: Resuming
+elapsedNotification: "The timer has elapsed"

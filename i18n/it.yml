@@ -1,0 +1,12 @@
+discussion: Discussione
+status: Stato
+voters: Votanti
+startTimer: "Avvia timer"
+startingTimer: "Avvio in corso"
+pauseTimer: Sospendi
+pausingTimer: "Sospensione in corso"
+endDiscussion: Termina
+endingDiscussion: "Interruzione in corso"
+resumeDiscussion: Riprendi
+resumingDiscussion: "Riavvio in corso"
+elapsedNotification: "Tempo scaduto"

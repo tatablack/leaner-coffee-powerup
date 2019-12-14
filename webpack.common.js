@@ -2,6 +2,7 @@ const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const yaml = require('js-yaml');
 
 const OUTPUT_FOLDER = 'docs';
 
@@ -52,9 +53,18 @@ module.exports = {
       chunks: ['discussion_ui']
     }),
     new CopyWebpackPlugin([
-      { from: './assets/**/*' },
-      { from: './i18n/**/*' },
-      { from: './*.html', ignore: ['_*'] }
+      { from: 'assets/**/*' },
+      {
+        from: 'i18n/**/*',
+        to: 'i18n/[name].json',
+        transform: (content) => Buffer.from(
+          JSON.stringify(
+            yaml.safeLoad(content.toString('utf8'), { schema: yaml.JSON_SCHEMA })
+          ),
+          'utf8'
+        )
+      },
+      { from: '*.html', ignore: ['_*'] }
     ])
   ]
 };
