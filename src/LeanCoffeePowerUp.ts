@@ -1,6 +1,5 @@
 import { Trello } from './types/TrelloPowerUp';
 import BoardStorage from './storage/BoardStorage';
-import CardStorage from './storage/CardStorage';
 import ElapsedCardBadge from './badges/ElapsedCardBadge';
 import ElapsedCardDetailBadge from './badges/ElapsedCardDetailBadge';
 import VotingCardBadge from './badges/VotingCardBadge';
@@ -9,6 +8,7 @@ import Discussion from './utils/Discussion';
 import Voting from './utils/Voting';
 import UpdateChecker from './utils/UpdateChecker';
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
+import { CapabilityHandlers } from './CapabilityHandlers';
 
 interface LeanCoffeePowerUpParams extends LeanCoffeeBaseParams {
   maxDiscussionDuration: number;
@@ -44,107 +44,6 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     this.votingCardBadge = new VotingCardBadge(this.baseUrl, this.voting);
     this.votingCardDetailBadge = new VotingCardDetailBadge(this.baseUrl, this.voting);
   }
-
-  handleBoardButtons = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.BoardButtonCallback[]> => {
-    if (!await this.updateChecker.hasBeenUpdated(t)) {
-      return [];
-    }
-
-    return [{
-      icon: {
-        dark: `${this.baseUrl}/assets/moka_white.svg`,
-        light: `${this.baseUrl}/assets/moka.svg`
-      },
-      text: 'Leaner Coffee update!',
-      callback: this.updateChecker.showMenu
-    }];
-  };
-
-  handleCardBackSection = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBackSection> => {
-    const discussionStatus = await this.discussion.cardStorage.getDiscussionStatus(t);
-    if (discussionStatus === undefined) { return null; }
-
-    return {
-      title: 'Discussion',
-      icon: `${this.baseUrl}/assets/powerup/timer.svg`,
-      content: {
-        type: 'iframe',
-        url: t.signUrl(`${this.baseUrl}/discussion-ui.html`),
-        height: 64
-      }
-    };
-  };
-
-  handleCardBadges = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBadge[]> => {
-    const badges = [
-      await this.elapsedCardBadge.render(t),
-      await this.votingCardBadge.render(t)
-    ];
-
-    return badges.filter((badge) => badge);
-  };
-
-  handleCardButtons = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardButton[]> => [{
-    icon: `${this.baseUrl}/assets/powerup/timer.svg`,
-    text: await this.getButtonLabel(t),
-    callback: this.handleDiscussion
-  }, {
-    icon: `${this.baseUrl}/assets/powerup/heart.svg`,
-    text: `Vote    ${await this.voting.hasCurrentMemberVoted(t) ? '☑' : '☐'}`,
-    callback: this.handleVoting
-  }];
-
-  handleCardDetailBadges = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardDetailBadge[]> => {
-    const badges = [
-      await this.elapsedCardDetailBadge.render(t),
-      await this.votingCardDetailBadge.render(t)
-    ];
-
-    return badges.filter((badge) => badge);
-  };
-
-  handleListActions = (): Promise<Trello.PowerUp.ListAction[]> => Promise.resolve([{
-    text: 'Clear All Votes',
-    callback: async (t): Promise<void> => {
-      const result = await t.list('cards');
-      result.cards.forEach(({ id }) => {
-        this.cardStorage.deleteMultipleById(t, [CardStorage.VOTES], id);
-      });
-      return t.closePopup();
-    }
-  }]);
-
-  handleListSorters = (): Promise<Trello.PowerUp.ListSorter[]> => Promise.resolve([{
-    text: 'Most Votes',
-    callback: async (t, opts): Promise<{ sortedIds: string[] }> => {
-      const votingData = await Promise.all(opts.cards.map(
-        async (card): Promise<{ leanCoffeeVotes: number; id: string }> => {
-          const leanCoffeeVotes = await this.voting.countVotesByCard(t, card.id);
-          return { leanCoffeeVotes, id: card.id };
-        }
-      ));
-
-      const sortedCards = votingData.sort((cardA, cardB) => {
-        if (cardA.leanCoffeeVotes < cardB.leanCoffeeVotes) { return 1; }
-        if (cardB.leanCoffeeVotes < cardA.leanCoffeeVotes) { return -1; }
-        return 0;
-      });
-
-      return {
-        sortedIds: sortedCards.map((card) => card.id)
-      };
-    }
-  }]);
-
-  handleEnable = (t: Trello.PowerUp.IFrame): PromiseLike<void> => this.boardStorage.setPowerUpVersion(
-    t, process.env.VERSION
-  );
-
-  showSettings = (t: Trello.PowerUp.IFrame): PromiseLike<void> => t.popup({
-    title: `Leaner Coffee v${process.env.VERSION}`,
-    url: `${this.baseUrl}/settings.html`,
-    height: 184
-  });
 
   handleVoting = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     if (!await this.voting.canCurrentMemberVote(t)) {
@@ -277,19 +176,11 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   };
 
   start(): void {
-    const trelloPlugin = this.t.initialize({
-      'board-buttons': this.handleBoardButtons,
-      'card-back-section': this.handleCardBackSection,
-      'card-badges': this.handleCardBadges,
-      'card-buttons': this.handleCardButtons,
-      'card-detail-badges': this.handleCardDetailBadges,
-      'list-actions': this.handleListActions,
-      'list-sorters': this.handleListSorters,
-      'on-enable': this.handleEnable,
-      'show-settings': this.showSettings
-    }, {
-      localization: this.localization
-    }) as Trello.PowerUp.Plugin;
+    const trelloPlugin = this.t.initialize(
+      CapabilityHandlers(this), {
+        localization: this.localization
+      }
+    ) as Trello.PowerUp.Plugin;
 
     this.discussion.init(trelloPlugin);
   }
