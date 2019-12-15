@@ -12,7 +12,7 @@ export const CapabilityHandlers = (powerup: any) => ({
         dark: `${powerup.baseUrl}/assets/moka_white.svg`,
         light: `${powerup.baseUrl}/assets/moka.svg`
       },
-      text: 'Leaner Coffee update!',
+      text: t.localizeKey('boardButtonLabel'),
       callback: powerup.updateChecker.showMenu
     }];
   },
@@ -47,7 +47,9 @@ export const CapabilityHandlers = (powerup: any) => ({
     callback: powerup.handleDiscussion
   }, {
     icon: `${powerup.baseUrl}/assets/powerup/heart.svg`,
-    text: `Vote    ${await powerup.voting.hasCurrentMemberVoted(t) ? '☑' : '☐'}`,
+    text: t.localizeKey('vote', {
+      symbol: await powerup.voting.hasCurrentMemberVoted(t) ? '☑' : '☐'
+    }),
     callback: powerup.handleVoting
   }],
 
@@ -60,8 +62,8 @@ export const CapabilityHandlers = (powerup: any) => ({
     return badges.filter((badge) => badge);
   },
 
-  'list-actions': (): Promise<Trello.PowerUp.ListAction[]> => Promise.resolve([{
-    text: 'Clear All Votes',
+  'list-actions': (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.ListAction[]> => Promise.resolve([{
+    text: t.localizeKey('clearVotes'),
     callback: async (t): Promise<void> => {
       const result = await t.list('cards');
       result.cards.forEach(({ id }) => {
@@ -71,8 +73,8 @@ export const CapabilityHandlers = (powerup: any) => ({
     }
   }]),
 
-  'list-sorters': (): Promise<Trello.PowerUp.ListSorter[]> => Promise.resolve([{
-    text: 'Most Votes',
+  'list-sorters': (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.ListSorter[]> => Promise.resolve([{
+    text: t.localizeKey('sortByVote'),
     callback: async (t, opts): Promise<{ sortedIds: string[] }> => {
       const votingData = await Promise.all(opts.cards.map(
         async (card): Promise<{ leanCoffeeVotes: number; id: string }> => {

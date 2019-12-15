@@ -13,5 +13,16 @@ endingDiscussion: "Interruzione... {symbol}"
 resumeDiscussion: "{symbol} Riprendi"
 resumingDiscussion: "Riavvio in corso {symbol}"
 
+# Vote Menu Button
+vote: "Vota {symbol}"
+
+# List menu items (actions and sorting)
+clearVotes: 'Rimuovi tutti i voti da questa lista'
+sortByVote: 'Numero di voti'
+
 # Notifications
 elapsedNotification: "Tempo scaduto"
+
+# Board button
+boardButtonLabel: 'Aggiornamento per Leaner Coffee!'
+boardButtonPopupTitle: 'Aggiornato da {oldVersion} a {newVersion}'
