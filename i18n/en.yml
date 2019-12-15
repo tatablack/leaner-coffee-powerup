@@ -3,16 +3,16 @@
 status: Status
 voters: Voters
 
-# Menu
+# Discussion Menu Button
 discussion: Discussion
-startTimer: "Start timer"
-startingTimer: Starting
-pauseTimer: "Pause timer"
-pausingTimer: Pausing
-endDiscussion: "End discussion"
-endingDiscussion: Stopping
-resumeDiscussion: "Resume discussion"
-resumingDiscussion: Resuming
+startTimer: "{symbol} Start timer"
+startingTimer: "Starting {symbol} "
+pauseTimer: "{symbol} Pause timer"
+pausingTimer: "Pausing {symbol} "
+endDiscussion: "{symbol} End discussion"
+endingDiscussion: "Stopping {symbol}"
+resumeDiscussion: "{symbol} Resume discussion"
+resumingDiscussion: "Resuming {symbol}"
 
 # Notifications
 elapsedNotification: "The timer has elapsed"

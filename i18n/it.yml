@@ -2,16 +2,16 @@
 status: Stato
 voters: Votanti
 
-# Menu (max length ~20 chars)
+# Discussion Menu (max length ~20 chars)
 discussion: Discussione
-startTimer: "Avvia timer"
-startingTimer: "Avvio in corso"
-pauseTimer: Sospendi
-pausingTimer: "Sospensione..."
-endDiscussion: Termina
-endingDiscussion: "Interruzione..."
-resumeDiscussion: Riprendi
-resumingDiscussion: "Riavvio in corso"
+startTimer: "{symbol} Avvia timer"
+startingTimer: "Avvio in corso {symbol} "
+pauseTimer: "{symbol} Sospendi"
+pausingTimer: "Sospensione... {symbol} "
+endDiscussion: "{symbol} Termina"
+endingDiscussion: "Interruzione... {symbol}"
+resumeDiscussion: "{symbol} Riprendi"
+resumingDiscussion: "Riavvio in corso {symbol}"
 
 # Notifications
 elapsedNotification: "Tempo scaduto"

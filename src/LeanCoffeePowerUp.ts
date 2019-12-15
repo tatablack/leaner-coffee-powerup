@@ -116,59 +116,59 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       case await this.discussion.isOngoingFor(t):
         items = [{
           // eslint-disable-next-line no-irregular-whitespace
-          text: this.i18nPrepend(t, '❙ ❙ ', 'pauseTimer'),
+          text: t.localizeKey('pauseTimer', { symbol: '❙ ❙' }), // MEDIUM VERTICAL BAR + NARROW NO-BREAK SPACE
           callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
             await this.discussion.pause(t2);
             await t2.closePopup();
             await this.discussion.cardStorage.saveDiscussionButtonLabel(
               t2,
-              this.i18nAppend(t2, '❙ ❙ ', 'pausingTimer')
+              t2.localizeKey('pausingTimer', { symbol: '❙ ❙' }) // MEDIUM VERTICAL BAR + NARROW NO-BREAK SPACE
             );
           }
         }, {
-          text: this.i18nPrepend(t, '■', 'endDiscussion'),
+          text: t.localizeKey('endDiscussion', { symbol: '■' }), // BLACK SQUARE
           callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
             await this.discussion.end(t2);
             await t2.closePopup();
             await this.discussion.cardStorage.saveDiscussionButtonLabel(
               t2,
-              this.i18nAppend(t2, '■', 'endingDiscussion')
+              t2.localizeKey('endingDiscussion', { symbol: '■' }) // BLACK SQUARE
             );
           }
         }];
         break;
       case await this.discussion.isPausedFor(t):
         items = [{
-          text: this.i18nPrepend(t, '▶', 'resumeDiscussion'),
+          text: t.localizeKey('resumeDiscussion', { symbol: '▶' }), // BLACK RIGHT-POINTING TRIANGLE
           callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
             await this.discussion.start(t2);
             await t2.closePopup();
             await this.discussion.cardStorage.saveDiscussionButtonLabel(
               t2,
-              this.i18nAppend(t2, '▶', 'resumingDiscussion')
+              t2.localizeKey('resumingDiscussion', { symbol: '▶' }) // BLACK RIGHT-POINTING TRIANGLE
             );
           }
         }, {
-          text: this.i18nPrepend(t, '■', 'endDiscussion'),
+          text: t.localizeKey('endDiscussion', { symbol: '■' }), // BLACK SQUARE
           callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
             await this.discussion.end(t2);
             await t2.closePopup();
             await this.discussion.cardStorage.saveDiscussionButtonLabel(
               t2,
-              this.i18nAppend(t2, '■', 'endingDiscussion')
+              t2.localizeKey('endingDiscussion', { symbol: '■' }) // BLACK SQUARE
             );
           }
         }];
         break;
       default:
         items = [{
-          text: this.i18nPrepend(t, '▶', 'startTimer'),
+          text: t.localizeKey('startTimer', { symbol: '▶' }), // BLACK RIGHT-POINTING TRIANGLE
           callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
             await this.discussion.start(t2);
             await t2.closePopup();
             await this.discussion.cardStorage.saveDiscussionButtonLabel(
               t2,
-              this.i18nAppend(t2, '▶', 'startingTimer')
+              t2.localizeKey('startingTimer', { symbol: '▶' }) // BLACK RIGHT-POINTING TRIANGLE
             );
           }
         }];
@@ -179,18 +179,6 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       items
     });
   };
-
-  i18nPrepend = (
-    t: Trello.PowerUp.IFrame,
-    symbol: LifecycleSymbol,
-    key: string
-  ) => `${symbol} ${t.localizeKey(key)}`;
-
-  i18nAppend = (
-    t: Trello.PowerUp.IFrame,
-    symbol: LifecycleSymbol,
-    key: string
-  ) => `${t.localizeKey(key)} ${symbol}`;
 
   getButtonLabel = async (t: Trello.PowerUp.IFrame): Promise<string> => {
     let label = await this.discussion.cardStorage.getDiscussionButtonLabel(t);
