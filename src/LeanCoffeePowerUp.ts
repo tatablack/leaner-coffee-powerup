@@ -15,9 +15,6 @@ interface LeanCoffeePowerUpParams extends LeanCoffeeBaseParams {
   maxDiscussionDuration: number;
 }
 
-// BLACK RIGHT-POINTING TRIANGLE, MEDIUM VERTICAL BAR + NARROW NO-BREAK SPACE, BLACK SQUARE
-type LifecycleSymbol = '▶' | '❙ ❙ ' | '■'
-
 class LeanCoffeePowerUp extends LeanCoffeeBase {
   t: Trello.PowerUp;
   baseUrl: string;
