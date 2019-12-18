@@ -223,7 +223,7 @@ export namespace Trello {
       getContext(): Context;
       isMemberSignedIn(): boolean;
       memberCanWriteToModel(modelType: Model): boolean;
-      arg(name: string, defaultValue: any): any;
+      arg(name: string, defaultValue?: any): any;
       signUrl(url: string, args?: { [key: string]: any}): string;
       navigate(options: { url: string }): any;
       showCard(idCard: string): PromiseLike<void>;

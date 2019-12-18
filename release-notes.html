@@ -30,10 +30,10 @@
 
 <body>
     <ul>
-        <li id="dismiss"><a href="#">Dismiss Notification</a></li>
+        <li id="dismiss"><a href="#" data-i18n-id="dismiss"></a></li>
         <li id="open">
             <a href="#">
-                Open Release Notes
+                <span data-i18n-id="open"></span>
                 <img src="./assets/powerup/external_link.svg" alt="External link" />
             </a>
         </li>
@@ -42,6 +42,11 @@
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
     <script>
         const t = window.TrelloPowerUp.iframe();
+
+        window.TrelloPowerUp.util.initLocalizer(
+          window.locale,
+          { localization: t.arg('localization') }
+        );
 
         document.getElementById('dismiss').addEventListener('click', () => {
           t.notifyParent('done');
@@ -55,7 +60,10 @@
           return false;
         });
 
-        t.sizeTo('body');
+        t.render(() => {
+          t.localizeNode(document.body);
+          t.sizeTo('body');
+        });
     </script>
 </body>
 

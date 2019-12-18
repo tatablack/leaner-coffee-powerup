@@ -26,3 +26,7 @@ elapsedNotification: "Tempo scaduto"
 # Board button
 boardButtonLabel: 'Aggiornamento per Leaner Coffee!'
 boardButtonPopupTitle: 'Aggiornato da {oldVersion} a {newVersion}'
+
+# Release Notes Popup
+dismiss: 'Segna come letto'
+open: 'Mostra informazioni di rilascio'
