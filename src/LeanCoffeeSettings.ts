@@ -1,6 +1,7 @@
 import { Trello } from './types/TrelloPowerUp';
 import Debug from './utils/Debug';
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
+import { I18nConfig } from './utils/I18nConfig';
 
 class LeanCoffeeSettings extends LeanCoffeeBase {
   isProduction: boolean;
@@ -8,7 +9,7 @@ class LeanCoffeeSettings extends LeanCoffeeBase {
 
   constructor({ w, config }: LeanCoffeeBaseParams) {
     super({ w, config });
-    this.t = w.TrelloPowerUp.iframe({ localization: this.localization });
+    this.t = w.TrelloPowerUp.iframe({ localization: I18nConfig });
     this.isProduction = process.env.NODE_ENV === 'production';
   }
 

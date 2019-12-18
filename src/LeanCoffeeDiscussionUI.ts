@@ -2,6 +2,7 @@ import formatDuration from 'format-duration';
 import { Trello } from './types/TrelloPowerUp';
 
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
+import { I18nConfig } from './utils/I18nConfig';
 
 const MESSAGES = {
   NONE: 'This card is not being discussed at the moment.',
@@ -26,7 +27,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
 
   constructor({ w, config }: LeanCoffeeBaseParams) {
     super({ w, config });
-    this.t = w.TrelloPowerUp.iframe({ localization: this.localization });
+    this.t = w.TrelloPowerUp.iframe({ localization: I18nConfig });
 
     this.badges = this.w.document.querySelector('.badges');
     this.badgeElapsed = this.w.document.querySelector('.badge-elapsed');

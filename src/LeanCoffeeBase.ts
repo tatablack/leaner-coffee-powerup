@@ -12,20 +12,12 @@ export class LeanCoffeeBase {
   w: Window;
   boardStorage: BoardStorage;
   cardStorage: CardStorage;
-  supportedLocales: string[];
-  localization: Trello.PowerUp.Localization;
+  config: Config;
 
   constructor({ w, config }: LeanCoffeeBaseParams) {
     this.w = w;
+    this.config = config;
     this.boardStorage = new BoardStorage();
     this.cardStorage = new CardStorage();
-
-    const { supportedLocales } = config[process.env.NODE_ENV as Environment];
-    this.supportedLocales = supportedLocales;
-    this.localization = {
-      defaultLocale: 'en',
-      supportedLocales: this.supportedLocales,
-      resourceUrl: '/i18n/{locale}.json'
-    };
   }
 }

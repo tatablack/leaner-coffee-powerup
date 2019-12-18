@@ -9,6 +9,7 @@ import Voting from './utils/Voting';
 import UpdateChecker from './utils/UpdateChecker';
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
 import { CapabilityHandlers } from './CapabilityHandlers';
+import { I18nConfig } from './utils/I18nConfig';
 
 interface LeanCoffeePowerUpParams extends LeanCoffeeBaseParams {
   maxDiscussionDuration: number;
@@ -34,9 +35,8 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     super({ w, config });
     this.t = w.TrelloPowerUp;
 
-    const { hostname, port, supportedLocales } = config[process.env.NODE_ENV as Environment];
+    const { hostname, port } = this.config[process.env.NODE_ENV as Environment];
     this.baseUrl = `${hostname}${port ? `:${port}` : ''}`;
-    this.supportedLocales = supportedLocales;
 
     this.discussion = new Discussion(this.w, this.baseUrl, maxDiscussionDuration);
     this.voting = new Voting();
@@ -197,7 +197,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   start(): void {
     const trelloPlugin = this.t.initialize(
       CapabilityHandlers(this), {
-        localization: this.localization
+        localization: I18nConfig
       }
     ) as Trello.PowerUp.Plugin;
 
