@@ -20,7 +20,10 @@ class LeanCoffeeSettings extends LeanCoffeeBase {
       this.w.document.getElementById('wipeData').addEventListener('click', this.wipeData.bind(this));
     }
 
-    this.t.sizeTo('#leanCoffeeSettingsForm');
+    this.t.render(() => {
+      this.t.localizeNode(document.body);
+      this.t.sizeTo('#leanCoffeeSettingsForm');
+    });
   }
 
   showData = (evt: Event): void => {

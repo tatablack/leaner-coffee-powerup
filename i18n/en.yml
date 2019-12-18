@@ -31,3 +31,11 @@ boardButtonPopupTitle: 'Updated from {oldVersion} to {newVersion}'
 # Release Notes Popup
 dismiss: 'Dismiss'
 open: 'Open Release Notes'
+
+# Settings
+settingsMainSection:  About
+settingsMainContent: 'Nothing is configurable yet!'
+settingsMainSuggestions: 'If you have any suggestion, please share them with us using'
+settingsDebugSection: 'Debug information'
+settingsDebugShowData: 'Show all data'
+settingsDebugWipeData: 'Wipe all data'

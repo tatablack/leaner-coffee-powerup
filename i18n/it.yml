@@ -30,3 +30,11 @@ boardButtonPopupTitle: 'Aggiornato da {oldVersion} a {newVersion}'
 # Release Notes Popup
 dismiss: 'Segna come letto'
 open: 'Mostra informazioni di rilascio'
+
+# Settings
+settingsMainSection: 'Informazioni su...'
+settingsMainContent: 'Non c''è niente di configurabile, per ora.'
+settingsMainSuggestions: 'Se avete suggerimenti, condivideteli pure con noi tramite'
+settingsDebugSection: 'Informazioni di debug'
+settingsDebugShowData: 'Mostra tutti i dati'
+settingsDebugWipeData: 'Rimuovi tutti i dati'

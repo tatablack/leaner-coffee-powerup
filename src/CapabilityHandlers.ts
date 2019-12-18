@@ -1,5 +1,6 @@
 import { Trello } from './types/TrelloPowerUp';
 import CardStorage from './storage/CardStorage';
+import { I18nConfig } from './utils/I18nConfig';
 
 export const CapabilityHandlers = (powerup: any) => ({
   'board-buttons': async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.BoardButtonCallback[]> => {
@@ -102,6 +103,9 @@ export const CapabilityHandlers = (powerup: any) => ({
   'show-settings': (t: Trello.PowerUp.IFrame): PromiseLike<void> => t.popup({
     title: `Leaner Coffee v${process.env.VERSION}`,
     url: `${powerup.baseUrl}/settings.html`,
-    height: 184
+    height: 184,
+    args: {
+      localization: I18nConfig
+    }
   })
 });
