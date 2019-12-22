@@ -7,29 +7,45 @@
 </head>
 
 <body>
-    <div id="message"></div>
+    <div data-i18n-id="ongoingIntro"></div><br/>
+    <div class="message" data-i18n-id="ongoingRunning"></div>
+    <div class="message" data-i18n-id="ongoingOnHold"></div>
+    <hr/>
+    <div data-i18n-id="ongoingBottomLine"></div>
 
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
     <script>
-        const t = window.TrelloPowerUp.iframe();
+        const toggleFields = (clazz, key) => {
+            const elements = document.querySelectorAll(clazz);
 
-        const messageText = `
-            <div>Only one card can be discussed at any given time!</div><br/>
-            <div>A conversation about <b>$CARD</b> $STATUS.</div>
-            <hr/>
-            <div>Once that ends, you can start a new one.</div>
-        `;
+            elements.forEach((message) => {
+                const shouldBeDisplayed = message.dataset.i18nId === key;
+                // eslint-disable-next-line no-param-reassign
+                message.style.display = shouldBeDisplayed ? 'block' : 'none';
+            });
+        };
+
+        const t = window.TrelloPowerUp.iframe();
 
         const currentCardBeingDiscussed = t.arg('currentCardBeingDiscussed');
         const currentDiscussionStatus = t.arg('currentDiscussionStatus');
+        const isRunning = currentDiscussionStatus ==='ONGOING';
 
-        document.getElementById('message').innerHTML = messageText.
-            replace('$CARD', currentCardBeingDiscussed).
-            replace('$STATUS', currentDiscussionStatus ==='ONGOING' ?
-                'is currently taking place' :
-                'has already been started and is currently on hold');
+        const messageElements = document.querySelectorAll('.message');
+        messageElements.forEach((elem) => {
+          elem.dataset.i18nArgs = JSON.stringify({
+            card: currentCardBeingDiscussed
+          });
+        });
 
-        t.sizeTo('#message');
+        window.TrelloPowerUp.util.initLocalizer(
+          window.locale,
+          { localization: t.arg('localization') }
+        ).then(() => {
+          toggleFields('.message', isRunning ? 'ongoingRunning' : 'ongoingOnHold');
+          t.localizeNode(document.body);
+          t.sizeTo('body');
+        });
     </script>
 </body>
 

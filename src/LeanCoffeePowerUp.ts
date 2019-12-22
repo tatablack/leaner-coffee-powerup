@@ -87,7 +87,8 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
           url: `${this.baseUrl}/ongoing_or_paused.html`,
           args: {
             currentCardBeingDiscussed: cardBeingDiscussed.name,
-            currentDiscussionStatus: boardStatus
+            currentDiscussionStatus: boardStatus,
+            localization: I18nConfig,
           },
           height: 120
         });

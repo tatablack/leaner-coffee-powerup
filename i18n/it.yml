@@ -53,3 +53,9 @@ discussionUiNo: 'No'
 discussionUiMessageNone: 'Questa scheda non è al momento oggetto di discussione.'
 discussionUiMessageEnded: 'La discussione su questa scheda è terminata.'
 discussionUiWhatNext: 'Vuoi continuare la discussione?'
+
+# Ongoing conversation popup
+ongoingIntro: 'È possibile discutere solo una scheda per volta!'
+ongoingRunning: 'Una discussione è già in corso su "{card}".'
+ongoingOnHold: 'Una conversazione su "{card}" è stata iniziata ed è al momento in pausa.'
+ongoingBottomLine: 'A conversazione terminata, sarà possibile iniziarne un''altra.'
