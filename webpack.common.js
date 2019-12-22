@@ -55,7 +55,7 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: 'assets/**/*' },
       {
-        from: 'i18n/**/*',
+        from: 'i18n/*.yml',
         to: 'i18n/[name].json',
         transform: (content) => Buffer.from(
           JSON.stringify(
