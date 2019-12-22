@@ -1,0 +1,67 @@
+---
+# Card back
+voters: 'Voters'
+
+# Discussion Menu Button
+discussion: 'Discussion'
+startTimer: '{symbol} Start timer'
+startingTimer: 'Starting {symbol} '
+pauseTimer: '{symbol} Pause timer'
+pausingTimer: 'Pausing {symbol} '
+endDiscussion: '{symbol} End discussion'
+endingDiscussion: 'Stopping {symbol}'
+resumeDiscussion: '{symbol} Resume discussion'
+resumingDiscussion: 'Resuming {symbol}'
+
+# Discussion duration badge
+durationOngoing: 'Ongoing'
+durationElapsed: 'Elapsed'
+
+# Discussion duration title
+discussionDurationTitle: 'Discussion time'
+
+# Vote Menu Button
+vote: 'Vote {symbol}'
+
+# List menu items (actions and sorting)
+clearVotes: 'Clear all votes from this list'
+sortByVote: 'Most Votes'
+
+# Notifications
+elapsedNotification: 'The timer has elapsed'
+
+# Board buttons
+boardButtonLabel: 'Leaner Coffee update!'
+boardButtonPopupTitle: 'Updated from {oldVersion} to {newVersion}'
+
+# Release Notes Popup
+dismiss: 'Dismiss'
+open: 'Open Release Notes'
+
+# Settings
+settingsMainSection:  'About'
+settingsMainContent: 'Nothing is configurable yet!'
+settingsMainSuggestions: 'If you have any suggestion, please share them with us using'
+settingsDebugSection: 'Debug information'
+settingsDebugShowData: 'Show all data'
+settingsDebugWipeData: 'Wipe all data'
+
+# Discussion UI Card Back Section
+discussionUiStatus: 'Status'
+discussionUiYes: 'Yes'
+discussionUiNotSure: 'Not sure'
+discussionUiNo: 'No'
+discussionUiMessageNone: 'This card is not being discussed at the moment.'
+discussionUiMessageEnded: 'The discussion on this card has ended.'
+discussionUiWhatNext: 'Should we keep discussing?'
+
+# Ongoing conversation popup
+ongoingIntro: 'Only one card can be discussed at any given time!'
+ongoingRunning: 'A conversation about "{card}" is currently taking place.'
+ongoingOnHold: 'A conversation about "{card}" has already been started and is currently on hold.'
+ongoingBottomLine: 'Once that ends, you can start a new one.'
+
+# Max votes reached popup
+maxVotes: 'Based on the current number of topics in this list, you can vote for {maxVotes} of them at most.'
+maxVotesRationale: 'For the rationale, see'
+maxVotesLink: 'here'

@@ -1,19 +1,16 @@
 import { Trello } from './types/TrelloPowerUp';
 import Debug from './utils/Debug';
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
-
-interface LeanCoffeeSettingsParams extends LeanCoffeeBaseParams {
-  environment: Environment;
-}
+import { I18nConfig } from './utils/I18nConfig';
 
 class LeanCoffeeSettings extends LeanCoffeeBase {
   isProduction: boolean;
   t: Trello.PowerUp.IFrame;
 
-  constructor({ w, environment }: LeanCoffeeSettingsParams) {
-    super({ w });
-    this.t = w.TrelloPowerUp.iframe();
-    this.isProduction = environment === 'production';
+  constructor({ w, config }: LeanCoffeeBaseParams) {
+    super({ w, config });
+    this.t = w.TrelloPowerUp.iframe({ localization: I18nConfig });
+    this.isProduction = process.env.NODE_ENV === 'production';
   }
 
   init(): void {
@@ -23,7 +20,10 @@ class LeanCoffeeSettings extends LeanCoffeeBase {
       this.w.document.getElementById('wipeData').addEventListener('click', this.wipeData.bind(this));
     }
 
-    this.t.sizeTo('#leanCoffeeSettingsForm');
+    this.t.render(() => {
+      this.t.localizeNode(document.body);
+      this.t.sizeTo('#leanCoffeeSettingsForm');
+    });
   }
 
   showData = (evt: Event): void => {

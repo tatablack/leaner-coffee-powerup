@@ -2,11 +2,7 @@ import formatDuration from 'format-duration';
 import { Trello } from './types/TrelloPowerUp';
 
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
-
-const MESSAGES = {
-  NONE: 'This card is not being discussed at the moment.',
-  ENDED: 'The discussion on this card has ended.'
-};
+import { I18nConfig } from './utils/I18nConfig';
 
 enum ThumbDirection {
   'UP' = 'UP',
@@ -18,20 +14,24 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
   t: Trello.PowerUp.IFrame;
   badges: HTMLElement;
   badgeElapsed: HTMLElement;
-  badgeHeaderElapsed: HTMLElement;
-  message: HTMLElement;
+  badgeHeaderStatus: HTMLElement;
+  badgeHeaderWhatNext: HTMLElement;
+  messageNone: HTMLElement;
+  messageEnded: HTMLElement;
   voting: NodeListOf<HTMLElement>;
   intervalId: number;
   previousStatus: DiscussionStatus;
 
-  constructor({ w }: LeanCoffeeBaseParams) {
-    super({ w });
-    this.t = w.TrelloPowerUp.iframe();
+  constructor({ w, config }: LeanCoffeeBaseParams) {
+    super({ w, config });
+    this.t = w.TrelloPowerUp.iframe({ localization: I18nConfig });
 
     this.badges = this.w.document.querySelector('.badges');
     this.badgeElapsed = this.w.document.querySelector('.badge-elapsed');
-    this.badgeHeaderElapsed = this.w.document.querySelector('.badge-header-elapsed');
-    this.message = this.w.document.querySelector('.message');
+    this.badgeHeaderStatus = this.w.document.querySelector('[data-i18n-id="discussionUiStatus"]');
+    this.badgeHeaderWhatNext = this.w.document.querySelector('[data-i18n-id="discussionUiWhatNext"]');
+    this.messageNone = this.w.document.querySelector('[data-i18n-id="discussionUiMessageNone"]');
+    this.messageEnded = this.w.document.querySelector('[data-i18n-id="discussionUiMessageEnded"]');
     this.voting = this.w.document.querySelectorAll('.voting');
   }
 
@@ -45,8 +45,14 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
     this.w.document.querySelector('.voting-down').addEventListener(
       'click', () => this.handleThumbs('DOWN')
     );
-    this.monitorDiscussion();
-    this.intervalId = this.w.setInterval(this.monitorDiscussion, 1000);
+
+    this.t.render(() => {
+      this.t.localizeNode(document.body);
+      this.w.setTimeout(() => this.t.sizeTo.call(this.t, 'body'), 100);
+      this.monitorDiscussion();
+      this.w.clearInterval(this.intervalId);
+      this.intervalId = this.w.setInterval(this.monitorDiscussion, 1000);
+    });
   }
 
   monitorDiscussion = async (): Promise<void> => {
@@ -61,14 +67,14 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
       case 'ENDED': {
         // when discussion ends, hide badge and display message
         this.toggleBadges(false);
-        this.updateMessage(MESSAGES.ENDED);
+        this.toggleFields('.message', 'discussionUiMessageEnded');
         break;
       } case 'ONGOING': {
         // when discussion is ongoing, update badge (display ongoing and 1-sec res timer)
         if (this.previousStatus !== discussionStatus) {
           this.toggleVoting(false);
           this.toggleBadges(true);
-          this.updateMessage('');
+          this.toggleFields('.message', '');
 
           this.updateStatusHeader('ONGOING');
         }
@@ -78,7 +84,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
       } case 'PAUSED': {
         // when discussion is paused, update badge (display elapsed and three buttons to deal with discussion)
         if (this.previousStatus !== discussionStatus) {
-          this.updateMessage('');
+          this.toggleFields('.message', '');
           this.toggleVoting(true);
           this.toggleBadges(true);
           this.updateStatusHeader('PAUSED');
@@ -90,7 +96,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
       } default:
         this.toggleBadges(false);
         this.toggleVoting(false);
-        this.updateMessage(MESSAGES.NONE);
+        this.toggleFields('.message', 'discussionUiMessageNone');
         break;
     }
 
@@ -102,24 +108,17 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
       const startedAt = await this.boardStorage.getDiscussionStartedAt(this.t);
       const previousElapsed = await this.boardStorage.getDiscussionPreviousElapsed(this.t) || 0;
       const elapsed = startedAt ? Date.now() - startedAt : 0;
+      const formattedTotalElapsed = formatDuration(elapsed + previousElapsed);
 
       this.badgeElapsed.classList.add(status.toLowerCase());
       this.badgeElapsed.classList.remove('paused');
-      this.badgeElapsed.textContent = `Ongoing → ${formatDuration(elapsed + previousElapsed)}`;
+      this.badgeElapsed.textContent = `${this.t.localizeKey('discussionOngoing')} → ${formattedTotalElapsed}`;
     } else {
       const elapsed = await this.cardStorage.getDiscussionElapsed(this.t);
 
       this.badgeElapsed.classList.add(status.toLowerCase());
       this.badgeElapsed.classList.remove('ongoing');
-      this.badgeElapsed.textContent = `Elapsed → ${formatDuration(elapsed)}`;
-    }
-  };
-
-  updateStatusHeader = (status: DiscussionStatus): void => {
-    if (status === 'PAUSED') {
-      this.badgeHeaderElapsed.innerText = 'Should we keep discussing?';
-    } else {
-      this.badgeHeaderElapsed.innerText = 'Status';
+      this.badgeElapsed.textContent = `${this.t.localizeKey('discussionElapsed')} → ${formatDuration(elapsed)}`;
     }
   };
 
@@ -161,16 +160,29 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
     this.badges.style.display = visible ? 'grid' : 'none';
   };
 
+
   toggleVoting = (visible: boolean): void => {
     this.voting.forEach((element) => {
       element.style.visibility = visible ? 'visible' : 'hidden';
     });
   };
 
-  updateMessage = (message: string): void => {
-    this.message.innerText = message;
-    this.message.style.display = 'block';
-    this.t.sizeTo('body');
+  updateStatusHeader = (status: DiscussionStatus): void => {
+    if (status === 'PAUSED') {
+      this.toggleFields('.badge-header-text', 'discussionUiWhatNext');
+    } else {
+      this.toggleFields('.badge-header-text', 'discussionUiStatus');
+    }
+  };
+
+  toggleFields = (cssSelector: string, key: string): void => {
+    const elements = this.w.document.querySelectorAll(cssSelector) as NodeListOf<HTMLElement>;
+
+    elements.forEach((message) => {
+      const shouldBeDisplayed = message.dataset.i18nId === key;
+      // eslint-disable-next-line no-param-reassign
+      message.style.display = shouldBeDisplayed ? 'block' : 'none';
+    });
   };
 }
 

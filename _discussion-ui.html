@@ -85,13 +85,15 @@
 </head>
 
 <body>
-    <div class="message"></div>
+    <div class="message" data-i18n-id="discussionUiMessageNone"></div>
+    <div class="message" data-i18n-id="discussionUiMessageEnded"></div>
 
     <div class="badges">
-        <h3 class="badge-header badge-header-elapsed">Status</h3>
-        <h3 class="badge-header voting">Yes</h3>
-        <h3 class="badge-header voting">Not sure</h3>
-        <h3 class="badge-header voting">No</h3>
+        <h3 class="badge-header badge-header-text" data-i18n-id="discussionUiStatus"></h3>
+        <h3 class="badge-header badge-header-text" data-i18n-id="discussionUiWhatNext"></h3>
+        <h3 class="badge-header voting" data-i18n-id="discussionUiYes"></h3>
+        <h3 class="badge-header voting" data-i18n-id="discussionUiNotSure"></h3>
+        <h3 class="badge-header voting" data-i18n-id="discussionUiNo"></h3>
 
         <div class="badge badge-elapsed"></div>
         <div class="badge voting voting-up"></div>

@@ -22,20 +22,25 @@
 <body>
     <form id="leanCoffeeSettingsForm">
         <section>
-            <h3>About</h3>
-            <div>Nothing is configurable yet!</div>
+            <h3 data-i18n-id="settingsMainSection"></h3>
+            <div data-i18n-id="settingsMainContent"></div>
             <br>
             <div>
-                If you have any suggestion, please use
-                <a target="_blank" href="https://github.com/tatablack/leaner-coffee-powerup/issues">GitHub issues</a>
-                to share them with us!
+                <span data-i18n-id="settingsMainSuggestions"></span>
+                <a target="_blank" href="https://github.com/tatablack/leaner-coffee-powerup/issues">GitHub issues!</a>
             </div>
         </section>
         <section class="dev-only">
-            <h3>Debug information</h3>
+            <h3 data-i18n-id="settingsDebugSection"></h3>
             <div>
-                <button id="showData">Show data</button>
-                <button id="wipeData" class="mod-danger">Wipe data</button>
+                <button
+                        id="showData"
+                        data-i18n-id="settingsDebugShowData"
+                        onclick="window.settingsInstance.showData()"></button>
+                <button
+                        id="wipeData"
+                        data-i18n-id="settingsDebugWipeData"
+                        class="mod-danger" onclick="window.settingsInstance.wipeData()"></button>
             </div>
         </section>
     </form>

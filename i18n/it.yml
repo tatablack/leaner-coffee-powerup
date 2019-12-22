@@ -1,0 +1,66 @@
+# Card back
+voters: 'Votanti'
+
+# Discussion Menu (max length ~20 chars)
+discussion: 'Discussione'
+startTimer: '{symbol} Avvia timer'
+startingTimer: 'Avvio in corso {symbol} '
+pauseTimer: '{symbol} Sospendi'
+pausingTimer: 'Sospensione... {symbol} '
+endDiscussion: '{symbol} Termina'
+endingDiscussion: 'Interruzione... {symbol}'
+resumeDiscussion: '{symbol} Riprendi'
+resumingDiscussion: 'Riavvio in corso {symbol}'
+
+# Discussion duration badge
+discussionOngoing: 'In corso'
+discussionElapsed: 'Tempo trascorso'
+
+# Discussion duration title
+discussionDurationTitle: 'Durata discussione'
+
+# Vote Menu Button
+vote: 'Vota {symbol}'
+
+# List menu items (actions and sorting)
+clearVotes: 'Rimuovi tutti i voti da questa lista'
+sortByVote: 'Numero di voti'
+
+# Notifications
+elapsedNotification: 'Tempo scaduto'
+
+# Board button
+boardButtonLabel: 'Aggiornamento per Leaner Coffee!'
+boardButtonPopupTitle: 'Aggiornato da {oldVersion} a {newVersion}'
+
+# Release Notes Popup
+dismiss: 'Segna come letto'
+open: 'Mostra informazioni di rilascio'
+
+# Settings
+settingsMainSection: 'Informazioni su...'
+settingsMainContent: 'Non c''è niente di configurabile, per ora.'
+settingsMainSuggestions: 'Se avete suggerimenti, condivideteli pure con noi tramite'
+settingsDebugSection: 'Informazioni di debug'
+settingsDebugShowData: 'Mostra tutti i dati'
+settingsDebugWipeData: 'Rimuovi tutti i dati'
+
+# Discussion UI Card Back Section
+discussionUiStatus: 'Stato'
+discussionUiYes: 'Sì'
+discussionUiNotSure: 'Non so'
+discussionUiNo: 'No'
+discussionUiMessageNone: 'Questa scheda non è al momento oggetto di discussione.'
+discussionUiMessageEnded: 'La discussione su questa scheda è terminata.'
+discussionUiWhatNext: 'Vuoi continuare la discussione?'
+
+# Ongoing conversation popup
+ongoingIntro: 'È possibile discutere solo una scheda per volta!'
+ongoingRunning: 'Una discussione è già in corso su "{card}".'
+ongoingOnHold: 'Una conversazione su "{card}" è stata iniziata ed è al momento in pausa.'
+ongoingBottomLine: 'A conversazione terminata, sarà possibile iniziarne un''altra.'
+
+# Max votes reached popup
+maxVotes: 'In base al numero di argomenti in questa lista, il totale dei voti a tua disposizione è {maxVotes}.'
+maxVotesRationale: 'Per le motivazioni, leggi'
+maxVotesLink: 'qui'

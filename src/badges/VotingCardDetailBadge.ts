@@ -8,7 +8,7 @@ class VotingCardDetailBadge extends VotingCardBadge {
     if (!items.length) { return; }
 
     t.popup({
-      title: 'Voters',
+      title: t.localizeKey('voters'),
       items
     });
   };
@@ -17,7 +17,7 @@ class VotingCardDetailBadge extends VotingCardBadge {
     const commonData = await super.render(t) as Trello.PowerUp.CardDetailBadge;
 
     if (commonData) {
-      commonData.title = 'Voters';
+      commonData.title = t.localizeKey('voters');
       delete commonData.icon;
       commonData.callback = this.showVoters;
     }

@@ -1,5 +1,6 @@
 import { Trello } from '../types/TrelloPowerUp';
 import BoardStorage from '../storage/BoardStorage';
+import { I18nConfig } from './I18nConfig';
 
 const LAST_UNCHECKED_VERSION = '0.6.2';
 
@@ -18,11 +19,13 @@ class UpdateChecker {
 
   showMenu = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     const storedVersion = await this.storage.getPowerUpVersion(t);
-
     return t.popup({
-      title: `Updated from ${storedVersion || LAST_UNCHECKED_VERSION} to ${process.env.VERSION}`,
+      title: t.localizeKey('boardButtonPopupTitle', {
+        oldVersion: storedVersion || LAST_UNCHECKED_VERSION,
+        newVersion: process.env.VERSION
+      }),
       url: './release-notes.html',
-      args: { version: process.env.VERSION },
+      args: { version: process.env.VERSION, localization: I18nConfig },
       callback: this.storeNewVersion,
       height: 65
     });
