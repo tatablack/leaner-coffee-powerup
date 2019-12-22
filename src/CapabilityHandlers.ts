@@ -2,62 +2,62 @@ import { Trello } from './types/TrelloPowerUp';
 import CardStorage from './storage/CardStorage';
 import { I18nConfig } from './utils/I18nConfig';
 
-export const CapabilityHandlers = (powerup: any) => ({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const CapabilityHandlers = (powerUp: any): Trello.PowerUp.CapabilityHandlers => ({
   'board-buttons': async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.BoardButtonCallback[]> => {
-    if (!await powerup.updateChecker.hasBeenUpdated(t)) {
+    if (!await powerUp.updateChecker.hasBeenUpdated(t)) {
       return [];
     }
 
     return [{
       icon: {
-        dark: `${powerup.baseUrl}/assets/moka_white.svg`,
-        light: `${powerup.baseUrl}/assets/moka.svg`
+        dark: `${powerUp.baseUrl}/assets/moka_white.svg`,
+        light: `${powerUp.baseUrl}/assets/moka.svg`
       },
       text: t.localizeKey('boardButtonLabel'),
-      callback: powerup.updateChecker.showMenu
+      callback: powerUp.updateChecker.showMenu
     }];
   },
 
   'card-back-section': async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBackSection> => {
-    const discussionStatus = await powerup.discussion.cardStorage.getDiscussionStatus(t);
+    const discussionStatus = await powerUp.discussion.cardStorage.getDiscussionStatus(t);
     if (discussionStatus === undefined) { return null; }
 
     return {
       title: t.localizeKey('discussion'),
-      icon: `${powerup.baseUrl}/assets/powerup/timer.svg`,
+      icon: `${powerUp.baseUrl}/assets/powerup/timer.svg`,
       content: {
         type: 'iframe',
-        url: t.signUrl(`${powerup.baseUrl}/discussion-ui.html`),
-        height: 64
+        url: t.signUrl(`${powerUp.baseUrl}/discussion-ui.html`)
       }
     };
   },
 
   'card-badges': async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBadge[]> => {
     const badges = [
-      await powerup.elapsedCardBadge.render(t),
-      await powerup.votingCardBadge.render(t)
+      await powerUp.elapsedCardBadge.render(t),
+      await powerUp.votingCardBadge.render(t)
     ];
 
     return badges.filter((badge) => badge);
   },
 
   'card-buttons': async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardButton[]> => [{
-    icon: `${powerup.baseUrl}/assets/powerup/timer.svg`,
-    text: await powerup.getButtonLabel(t),
-    callback: powerup.handleDiscussion
+    icon: `${powerUp.baseUrl}/assets/powerup/timer.svg`,
+    text: await powerUp.getButtonLabel(t),
+    callback: powerUp.handleDiscussion
   }, {
-    icon: `${powerup.baseUrl}/assets/powerup/heart.svg`,
+    icon: `${powerUp.baseUrl}/assets/powerup/heart.svg`,
     text: t.localizeKey('vote', {
-      symbol: await powerup.voting.hasCurrentMemberVoted(t) ? '☑' : '☐'
+      symbol: await powerUp.voting.hasCurrentMemberVoted(t) ? '☑' : '☐'
     }),
-    callback: powerup.handleVoting
+    callback: powerUp.handleVoting
   }],
 
   'card-detail-badges': async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardDetailBadge[]> => {
     const badges = [
-      await powerup.elapsedCardDetailBadge.render(t),
-      await powerup.votingCardDetailBadge.render(t)
+      await powerUp.elapsedCardDetailBadge.render(t),
+      await powerUp.votingCardDetailBadge.render(t)
     ];
 
     return badges.filter((badge) => badge);
@@ -65,21 +65,21 @@ export const CapabilityHandlers = (powerup: any) => ({
 
   'list-actions': (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.ListAction[]> => Promise.resolve([{
     text: t.localizeKey('clearVotes'),
-    callback: async (t): Promise<void> => {
-      const result = await t.list('cards');
+    callback: async (t2): Promise<void> => {
+      const result = await t2.list('cards');
       result.cards.forEach(({ id }) => {
-        powerup.cardStorage.deleteMultipleById(t, [CardStorage.VOTES], id);
+        powerUp.cardStorage.deleteMultipleById(t2, [CardStorage.VOTES], id);
       });
-      return t.closePopup();
+      return t2.closePopup();
     }
   }]),
 
   'list-sorters': (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.ListSorter[]> => Promise.resolve([{
     text: t.localizeKey('sortByVote'),
-    callback: async (t, opts): Promise<{ sortedIds: string[] }> => {
+    callback: async (t2, opts): Promise<{ sortedIds: string[] }> => {
       const votingData = await Promise.all(opts.cards.map(
         async (card): Promise<{ leanCoffeeVotes: number; id: string }> => {
-          const leanCoffeeVotes = await powerup.voting.countVotesByCard(t, card.id);
+          const leanCoffeeVotes = await powerUp.voting.countVotesByCard(t2, card.id);
           return { leanCoffeeVotes, id: card.id };
         }
       ));
@@ -96,13 +96,13 @@ export const CapabilityHandlers = (powerup: any) => ({
     }
   }]),
 
-  'on-enable': (t: Trello.PowerUp.IFrame): PromiseLike<void> => powerup.boardStorage.setPowerUpVersion(
+  'on-enable': (t: Trello.PowerUp.IFrame): PromiseLike<void> => powerUp.boardStorage.setPowerUpVersion(
     t, process.env.VERSION
   ),
 
   'show-settings': (t: Trello.PowerUp.IFrame): PromiseLike<void> => t.popup({
     title: `Leaner Coffee v${process.env.VERSION}`,
-    url: `${powerup.baseUrl}/settings.html`,
+    url: `${powerUp.baseUrl}/settings.html`,
     height: 184,
     args: {
       localization: I18nConfig
