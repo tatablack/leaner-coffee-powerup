@@ -1,4 +1,4 @@
-import {Trello} from '../types/TrelloPowerUp';
+import { Trello } from '../types/TrelloPowerUp';
 
 const config: Config = process.env.CONFIG as unknown as Config;
 const { supportedLocales } = config[process.env.NODE_ENV as Environment];

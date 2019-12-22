@@ -373,7 +373,7 @@ export namespace Trello {
       content: {
         type: 'iframe';
         url: string;
-        height: number;
+        height?: number;
       };
     }
 

@@ -112,10 +112,11 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
       const startedAt = await this.boardStorage.getDiscussionStartedAt(this.t);
       const previousElapsed = await this.boardStorage.getDiscussionPreviousElapsed(this.t) || 0;
       const elapsed = startedAt ? Date.now() - startedAt : 0;
+      const formattedTotalElapsed = formatDuration(elapsed + previousElapsed);
 
       this.badgeElapsed.classList.add(status.toLowerCase());
       this.badgeElapsed.classList.remove('paused');
-      this.badgeElapsed.textContent = `${this.t.localizeKey('discussionOngoing')} → ${formatDuration(elapsed + previousElapsed)}`;
+      this.badgeElapsed.textContent = `${this.t.localizeKey('discussionOngoing')} → ${formattedTotalElapsed}`;
     } else {
       const elapsed = await this.cardStorage.getDiscussionElapsed(this.t);
 
