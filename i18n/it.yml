@@ -1,33 +1,33 @@
 # Card back
-voters: Votanti
+voters: 'Votanti'
 
 # Discussion Menu (max length ~20 chars)
-discussion: Discussione
-startTimer: "{symbol} Avvia timer"
-startingTimer: "Avvio in corso {symbol} "
-pauseTimer: "{symbol} Sospendi"
-pausingTimer: "Sospensione... {symbol} "
-endDiscussion: "{symbol} Termina"
-endingDiscussion: "Interruzione... {symbol}"
-resumeDiscussion: "{symbol} Riprendi"
-resumingDiscussion: "Riavvio in corso {symbol}"
+discussion: 'Discussione'
+startTimer: '{symbol} Avvia timer'
+startingTimer: 'Avvio in corso {symbol} '
+pauseTimer: '{symbol} Sospendi'
+pausingTimer: 'Sospensione... {symbol} '
+endDiscussion: '{symbol} Termina'
+endingDiscussion: 'Interruzione... {symbol}'
+resumeDiscussion: '{symbol} Riprendi'
+resumingDiscussion: 'Riavvio in corso {symbol}'
 
 # Discussion duration badge
-discussionOngoing: "In corso"
-discussionElapsed: "Tempo trascorso"
+discussionOngoing: 'In corso'
+discussionElapsed: 'Tempo trascorso'
 
 # Discussion duration title
-discussionDurationTitle: "Durata discussione"
+discussionDurationTitle: 'Durata discussione'
 
 # Vote Menu Button
-vote: "Vota {symbol}"
+vote: 'Vota {symbol}'
 
 # List menu items (actions and sorting)
 clearVotes: 'Rimuovi tutti i voti da questa lista'
 sortByVote: 'Numero di voti'
 
 # Notifications
-elapsedNotification: "Tempo scaduto"
+elapsedNotification: 'Tempo scaduto'
 
 # Board button
 boardButtonLabel: 'Aggiornamento per Leaner Coffee!'
@@ -46,7 +46,7 @@ settingsDebugShowData: 'Mostra tutti i dati'
 settingsDebugWipeData: 'Rimuovi tutti i dati'
 
 # Discussion UI Card Back Section
-discussionUiStatus: Stato
+discussionUiStatus: 'Stato'
 discussionUiYes: 'Sì'
 discussionUiNotSure: 'Non so'
 discussionUiNo: 'No'

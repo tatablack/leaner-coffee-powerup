@@ -1,27 +1,27 @@
 ---
 # Card back
-voters: Voters
+voters: 'Voters'
 
 # Discussion Menu Button
-discussion: Discussion
-startTimer: "{symbol} Start timer"
-startingTimer: "Starting {symbol} "
-pauseTimer: "{symbol} Pause timer"
-pausingTimer: "Pausing {symbol} "
-endDiscussion: "{symbol} End discussion"
-endingDiscussion: "Stopping {symbol}"
-resumeDiscussion: "{symbol} Resume discussion"
-resumingDiscussion: "Resuming {symbol}"
+discussion: 'Discussion'
+startTimer: '{symbol} Start timer'
+startingTimer: 'Starting {symbol} '
+pauseTimer: '{symbol} Pause timer'
+pausingTimer: 'Pausing {symbol} '
+endDiscussion: '{symbol} End discussion'
+endingDiscussion: 'Stopping {symbol}'
+resumeDiscussion: '{symbol} Resume discussion'
+resumingDiscussion: 'Resuming {symbol}'
 
 # Discussion duration badge
-durationOngoing: "Ongoing"
-durationElapsed: "Elapsed"
+durationOngoing: 'Ongoing'
+durationElapsed: 'Elapsed'
 
 # Discussion duration title
-discussionDurationTitle: "Discussion time"
+discussionDurationTitle: 'Discussion time'
 
 # Vote Menu Button
-vote: "Vote {symbol}"
+vote: 'Vote {symbol}'
 
 # List menu items (actions and sorting)
 clearVotes: 'Clear all votes from this list'
@@ -39,7 +39,7 @@ dismiss: 'Dismiss'
 open: 'Open Release Notes'
 
 # Settings
-settingsMainSection:  About
+settingsMainSection:  'About'
 settingsMainContent: 'Nothing is configurable yet!'
 settingsMainSuggestions: 'If you have any suggestion, please share them with us using'
 settingsDebugSection: 'Debug information'
@@ -47,7 +47,7 @@ settingsDebugShowData: 'Show all data'
 settingsDebugWipeData: 'Wipe all data'
 
 # Discussion UI Card Back Section
-discussionUiStatus: Status
+discussionUiStatus: 'Status'
 discussionUiYes: 'Yes'
 discussionUiNotSure: 'Not sure'
 discussionUiNo: 'No'
