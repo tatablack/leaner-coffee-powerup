@@ -43,11 +43,6 @@
     <script>
         const t = window.TrelloPowerUp.iframe();
 
-        window.TrelloPowerUp.util.initLocalizer(
-          window.locale,
-          { localization: t.arg('localization') }
-        );
-
         document.getElementById('dismiss').addEventListener('click', () => {
           t.notifyParent('done');
           t.closePopup();
@@ -60,7 +55,10 @@
           return false;
         });
 
-        t.render(() => {
+        window.TrelloPowerUp.util.initLocalizer(
+          window.locale,
+          { localization: t.arg('localization') }
+        ).then(() => {
           t.localizeNode(document.body);
           t.sizeTo('body');
         });
