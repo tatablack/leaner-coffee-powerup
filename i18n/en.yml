@@ -1,6 +1,5 @@
 ---
 # Card back
-status: Status
 voters: Voters
 
 # Discussion Menu Button
@@ -13,6 +12,13 @@ endDiscussion: "{symbol} End discussion"
 endingDiscussion: "Stopping {symbol}"
 resumeDiscussion: "{symbol} Resume discussion"
 resumingDiscussion: "Resuming {symbol}"
+
+# Discussion duration badge
+durationOngoing: "Ongoing"
+durationElapsed: "Elapsed"
+
+# Discussion duration title
+discussionDurationTitle: "Discussion time"
 
 # Vote Menu Button
 vote: "Vote {symbol}"
@@ -39,3 +45,12 @@ settingsMainSuggestions: 'If you have any suggestion, please share them with us 
 settingsDebugSection: 'Debug information'
 settingsDebugShowData: 'Show all data'
 settingsDebugWipeData: 'Wipe all data'
+
+# Discussion UI Card Back Section
+discussionUiStatus: Status
+discussionUiYes: 'Yes'
+discussionUiNotSure: 'Not sure'
+discussionUiNo: 'No'
+discussionUiMessageNone: 'This card is not being discussed at the moment.'
+discussionUiMessageEnded: 'The discussion on this card has ended.'
+discussionUiWhatNext: 'Should we keep discussing?'

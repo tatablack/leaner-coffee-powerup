@@ -7,7 +7,7 @@ class ElapsedCardDetailBadge extends ElapsedCardBadge {
     if (discussionStatus !== 'ENDED') { return null; }
 
     const badge = await super.render(t) as Trello.PowerUp.CardDetailBadge;
-    badge.title = 'Discussion time';
+    badge.title = t.localizeKey('discussionDurationTitle');
     return badge;
   };
 }

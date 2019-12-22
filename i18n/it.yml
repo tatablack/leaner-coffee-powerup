@@ -1,5 +1,4 @@
 # Card back
-status: Stato
 voters: Votanti
 
 # Discussion Menu (max length ~20 chars)
@@ -12,6 +11,13 @@ endDiscussion: "{symbol} Termina"
 endingDiscussion: "Interruzione... {symbol}"
 resumeDiscussion: "{symbol} Riprendi"
 resumingDiscussion: "Riavvio in corso {symbol}"
+
+# Discussion duration badge
+discussionOngoing: "In corso"
+discussionElapsed: "Tempo trascorso"
+
+# Discussion duration title
+discussionDurationTitle: "Durata discussione"
 
 # Vote Menu Button
 vote: "Vota {symbol}"
@@ -38,3 +44,12 @@ settingsMainSuggestions: 'Se avete suggerimenti, condivideteli pure con noi tram
 settingsDebugSection: 'Informazioni di debug'
 settingsDebugShowData: 'Mostra tutti i dati'
 settingsDebugWipeData: 'Rimuovi tutti i dati'
+
+# Discussion UI Card Back Section
+discussionUiStatus: Stato
+discussionUiYes: 'Sì'
+discussionUiNotSure: 'Non so'
+discussionUiNo: 'No'
+discussionUiMessageNone: 'Questa scheda non è al momento oggetto di discussione.'
+discussionUiMessageEnded: 'La discussione su questa scheda è terminata.'
+discussionUiWhatNext: 'Vuoi continuare la discussione?'
