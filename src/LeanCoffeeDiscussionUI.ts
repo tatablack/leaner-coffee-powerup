@@ -45,12 +45,13 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
     this.w.document.querySelector('.voting-down').addEventListener(
       'click', () => this.handleThumbs('DOWN')
     );
-    this.monitorDiscussion();
-    this.intervalId = this.w.setInterval(this.monitorDiscussion, 1000);
 
     this.t.render(() => {
       this.t.localizeNode(document.body);
-      this.t.sizeTo('body');
+      this.w.setTimeout(() => this.t.sizeTo.call(this.t, 'body'), 100);
+      this.monitorDiscussion();
+      this.w.clearInterval(this.intervalId);
+      this.intervalId = this.w.setInterval(this.monitorDiscussion, 1000);
     });
   }
 
@@ -100,11 +101,6 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
     }
 
     this.previousStatus = discussionStatus;
-    try {
-      await this.t.sizeTo('body');
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   updateElapsed = async (status: DiscussionStatus): Promise<void> => {
