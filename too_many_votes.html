@@ -7,29 +7,31 @@
 </head>
 
 <body>
-    <div id="message"></div>
+    <div data-i18n-id="maxVotes"></div>
+    <hr/>
+    <div>
+        <span data-i18n-id="maxVotesRationale"></span>
+        <a
+            href="http://www.leanmath.com/blog-entry/multi-voting-math-or-n3"
+            target="_blank"
+        ><span data-i18n-id="maxVotesLink"></span></a>.
+    </div>
 
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
     <script>
         const t = window.TrelloPowerUp.iframe();
-
-        const messageText = `
-            <div>
-                Based on the current number of topics,
-                you can vote for $MAXVOTES of them at most.</div>
-            <hr/>
-            <div>
-                See <a href="http://www.leanmath.com/blog-entry/multi-voting-math-or-n3" target="_blank">here</a>
-                for the rationale.
-            </div>
-        `;
-
         const maxVotes = t.arg('maxVotes');
 
-        document.getElementById('message').innerHTML = messageText.
-            replace('$MAXVOTES', maxVotes);
+        const maxVotesElement = document.querySelector('[data-i18n-id="maxVotes"');
+        maxVotesElement.dataset.i18nArgs = JSON.stringify({ maxVotes });
 
-        t.sizeTo('#message');
+        window.TrelloPowerUp.util.initLocalizer(
+          window.locale,
+          { localization: t.arg('localization') }
+        ).then(() => {
+          t.localizeNode(document.body);
+          t.sizeTo('body');
+        });
     </script>
 </body>
 

@@ -60,3 +60,8 @@ ongoingIntro: 'Only one card can be discussed at any given time!'
 ongoingRunning: 'A conversation about "{card}" is currently taking place.'
 ongoingOnHold: 'A conversation about "{card}" has already been started and is currently on hold.'
 ongoingBottomLine: 'Once that ends, you can start a new one.'
+
+# Max votes reached popup
+maxVotes: 'Based on the current number of topics in this list, you can vote for {maxVotes} of them at most.'
+maxVotesRationale: 'For the rationale, see'
+maxVotesLink: 'here'

@@ -51,7 +51,8 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
         title: 'Leaner Coffee',
         url: `${this.baseUrl}/too_many_votes.html`,
         args: {
-          maxVotes: await this.voting.getMaxVotes(t)
+          maxVotes: await this.voting.getMaxVotes(t),
+          localization: I18nConfig
         },
         height: 98
       });

@@ -59,3 +59,8 @@ ongoingIntro: 'È possibile discutere solo una scheda per volta!'
 ongoingRunning: 'Una discussione è già in corso su "{card}".'
 ongoingOnHold: 'Una conversazione su "{card}" è stata iniziata ed è al momento in pausa.'
 ongoingBottomLine: 'A conversazione terminata, sarà possibile iniziarne un''altra.'
+
+# Max votes reached popup
+maxVotes: 'In base al numero di argomenti in questa lista, il totale dei voti a tua disposizione è {maxVotes}.'
+maxVotesRationale: 'Per le motivazioni, leggi'
+maxVotesLink: 'qui'
