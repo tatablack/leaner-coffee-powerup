@@ -11,6 +11,11 @@ This project and everyone participating in it is governed by our [Code of Conduc
 
 ## How Can I Contribute?
 
+### Help with localisation
+Leaner Coffee supports translations, and is already available in more than one language.
+If you want to contribute, that's great! There are a few files you'll have to create/modify; you can find the details in the [L10n.md](L10n.md) file.
+Keep in mind that it's still a code contribution, so check [Your First Code Contribution](#your-first-code-contribution) further down; you'll need it to test your changes locally.
+
 ### Reporting Bugs
 
 This section guides you through submitting a bug report for Leaner Coffee. Following these guidelines helps maintainers and the community understand your report :pencil:, reproduce the behaviour :computer: :computer:, and find related reports :mag_right:.
@@ -42,7 +47,6 @@ Include details about your configuration and environment:
 
 * **What's the name and version of the OS you're using**?
 * **Which browser are you using, and which version of it?**
-
 
 ### Your First Code Contribution
 #### Prerequisites
