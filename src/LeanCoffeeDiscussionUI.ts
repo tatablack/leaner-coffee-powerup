@@ -175,8 +175,8 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
     }
   };
 
-  toggleFields = (clazz: string, key: string): void => {
-    const elements = this.w.document.querySelectorAll(clazz) as NodeListOf<HTMLElement>;
+  toggleFields = (cssSelector: string, key: string): void => {
+    const elements = this.w.document.querySelectorAll(cssSelector) as NodeListOf<HTMLElement>;
 
     elements.forEach((message) => {
       const shouldBeDisplayed = message.dataset.i18nId === key;

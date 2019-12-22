@@ -15,8 +15,8 @@
 
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
     <script>
-        const toggleFields = (clazz, key) => {
-            const elements = document.querySelectorAll(clazz);
+        const toggleFields = (cssSelector, key) => {
+            const elements = document.querySelectorAll(cssSelector);
 
             elements.forEach((message) => {
                 const shouldBeDisplayed = message.dataset.i18nId === key;
