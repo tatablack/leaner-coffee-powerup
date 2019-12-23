@@ -14,8 +14,8 @@ resumeDiscussion: '{symbol} Resume discussion'
 resumingDiscussion: 'Resuming {symbol}'
 
 # Discussion duration badge
-durationOngoing: 'Ongoing'
-durationElapsed: 'Elapsed'
+discussionOngoing: 'Ongoing'
+discussionElapsed: 'Elapsed'
 
 # Discussion duration title
 discussionDurationTitle: 'Discussion time'
