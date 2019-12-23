@@ -25,7 +25,11 @@ rules:
     - error
     - devDependencies:
       - webpack.*.js
+      - tools/**/*.js
 overrides:
+  - files: tools/**/*.js
+    env:
+      node: true
   - files: "webpack.*.js"
     settings:
       import/resolver: 'node'

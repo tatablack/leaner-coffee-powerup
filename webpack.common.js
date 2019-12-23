@@ -6,7 +6,6 @@ const yaml = require('js-yaml');
 
 const OUTPUT_FOLDER = 'docs';
 
-
 module.exports = {
   entry: {
     main: './src/index.ts',
@@ -53,7 +52,7 @@ module.exports = {
       chunks: ['discussion_ui']
     }),
     new CopyWebpackPlugin([
-      { from: 'assets/**/*' },
+      { from: 'assets/**/*', ignore: process.env.NODE_ENV === 'production' ? [] : ['assets/listings/**/*'] },
       {
         from: 'i18n/*.yml',
         to: 'i18n/[name].json',
