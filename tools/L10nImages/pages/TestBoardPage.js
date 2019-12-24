@@ -7,8 +7,8 @@ class TestBoardPage extends Page {
       memberMenu: '.js-open-header-member-menu',
       changeLanguageMenuItem: '[data-test-id="header-member-menu-lang"]',
       memberMenuPopOver: '[data-test-id="header-member-menu-popover"]',
-      cardWithVote: '.js-list:nth-child(1) > div > div.list-cards > .list-card:nth-child(1)',
-      cardWithElapsed: '.js-list:nth-child(1) > div > div.list-cards > .list-card:nth-child(2)',
+      cardWithVote: '.js-list:nth-child(1) > div',
+      cardWithElapsed: '.js-list:nth-child(2) > div',
       cardBackSectionOngoing: '.js-plugin-card-back-sections',
       cardBackSectionPaused: '.js-plugin-card-back-sections',
       powerUpButtons: '.js-button-list',
@@ -54,6 +54,8 @@ class TestBoardPage extends Page {
     this.logger.info({ label: languageCode, message: 'Initiating screenshots' });
     await this.switchLanguageTo(languageName);
 
+    await this.hideAddCardButton();
+
     await this.saveScreenshotFor('cardWithVote', languageCode);
     await this.saveScreenshotFor('cardWithElapsed', languageCode);
 
@@ -73,6 +75,12 @@ class TestBoardPage extends Page {
     await this.clickOn('closeCardButton');
 
     this.logger.info({ label: languageCode, message: 'Screenshot creation complete' });
+  }
+
+  async hideAddCardButton() {
+    return this.browser.executeScript(
+      'document.querySelectorAll(".js-card-composer-container").forEach((button) => button.style.display = "none")', []
+    );
   }
 
   async clickOn(selector) {
