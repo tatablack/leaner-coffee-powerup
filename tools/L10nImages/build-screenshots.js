@@ -1,8 +1,8 @@
-const Browser = require('./Browser');
-const SupportedLanguages = require('./SupportedLanguages');
+const Browser = require('./utils/Browser');
+const SupportedLanguages = require('./utils/SupportedLanguages');
 const LoginPage = require('./pages/LoginPage');
 const TestBoardPage = require('./pages/TestBoardPage');
-const getLogger = require('./Logger');
+const getLogger = require('./utils/Logger');
 
 const logger = getLogger();
 let browser;
@@ -11,6 +11,7 @@ let currentLanguage;
 (async () => {
   browser = await (new Browser('firefox')).build();
   browser.maximizeWindow();
+
   const loginPage = new LoginPage(browser);
   await loginPage.open();
   await loginPage.login(process.env.TRELLO_USERNAME, process.env.TRELLO_PASSWORD);

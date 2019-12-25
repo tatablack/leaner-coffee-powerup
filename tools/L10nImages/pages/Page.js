@@ -1,4 +1,4 @@
-const getLogger = require('../Logger');
+const getLogger = require('../utils/Logger');
 
 class Page {
   constructor(browser, selectors) {
