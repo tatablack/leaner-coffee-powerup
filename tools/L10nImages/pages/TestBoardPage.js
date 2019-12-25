@@ -50,8 +50,7 @@ class TestBoardPage extends Page {
   }
 
   async takeAllScreenshotsFor(languageCode, languageName) {
-    this.logger.info({ label: languageCode, message: ''.padEnd(28, '-') });
-    this.logger.info({ label: languageCode, message: 'Initiating screenshots' });
+    this.logger.info({ label: languageCode, message: '┌ Initiating screenshots' });
     await this.switchLanguageTo(languageName);
 
     await this.hideAddCardButton();
@@ -74,7 +73,10 @@ class TestBoardPage extends Page {
     await this.clickOn('stopButton');
     await this.clickOn('closeCardButton');
 
-    this.logger.info({ label: languageCode, message: 'Screenshot creation complete' });
+    this.logger.info({
+      label: languageCode,
+      message: `└ Done - all assets saved in ./assets/listings/${languageCode}/\n`
+    });
   }
 
   async hideAddCardButton() {
@@ -90,7 +92,7 @@ class TestBoardPage extends Page {
   }
 
   async saveScreenshotFor(elementName, languageCode) {
-    this.logger.info({ label: languageCode, message: `Saving screenshot for ${elementName}` });
+    this.logger.info({ label: languageCode, message: `├ Saving screenshot for ${elementName}` });
     const element = await this.browser.$(this.selectors[elementName]);
     await element.waitForDisplayed();
 

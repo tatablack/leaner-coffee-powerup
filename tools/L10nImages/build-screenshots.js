@@ -30,10 +30,9 @@ let currentLanguage;
   .finally(async () => {
     if (browser) {
       try {
-        await browser.saveScreenshot('./error.png');
         await browser.deleteSession();
       } catch (e) {
-        logger.error({ label: currentLanguage, message: 'Unable to save final screenshot or delete session' });
+        logger.error({ label: currentLanguage, message: 'Unable to delete session 🤔' });
         logger.error({ label: currentLanguage, message: e });
       }
     }
