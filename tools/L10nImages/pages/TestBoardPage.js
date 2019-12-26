@@ -1,3 +1,4 @@
+const { snakeCase } = require('snake-case');
 const Page = require('./Page');
 
 class TestBoardPage extends Page {
@@ -7,8 +8,8 @@ class TestBoardPage extends Page {
       memberMenu: '.js-open-header-member-menu',
       changeLanguageMenuItem: '[data-test-id="header-member-menu-lang"]',
       memberMenuPopOver: '[data-test-id="header-member-menu-popover"]',
-      cardWithVote: '.js-list:nth-child(1) > div',
-      cardWithElapsed: '.js-list:nth-child(2) > div',
+      cardBadgeVote: '.js-list:nth-child(1) > div',
+      cardBadgeElapsed: '.js-list:nth-child(2) > div',
       cardBackSectionOngoing: '.js-plugin-card-back-sections',
       cardBackSectionPaused: '.js-plugin-card-back-sections',
       powerUpButtons: '.js-button-list',
@@ -22,7 +23,7 @@ class TestBoardPage extends Page {
     await this.browser.pause(500);
     await this.browser.waitUntil(
       async () => {
-        const text = await (await this.browser.$(this.selectors.cardWithVote)).getText();
+        const text = await (await this.browser.$(this.selectors.cardBadgeVote)).getText();
         return text.length > 'Life, the Universe and Everything'.length;
       },
       10000,
@@ -55,10 +56,10 @@ class TestBoardPage extends Page {
 
     await this.hideAddCardButton();
 
-    await this.saveScreenshotFor('cardWithVote', languageCode);
-    await this.saveScreenshotFor('cardWithElapsed', languageCode);
+    await this.saveScreenshotFor('cardBadgeVote', languageCode);
+    await this.saveScreenshotFor('cardBadgeElapsed', languageCode);
 
-    await this.clickOn('cardWithVote');
+    await this.clickOn('cardBadgeVote');
     await this.saveScreenshotFor('powerUpButtons', languageCode);
 
     await this.clickOn('discussionButton');
@@ -97,7 +98,7 @@ class TestBoardPage extends Page {
     await element.waitForDisplayed();
 
     await this.browser.pause(3000);
-    await element.saveScreenshot(`./assets/listings/${languageCode}/${elementName}.png`);
+    await element.saveScreenshot(`./assets/listings/${languageCode}/${snakeCase(elementName)}.png`);
   }
 }
 
