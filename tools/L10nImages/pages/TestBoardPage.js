@@ -59,7 +59,7 @@ class TestBoardPage extends Page {
     await this.saveScreenshotFor('cardBadgeVote', languageCode);
     await this.saveScreenshotFor('cardBadgeElapsed', languageCode);
 
-    await this.clickOn('cardBadgeVote');
+    await this.clickOn('cardBadgeElapsed');
     await this.saveScreenshotFor('powerUpButtons', languageCode);
 
     await this.clickOn('discussionButton');
