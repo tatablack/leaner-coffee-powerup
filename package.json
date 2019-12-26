@@ -8,7 +8,8 @@
     "start": "npx webpack-dev-server --config ./webpack.dev.js",
     "lint": "eslint -c .eslintrc.yml './src/**/*'",
     "dist": "export NODE_ENV=production && webpack --config webpack.prod.js",
-    "version": "npm run dist && git add -A docs"
+    "version": "npm run dist && git add -A docs",
+    "screenshots": "node ./tools/L10nImages/build-screenshots.js"
   },
   "engines": {
     "node": "^12.13.1",
@@ -33,17 +34,23 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-import-resolver-webpack": "^0.11.1",
     "eslint-plugin-import": "^2.18.2",
+    "geckodriver": "^1.19.1",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^3.1.0",
     "js-yaml": "^3.13.1",
     "lint-staged": "^9.4.3",
+    "snake-case": "^3.0.3",
     "terser-webpack-plugin": "^2.2.1",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.2",
+    "webdriverio": "^5.18.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0",
-    "webpack-merge": "^4.2.2"
+    "webpack-dev-server": "^3.10.1",
+    "webpack-merge": "^4.2.2",
+    "webpack-watch-changed": "^1.0.0",
+    "winston": "^3.2.1",
+    "yargs": "^15.0.2"
   },
   "husky": {
     "hooks": {

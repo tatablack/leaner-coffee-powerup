@@ -80,6 +80,24 @@ This will:
 
 The Release Drafter GitHub App will take care of drafting/updating a GitHub release every time a PR gets merged; after the steps above the current draft release can be published (tied to the tag just created).
 
+#### Releasing a new translation
+Once a PR providing a new translation has been merged, we need to create localised screenshots for the Power-Up listing - the `tools` folder contains a script which uses WebDriver to automate this process.
+
+The tool can be run from the project's main folder with `npm run screenshots`. You can pass the `--help` parameter for usage instructions.
+Without parameters, it will regenerate screenshots for all locales - you can require a single one with:
+
+```npm run screenshots -- --locale <languagetag>```
+
+For example,
+
+```npm run screenshots -- --locale zh-Hans```
+
+The tool logs in to Trello, which means valid credentials are required (exposed through the TRELLO_USERNAME and TRELLO_PASSWORD environment variables), and access to a specific shared board is assumed, so that specific cards / lists can be included in the screenshots (the board URL is hard-coded in the script).
+
+At the time of writing, taking screenshots in Chrome did not work, so we're using Firefox, which needs to be installed on the user's machine (either the standard or Developer Edition; the script will try either of those default installation paths).
+
+Finally, before executing the script you'll need to start `geckodriver` from the project's folder (it will be there if you ran `npm install`) - it's the bit responsible for interpreting WebDriver commands and sending them to the browser.
+
 ## Contributing
 See the [CONTRIBUTING](CONTRIBUTING.md) document.
 
