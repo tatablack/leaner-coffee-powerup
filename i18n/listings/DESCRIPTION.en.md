@@ -40,11 +40,11 @@ Once enabled for a board, this Power-Up implements:
 
 Badge showing votes in favour of discussing this card.
 
-![Votes][CardBadgeVoting]
+![Votes][CardBadgeVote]
 
-Badge showing elapsed time for an ongoing discussion.
+Badge showing elapsed time for a discussion.
 
-![Votes][CardBadgeOngoing]
+![Votes][CardBadgeElapsed]
 
 ---
 
@@ -68,11 +68,11 @@ Next to it there's a "Vote" button toggle, to express interest in discussing the
 
 ![Votes][PowerUpButtons]
 
-[CardBadgeVoting]: https://leaner-coffee.tatablack.net/assets/readme/card_badge_voting.png
-[CardBadgeOngoing]: https://leaner-coffee.tatablack.net/assets/readme/card_badge_ongoing.png
-[CardBackSectionOngoing]: https://leaner-coffee.tatablack.net/assets/readme/ongoing_discussion.png
-[CardBackSectionPaused]: https://leaner-coffee.tatablack.net/assets/readme/paused_discussion.png
-[PowerUpButtons]: https://leaner-coffee.tatablack.net/assets/readme/buttons.png
+[CardBadgeVote]: https://leaner-coffee.tatablack.net/assets/listings/en/card_badge_vote.png
+[CardBadgeElapsed]: https://leaner-coffee.tatablack.net/assets/listings/en/card_badge_elapsed.png
+[CardBackSectionOngoing]: https://leaner-coffee.tatablack.net/assets/listings/en/card_back_section_ongoing.png
+[CardBackSectionPaused]: https://leaner-coffee.tatablack.net/assets/listings/en/card_back_section_paused.png
+[PowerUpButtons]: https://leaner-coffee.tatablack.net/assets/listings/en/power_up_buttons.png
 
 ---
 

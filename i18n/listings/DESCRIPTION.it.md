@@ -40,11 +40,11 @@ Una volta abilitato per una bacheca, il Power-Up fornirà:
 
 Badge che mostrano il numero di voti in favore alla discussione su una certa scheda.
 
-![Votes][CardBadgeVoting]
+![Votes][CardBadgeVote]
 
-Badge che mostrano il tempo trascorso per una discussione tuttora in corso.
+Badge che mostrano il tempo trascorso per una discussione.
 
-![Votes][CardBadgeOngoing]
+![Votes][CardBadgeElapsed]
 
 ---
 
@@ -68,11 +68,11 @@ Subito al di sotto c'è il pulsante "Vota", per esprimere il proprio interesse a
 
 ![Votes][PowerUpButtons]
 
-[CardBadgeVoting]: https://leaner-coffee.tatablack.net/assets/readme/card_badge_voting.png
-[CardBadgeOngoing]: https://leaner-coffee.tatablack.net/assets/readme/card_badge_ongoing.png
-[CardBackSectionOngoing]: https://leaner-coffee.tatablack.net/assets/readme/ongoing_discussion.png
-[CardBackSectionPaused]: https://leaner-coffee.tatablack.net/assets/readme/paused_discussion.png
-[PowerUpButtons]: https://leaner-coffee.tatablack.net/assets/readme/buttons.png
+[CardBadgeVote]: https://leaner-coffee.tatablack.net/assets/listings/it/card_badge_vote.png
+[CardBadgeElapsed]: https://leaner-coffee.tatablack.net/assets/listings/it/card_badge_elapsed.png
+[CardBackSectionOngoing]: https://leaner-coffee.tatablack.net/assets/listings/it/card_back_section_ongoing.png
+[CardBackSectionPaused]: https://leaner-coffee.tatablack.net/assets/listings/it/card_back_section_paused.png
+[PowerUpButtons]: https://leaner-coffee.tatablack.net/assets/listings/it/power_up_buttons.png
 
 ---
 
