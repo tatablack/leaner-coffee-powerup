@@ -16,6 +16,7 @@ rules:
       ignorePropertyModificationsFor:
         - element
   no-useless-constructor: 0
+  no-plusplus: 0
   max-len:
     - error
     - 120

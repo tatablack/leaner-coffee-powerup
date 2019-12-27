@@ -63,6 +63,8 @@ Card Badges | Card Back Section | Menu
 [CardBackSectionPaused]: ./assets/readme/paused_discussion.png
 [PowerUpButtons]: ./assets/readme/buttons.png
 
+[BrowserStack]: ./assets/readme/browserstack_logo.svg
+
 ## Installation
 The Power-Up is free, and available through the official Trello Power-Up listing.
 
@@ -80,11 +82,12 @@ This will:
 
 The Release Drafter GitHub App will take care of drafting/updating a GitHub release every time a PR gets merged; after the steps above the current draft release can be published (tied to the tag just created).
 
-#### Releasing a new translation
-Once a PR providing a new translation has been merged, we need to create localised screenshots for the Power-Up listing - the `tools` folder contains a script which uses WebDriver to automate this process.
+#### Releasing a new translation [![BrowserStack][BrowserStack]](https://www.browserstack.com)
 
-The tool can be run from the project's main folder with `npm run screenshots`. You can pass the `--help` parameter for usage instructions.
-Without parameters, it will regenerate screenshots for all locales - you can require a single one with:
+Once a PR providing a new translation has been merged, we need to create localised screenshots for the Power-Up listing - the `tools` folder contains a WebDriver-based script which uses BrowserStack to automate this process (it's free for Open Source projects).
+
+You can run it from the project's main folder with `npm run screenshots`; you can pass the `--help` parameter for usage instructions.
+Without parameters, it will regenerate screenshots for all locales - you can limit regeneration to a single locale with:
 
 ```npm run screenshots -- --locale <languagetag>```
 
@@ -92,11 +95,11 @@ For example,
 
 ```npm run screenshots -- --locale zh-Hans```
 
-The tool logs in to Trello, which means valid credentials are required (exposed through the TRELLO_USERNAME and TRELLO_PASSWORD environment variables), and access to a specific shared board is assumed, so that specific cards / lists can be included in the screenshots (the board URL is hard-coded in the script).
+The script opens a remote BrowserStack session (for which you'll need to set two environment variables, `BROWSERSTACK_USER` and `BROWSERSTACK_KEY`), and logs in to Trello (for which you'll need to expose credentials through the `TRELLO_USERNAME` and `TRELLO_PASSWORD` environment variables).
 
-At the time of writing, taking screenshots in Chrome did not work, so we're using Firefox, which needs to be installed on the user's machine (either the standard or Developer Edition; the script will try either of those default installation paths).
+Access to a specific shared board needs to be pre-arranged for the chosen Trello user, so that specific cards / lists can be included in the screenshots (the board URL is hard-coded in the script).
 
-Finally, before executing the script you'll need to start `geckodriver` from the project's folder (it will be there if you ran `npm install`) - it's the bit responsible for interpreting WebDriver commands and sending them to the browser.
+At the time of writing, taking screenshots in Chrome didn't seem to work, so Firefox will be used instead.
 
 ## Contributing
 See the [CONTRIBUTING](CONTRIBUTING.md) document.
