@@ -13,7 +13,7 @@ const supportedLanguagesPath = path.relative(
   process.cwd(),
   path.join(path.dirname(process.argv[1]), 'utils', 'SupportedLanguages.js')
 );
-let browser;
+let browserHandler;
 let currentLanguage;
 
 const { argv } = yargs.scriptName('\n🌟 build-screenshots 🌟')
@@ -49,8 +49,9 @@ const { argv } = yargs.scriptName('\n🌟 build-screenshots 🌟')
   .help();
 
 (async () => {
-  browser = await (new Browser('firefox')).build();
-  browser.maximizeWindow();
+  browserHandler = new Browser('Firefox');
+  const browser = await browserHandler.open();
+  await browser.maximizeWindow();
 
   const loginPage = new LoginPage(browser);
   await loginPage.open();
@@ -70,9 +71,9 @@ const { argv } = yargs.scriptName('\n🌟 build-screenshots 🌟')
 })()
   .catch((e) => logger.error({ label: currentLanguage, message: e }))
   .finally(async () => {
-    if (browser) {
+    if (browserHandler) {
       try {
-        await browser.deleteSession();
+        await browserHandler.close();
       } catch (e) {
         logger.error({ label: currentLanguage, message: 'Unable to delete session 🤔' });
         logger.error({ label: currentLanguage, message: e });

@@ -12,7 +12,7 @@ const getLogger = () => createLogger({
     }),
     colorize({ message: true }),
     printf(
-      (info) => `${info.timestamp} [${info.label ? info.label : '?'}] ${info.message}`
+      (info) => `${info.timestamp} [${info.label ? info.label : '-'}] ${info.message}`
     )
   ),
   transports: [
