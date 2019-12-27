@@ -82,9 +82,12 @@ This will:
 
 The Release Drafter GitHub App will take care of drafting/updating a GitHub release every time a PR gets merged; after the steps above the current draft release can be published (tied to the tag just created).
 
-#### Releasing a new translation [![BrowserStack][BrowserStack]](https://www.browserstack.com)
+#### Releasing a new translation
+|               |               |
+| ------------- |:-------------:|
+| Thanks to:    | [![BrowserStack][BrowserStack]](https://www.browserstack.com) |
 
-Once a PR providing a new translation has been merged, we need to create localised screenshots for the Power-Up listing - the `tools` folder contains a WebDriver-based script which uses BrowserStack to automate this process (it's free for Open Source projects).
+Once a PR providing a new translation has been merged, we need to create localised screenshots for the Power-Up listing - the `tools` folder contains a WebDriver-based script which uses BrowserStack to automate this process (they offer unlimited access for Open Source projects).
 
 You can run it from the project's main folder with `npm run screenshots`; you can pass the `--help` parameter for usage instructions.
 Without parameters, it will regenerate screenshots for all locales - you can limit regeneration to a single locale with:
