@@ -89,7 +89,7 @@ The Release Drafter GitHub App will take care of drafting/updating a GitHub rele
 
 Once a PR providing a new translation has been merged, we need to create localised screenshots for the Power-Up listing - the `tools` folder contains a WebDriver-based script which uses BrowserStack to automate this process (they offer unlimited access for Open Source projects).
 
-You can run it from the project's main folder with `npm run screenshots`; you can pass the `--help` parameter for usage instructions.
+You can run it from the project's main folder with `npm run screenshots`; pass `--help` for usage instructions.
 Without parameters, it will regenerate screenshots for all locales - you can limit regeneration to a single locale with:
 
 ```npm run screenshots -- --locale <languagetag>```
