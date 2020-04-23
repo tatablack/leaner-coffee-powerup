@@ -83,7 +83,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
         const allCards = await t.cards('id', 'name');
         const cardBeingDiscussed = allCards.find((card) => card.id === cardId);
 
-        t.popup({
+        return t.popup({
           title: 'Leaner Coffee',
           url: `${this.baseUrl}/ongoing_or_paused.html`,
           args: {
@@ -93,8 +93,6 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
           },
           height: 120
         });
-
-        return;
       }
 
       // eslint-disable-next-line no-console
@@ -173,7 +171,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
         }];
     }
 
-    await t.popup({
+    return t.popup({
       title: 'Leaner Coffee',
       items
     });

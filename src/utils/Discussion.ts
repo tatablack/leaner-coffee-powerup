@@ -71,11 +71,11 @@ class Discussion {
     const previousElapsed = await this.boardStorage.getDiscussionPreviousElapsed(t) || 0;
     const elapsed = startedAt ? Date.now() - startedAt : 0;
 
-    this.cardStorage.saveDiscussionElapsed(t, (elapsed + previousElapsed));
+    await this.cardStorage.saveDiscussionElapsed(t, (elapsed + previousElapsed));
   };
 
   start = async (t: Trello.PowerUp.IFrame): Promise<void> => {
-    this.boardStorage.writeMultiple(t, {
+    await this.boardStorage.writeMultiple(t, {
       [BoardStorage.DISCUSSION_STATUS]: 'ONGOING',
       [BoardStorage.DISCUSSION_CARD_ID]: t.getContext().card,
       [BoardStorage.DISCUSSION_STARTED_AT]: Date.now(),
@@ -94,9 +94,9 @@ class Discussion {
 
     clearInterval(intervalId);
 
-    this.cardStorage.saveDiscussionStatus(t, 'PAUSED');
+    await this.cardStorage.saveDiscussionStatus(t, 'PAUSED');
     this.saveElapsed(t);
-    this.boardStorage.writeMultiple(t, {
+    await this.boardStorage.writeMultiple(t, {
       [BoardStorage.DISCUSSION_STATUS]: 'PAUSED',
       [BoardStorage.DISCUSSION_STARTED_AT]: null,
       [BoardStorage.DISCUSSION_PREVIOUS_ELAPSED]: await this.getElapsed(t),
@@ -105,7 +105,7 @@ class Discussion {
 
     if (notify) {
       const elapsedNotification = this.getElapsedNotification();
-      this.notifications.play(elapsedNotification);
+      await this.notifications.play(elapsedNotification);
       this.notifications.show(elapsedNotification, cardName);
     }
   };
