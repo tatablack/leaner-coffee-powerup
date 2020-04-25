@@ -31,7 +31,7 @@ class Debug {
   }
 
   static async wipeData(t: Trello.PowerUp.IFrame, cardStorage: CardStorage, boardStorage: BoardStorage): Promise<void> {
-    boardStorage.deleteMultiple(t, [
+    await boardStorage.deleteMultiple(t, [
       BoardStorage.DISCUSSION_STATUS,
       BoardStorage.DISCUSSION_CARD_ID,
       BoardStorage.DISCUSSION_STARTED_AT,
@@ -42,7 +42,7 @@ class Debug {
     const cards = await t.cards('all');
 
     Promise.all(cards.map(async (card) => {
-      await cardStorage.deleteMultipleById(t, [
+      await cardStorage.deleteMultiple(t, [
         CardStorage.DISCUSSION_STATUS,
         CardStorage.DISCUSSION_ELAPSED,
         CardStorage.DISCUSSION_THUMBS,

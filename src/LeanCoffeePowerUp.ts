@@ -11,10 +11,6 @@ import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
 import { CapabilityHandlers } from './CapabilityHandlers';
 import { I18nConfig } from './utils/I18nConfig';
 
-interface LeanCoffeePowerUpParams extends LeanCoffeeBaseParams {
-  maxDiscussionDuration: number;
-}
-
 class LeanCoffeePowerUp extends LeanCoffeeBase {
   t: Trello.PowerUp;
   baseUrl: string;
@@ -27,15 +23,15 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   updateChecker: UpdateChecker;
 
   constructor({
-    w, config, maxDiscussionDuration
-  }: LeanCoffeePowerUpParams) {
+    w, config
+  }: LeanCoffeeBaseParams) {
     super({ w, config });
     this.t = w.TrelloPowerUp;
 
-    const { hostname, port } = this.config[process.env.NODE_ENV as Environment];
+    const { hostname, port, defaultDuration } = this.config[process.env.NODE_ENV as Environment];
     this.baseUrl = `${hostname}${port ? `:${port}` : ''}`;
 
-    this.discussion = new Discussion(this.w, this.baseUrl, maxDiscussionDuration);
+    this.discussion = new Discussion(this.w, this.baseUrl, defaultDuration);
     this.voting = new Voting();
     this.updateChecker = new UpdateChecker(this.boardStorage);
 
@@ -74,16 +70,23 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     return this.cardStorage.saveVotes(t, votes);
   };
 
+  stopAndStart = async (t: Trello.PowerUp.IFrame): Promise<void> => {
+    await this.discussion.end(t);
+    await this.discussion.start(t);
+  };
+
   handleDiscussion = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     if (await this.discussion.isOngoingOrPausedForAnotherCard(t)) {
       const boardStatus = await this.boardStorage.getDiscussionStatus(t);
       const cardId = await this.boardStorage.getDiscussionCardId(t);
 
+      // https://github.com/tatablack/leaner-coffee-powerup/issues/12
       if (await this.discussion.hasNotBeenArchived(t, cardId)) {
         const allCards = await t.cards('id', 'name');
         const cardBeingDiscussed = allCards.find((card) => card.id === cardId);
 
-        t.popup({
+        return t.popup({
+          callback: this.stopAndStart,
           title: 'Leaner Coffee',
           url: `${this.baseUrl}/ongoing_or_paused.html`,
           args: {
@@ -93,8 +96,6 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
           },
           height: 120
         });
-
-        return;
       }
 
       // eslint-disable-next-line no-console
@@ -173,7 +174,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
         }];
     }
 
-    await t.popup({
+    return t.popup({
       title: 'Leaner Coffee',
       items
     });

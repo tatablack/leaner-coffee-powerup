@@ -68,7 +68,7 @@ export const CapabilityHandlers = (powerUp: any): Trello.PowerUp.CapabilityHandl
     callback: async (t2): Promise<void> => {
       const result = await t2.list('cards');
       result.cards.forEach(({ id }) => {
-        powerUp.cardStorage.deleteMultipleById(t2, [CardStorage.VOTES], id);
+        powerUp.cardStorage.deleteMultiple(t2, [CardStorage.VOTES], id);
       });
       return t2.closePopup();
     }

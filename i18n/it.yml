@@ -55,10 +55,9 @@ discussionUiMessageEnded: 'La discussione su questa scheda è terminata.'
 discussionUiWhatNext: 'Vuoi continuare la discussione?'
 
 # Ongoing conversation popup
-ongoingIntro: 'È possibile discutere solo una scheda per volta!'
 ongoingRunning: 'Una discussione è già in corso su "{card}".'
 ongoingOnHold: 'Una conversazione su "{card}" è stata iniziata ed è al momento in pausa.'
-ongoingBottomLine: 'A conversazione terminata, sarà possibile iniziarne un''altra.'
+ongoingBottomLine: 'Fare clic qui sotto per terminarla e iniziarne un''altra sulla scheda corrente.'
 
 # Max votes reached popup
 maxVotes: 'In base al numero di argomenti in questa lista, il totale dei voti a tua disposizione è {maxVotes}.'

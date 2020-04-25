@@ -106,6 +106,7 @@ export namespace Trello {
     }
 
     interface PopupIframeOptions {
+      callback?(t: PowerUp.IFrame, options: { locale: string }): void;
       title: string;
       url: string;
       args?: {
@@ -294,7 +295,7 @@ export namespace Trello {
       storeSecret(secretKey: string, secretData: string): PromiseLike<void>;
       loadSecret(secretKey: string): PromiseLike<string>;
       clearSecret(secretKey: string): PromiseLike<void>;
-      notifyParent(message: string, options?: {
+      notifyParent(message: 'done', options?: {
         targetOrigin: string;
       }): PromiseLike<void>;
     }
