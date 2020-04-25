@@ -59,10 +59,9 @@ class Discussion {
     const elapsed = Date.now() - startedAt;
 
     if (elapsed > this.maxDiscussionDuration) {
-      clearInterval(await this.boardStorage.getDiscussionIntervalId(t));
-      this.pause(t, true);
+      await this.pause(t, true);
     } else {
-      this.saveElapsed(t);
+      await this.saveElapsed(t);
     }
   };
 
@@ -96,7 +95,7 @@ class Discussion {
     clearInterval(intervalId);
 
     await this.cardStorage.saveDiscussionStatus(t, 'PAUSED');
-    this.saveElapsed(t);
+    await this.saveElapsed(t);
     await this.boardStorage.writeMultiple(t, {
       [BoardStorage.DISCUSSION_STATUS]: 'PAUSED',
       [BoardStorage.DISCUSSION_STARTED_AT]: null,

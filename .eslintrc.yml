@@ -47,6 +47,7 @@ overrides:
         - error
         - peerDependencies: true
       import/prefer-default-export: 0
+      import/extensions: 0
       lines-between-class-members:
         - error
         - always
