@@ -10,7 +10,8 @@ module.exports = {
   entry: {
     main: './src/index.ts',
     settings: './src/settings.ts',
-    discussion_ui: './src/discussion-ui.ts'
+    discussion_ui: './src/discussion-ui.ts',
+    ongoing_or_paused: './src/popups/ongoing_or_paused.ts'
   },
 
   output: {
@@ -50,6 +51,12 @@ module.exports = {
       template: '_discussion-ui.html',
       filename: 'discussion-ui.html',
       chunks: ['discussion_ui']
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Ongoing or paused',
+      template: '_ongoing_or_paused.html',
+      filename: 'ongoing_or_paused.html',
+      chunks: ['ongoing_or_paused']
     }),
     new CopyWebpackPlugin([
       { from: 'assets/**/*', ignore: process.env.NODE_ENV === 'production' ? [] : ['assets/listings/**/*'] },

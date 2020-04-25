@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <title data-i18n-id=""></title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" type="text/css" />
+
+    <style>
+        hr {
+            margin: 8px 0 8px;
+        }
+
+        #start-button {
+            cursor: pointer;
+            display: block;
+            padding: 6px 12px;
+            margin: 0 -12px;
+        }
+
+        #start-button:hover {
+            background-color: rgba(9,30,66,.04);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="message" data-i18n-id="ongoingRunning"></div>
+    <div class="message" data-i18n-id="ongoingOnHold"></div>
+    <br/>
+    <div data-i18n-id="ongoingBottomLine"></div>
+    <hr/>
+    <a id="start-button" data-i18n-id="startTimer" data-i18n-args='{"symbol": "▶"}'></a>
+
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+</body>
+
+</html>

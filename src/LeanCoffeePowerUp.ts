@@ -70,16 +70,23 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     return this.cardStorage.saveVotes(t, votes);
   };
 
+  stopAndStart = async (t: Trello.PowerUp.IFrame): Promise<void> => {
+    await this.discussion.end(t);
+    await this.discussion.start(t);
+  };
+
   handleDiscussion = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     if (await this.discussion.isOngoingOrPausedForAnotherCard(t)) {
       const boardStatus = await this.boardStorage.getDiscussionStatus(t);
       const cardId = await this.boardStorage.getDiscussionCardId(t);
 
+      // https://github.com/tatablack/leaner-coffee-powerup/issues/12
       if (await this.discussion.hasNotBeenArchived(t, cardId)) {
         const allCards = await t.cards('id', 'name');
         const cardBeingDiscussed = allCards.find((card) => card.id === cardId);
 
         return t.popup({
+          callback: this.stopAndStart,
           title: 'Leaner Coffee',
           url: `${this.baseUrl}/ongoing_or_paused.html`,
           args: {
