@@ -42,7 +42,7 @@ class Debug {
     const cards = await t.cards('all');
 
     Promise.all(cards.map(async (card) => {
-      await cardStorage.deleteMultipleById(t, [
+      await cardStorage.deleteMultiple(t, [
         CardStorage.DISCUSSION_STATUS,
         CardStorage.DISCUSSION_ELAPSED,
         CardStorage.DISCUSSION_THUMBS,

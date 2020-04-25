@@ -28,12 +28,12 @@ class CardStorage extends Storage {
     return super.read(t, CardStorage.DISCUSSION_BUTTON_LABEL);
   }
 
-  saveDiscussionStatus(t: Trello.PowerUp.IFrame, newStatus: DiscussionStatus): PromiseLike<void> {
-    return super.write(t, CardStorage.DISCUSSION_STATUS, newStatus);
+  saveDiscussionStatus(t: Trello.PowerUp.IFrame, newStatus: DiscussionStatus, cardId?: string): PromiseLike<void> {
+    return super.write(t, CardStorage.DISCUSSION_STATUS, newStatus, cardId);
   }
 
-  saveDiscussionElapsed(t: Trello.PowerUp.IFrame, newElapsed: number): PromiseLike<void> {
-    return super.write(t, CardStorage.DISCUSSION_ELAPSED, newElapsed);
+  saveDiscussionElapsed(t: Trello.PowerUp.IFrame, newElapsed: number, cardId?: string): PromiseLike<void> {
+    return super.write(t, CardStorage.DISCUSSION_ELAPSED, newElapsed, cardId);
   }
 
   saveDiscussionThumbs(t: Trello.PowerUp.IFrame, newThumbs: Thumbs): PromiseLike<void> {
