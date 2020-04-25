@@ -67,11 +67,12 @@ class Discussion {
   };
 
   saveElapsed = async (t: Trello.PowerUp.IFrame): Promise<void> => {
+    const cardId = await this.boardStorage.getDiscussionCardId(t);
     const startedAt = await this.boardStorage.getDiscussionStartedAt(t);
     const previousElapsed = await this.boardStorage.getDiscussionPreviousElapsed(t) || 0;
     const elapsed = startedAt ? Date.now() - startedAt : 0;
 
-    await this.cardStorage.saveDiscussionElapsed(t, (elapsed + previousElapsed));
+    await this.cardStorage.saveDiscussionElapsed(t, (elapsed + previousElapsed), cardId);
   };
 
   start = async (t: Trello.PowerUp.IFrame): Promise<void> => {
@@ -112,12 +113,13 @@ class Discussion {
 
   end = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     const intervalId = await this.boardStorage.getDiscussionIntervalId(t);
+    const cardId = await this.boardStorage.getDiscussionCardId(t);
     clearInterval(intervalId);
 
     try {
-      await this.cardStorage.saveDiscussionStatus(t, 'ENDED');
+      await this.cardStorage.saveDiscussionStatus(t, 'ENDED', cardId);
       await this.saveElapsed(t);
-      await this.cardStorage.deleteMultiple(t, [CardStorage.DISCUSSION_THUMBS]);
+      await this.cardStorage.deleteMultiple(t, [CardStorage.DISCUSSION_THUMBS], cardId);
       await this.boardStorage.deleteMultiple(t, [
         BoardStorage.DISCUSSION_STATUS,
         BoardStorage.DISCUSSION_CARD_ID,
