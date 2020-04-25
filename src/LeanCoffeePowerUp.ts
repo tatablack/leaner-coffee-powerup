@@ -11,10 +11,6 @@ import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
 import { CapabilityHandlers } from './CapabilityHandlers';
 import { I18nConfig } from './utils/I18nConfig';
 
-interface LeanCoffeePowerUpParams extends LeanCoffeeBaseParams {
-  maxDiscussionDuration: number;
-}
-
 class LeanCoffeePowerUp extends LeanCoffeeBase {
   t: Trello.PowerUp;
   baseUrl: string;
@@ -27,15 +23,15 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   updateChecker: UpdateChecker;
 
   constructor({
-    w, config, maxDiscussionDuration
-  }: LeanCoffeePowerUpParams) {
+    w, config
+  }: LeanCoffeeBaseParams) {
     super({ w, config });
     this.t = w.TrelloPowerUp;
 
-    const { hostname, port } = this.config[process.env.NODE_ENV as Environment];
+    const { hostname, port, defaultDuration } = this.config[process.env.NODE_ENV as Environment];
     this.baseUrl = `${hostname}${port ? `:${port}` : ''}`;
 
-    this.discussion = new Discussion(this.w, this.baseUrl, maxDiscussionDuration);
+    this.discussion = new Discussion(this.w, this.baseUrl, defaultDuration);
     this.voting = new Voting();
     this.updateChecker = new UpdateChecker(this.boardStorage);
 
