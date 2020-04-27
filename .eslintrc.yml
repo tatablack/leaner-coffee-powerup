@@ -31,6 +31,11 @@ overrides:
   - files: tools/**/*.js
     env:
       node: true
+  - files: ['src/**/__mocks__/*.ts', 'src/**/*.spec.ts']
+    env:
+      jest: true
+    rules:
+      import/extensions: 0
   - files: "webpack.*.js"
     settings:
       import/resolver: 'node'
