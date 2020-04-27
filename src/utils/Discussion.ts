@@ -1,6 +1,6 @@
 import { Trello } from '../types/TrelloPowerUp';
 import BoardStorage from '../storage/BoardStorage';
-import CardStorage from '../storage/CardStorage';
+import { CardStorage } from '../storage/CardStorage';
 import Notifications, { NotificationType } from './Notifications';
 
 class Discussion {

@@ -1,7 +1,7 @@
 import { Trello } from '../types/TrelloPowerUp';
 
 import BoardStorage from '../storage/BoardStorage';
-import CardStorage from '../storage/CardStorage';
+import { CardStorage } from '../storage/CardStorage';
 
 /* eslint-disable no-console */
 class Debug {

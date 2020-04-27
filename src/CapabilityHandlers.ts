@@ -1,5 +1,5 @@
 import { Trello } from './types/TrelloPowerUp';
-import CardStorage from './storage/CardStorage';
+import { CardStorage } from './storage/CardStorage';
 import { I18nConfig } from './utils/I18nConfig';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

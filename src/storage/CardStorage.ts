@@ -53,4 +53,6 @@ class CardStorage extends Storage {
   }
 }
 
-export default CardStorage;
+export {
+  CardStorage
+};

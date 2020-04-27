@@ -1,5 +1,5 @@
 import { Trello } from '../types/TrelloPowerUp';
-import CardStorage from '../storage/CardStorage';
+import { CardStorage } from '../storage/CardStorage';
 
 class Voting {
   cardStorage: CardStorage;
