@@ -2,8 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const webpack = require('webpack');
-const merge = require('webpack-merge');
-const WatchRunPlugin = require('webpack-watch-changed');
+const { merge } = require('webpack-merge');
 
 const PACKAGE_JSON = require('./package.json');
 const common = require('./webpack.common.js');
@@ -15,8 +14,6 @@ module.exports = merge(common, {
   devtool: 'inline-source-map',
 
   plugins: [
-    new WatchRunPlugin(),
-
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'development',
       CONFIG: Config,
@@ -31,6 +28,10 @@ module.exports = merge(common, {
       )
     },
     open: true,
+    publicPath: '/',
+    clientLogLevel: 'info',
+    liveReload: false,
+    stats: 'errors-warnings',
     https: {
       key: fs.readFileSync('localhost.key'),
       cert: fs.readFileSync('localhost.cert')

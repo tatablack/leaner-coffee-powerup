@@ -15,7 +15,7 @@ module.exports = {
   },
 
   output: {
-    filename: '[name].[hash].js',
+    filename: '[name].[fullhash].js',
     path: path.resolve(__dirname, OUTPUT_FOLDER)
   },
 
@@ -58,19 +58,28 @@ module.exports = {
       filename: 'ongoing_or_paused.html',
       chunks: ['ongoing_or_paused']
     }),
-    new CopyWebpackPlugin([
-      { from: 'assets/**/*', ignore: process.env.NODE_ENV === 'production' ? [] : ['assets/listings/**/*'] },
+    new CopyWebpackPlugin(
       {
-        from: 'i18n/*.yml',
-        to: 'i18n/[name].json',
-        transform: (content) => Buffer.from(
-          JSON.stringify(
-            yaml.safeLoad(content.toString('utf8'), { schema: yaml.JSON_SCHEMA })
-          ),
-          'utf8'
-        )
-      },
-      { from: '*.html', ignore: ['_*'] }
-    ])
+        patterns: [
+          {
+            from: 'assets/**/*',
+            globOptions: {
+              ignore: process.env.NODE_ENV === 'production' ? [] : ['assets/listings/**/*']
+            }
+          },
+          {
+            from: 'i18n/*.yml',
+            to: 'i18n/[name].json',
+            transform: (content) => Buffer.from(
+              JSON.stringify(
+                yaml.safeLoad(content.toString('utf8'), { schema: yaml.JSON_SCHEMA })
+              ),
+              'utf8'
+            )
+          },
+          { from: '*.html', globOptions: { ignore: ['_*'] } }
+        ]
+      }
+    )
   ]
 };
