@@ -9,9 +9,11 @@ export class LeanCoffeePopupBase {
   t: Trello.PowerUp.IFrame;
 
   constructor({ w }: LeanCoffeePopupBaseParams) {
-    this.t = w.TrelloPowerUp.iframe();
+    this.t = w.TrelloPowerUp.iframe({ helpfulStacks: !this.isRunningInProduction() });
     this.w = w;
   }
+
+  isRunningInProduction = (): boolean => (process.env.NODE_ENV as Environment) === 'production';
 
   toggleFields(cssSelector: string, key: string): void {
     const elements: NodeListOf<HTMLElement> = this.w.document.querySelectorAll(cssSelector);
