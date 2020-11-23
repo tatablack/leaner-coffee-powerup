@@ -20,4 +20,6 @@ export class LeanCoffeeBase {
     this.boardStorage = new BoardStorage();
     this.cardStorage = new CardStorage();
   }
+
+  isRunningInProduction = (): boolean => (process.env.NODE_ENV as Environment) === 'production';
 }

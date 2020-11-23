@@ -172,6 +172,20 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
             );
           }
         }];
+
+        if (await this.discussion.hasEverBeenDiscussed(t)) {
+          items.push({
+            text: t.localizeKey('resetDiscussion', { symbol: '↺' }), // ANTICLOCKWISE OPEN CIRCLE ARROW
+            callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+              await this.discussion.reset(t2);
+              await t2.closePopup();
+              await this.discussion.cardStorage.saveDiscussionButtonLabel(
+                t2,
+                t2.localizeKey('resettingDiscussion', { symbol: '↺' }) // ANTICLOCKWISE OPEN CIRCLE ARROW
+              );
+            }
+          });
+        }
     }
 
     return t.popup({
@@ -197,7 +211,8 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   start(): void {
     const trelloPlugin = this.t.initialize(
       CapabilityHandlers(this), {
-        localization: I18nConfig
+        localization: I18nConfig,
+        helpfulStacks: !this.isRunningInProduction()
       }
     ) as Trello.PowerUp.Plugin;
 

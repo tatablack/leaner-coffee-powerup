@@ -37,6 +37,11 @@ class Discussion {
     return ['ONGOING', 'PAUSED'].includes(boardStatus) && cardId !== t.getContext().card;
   };
 
+  hasEverBeenDiscussed = async (t: Trello.PowerUp.IFrame): Promise<boolean> => {
+    const cardStatus = await this.cardStorage.getDiscussionStatus(t);
+    return cardStatus !== undefined;
+  };
+
   hasNotBeenArchived = async (t: Trello.PowerUp.IFrame, cardId: string): Promise<boolean> => {
     const allCards = await t.cards('id', 'name');
     return !!allCards.find((card) => card.id === cardId);
@@ -128,6 +133,16 @@ class Discussion {
       ]);
     } catch (err) {
       throw new Error(err);
+    }
+  };
+
+  reset = async (t: Trello.PowerUp.IFrame): Promise<void> => {
+    if (await this.hasEverBeenDiscussed(t)) {
+      await this.cardStorage.deleteMultiple(t, [
+        CardStorage.DISCUSSION_STATUS,
+        CardStorage.DISCUSSION_ELAPSED,
+        CardStorage.DISCUSSION_THUMBS
+      ], t.getContext().card);
     }
   };
 }

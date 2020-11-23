@@ -24,7 +24,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
 
   constructor({ w, config }: LeanCoffeeBaseParams) {
     super({ w, config });
-    this.t = w.TrelloPowerUp.iframe({ localization: I18nConfig });
+    this.t = w.TrelloPowerUp.iframe({ localization: I18nConfig, helpfulStacks: !this.isRunningInProduction() });
 
     this.badges = this.w.document.querySelector('.badges');
     this.badgeElapsed = this.w.document.querySelector('.badge-elapsed');
@@ -159,7 +159,6 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
   toggleBadges = (visible: boolean): void => {
     this.badges.style.display = visible ? 'grid' : 'none';
   };
-
 
   toggleVoting = (visible: boolean): void => {
     this.voting.forEach((element) => {
