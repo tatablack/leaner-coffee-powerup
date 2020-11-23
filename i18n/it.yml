@@ -11,6 +11,8 @@ endDiscussion: '{symbol} Termina'
 endingDiscussion: 'Interruzione... {symbol}'
 resumeDiscussion: '{symbol} Riprendi'
 resumingDiscussion: 'Riavvio in corso {symbol}'
+resetDiscussion: '{symbol} Azzera timer'
+resettingDiscussion: 'Azzeramento... {symbol}'
 
 # Discussion duration badge
 discussionOngoing: 'In corso'

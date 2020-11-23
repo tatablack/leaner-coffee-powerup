@@ -12,6 +12,8 @@ endDiscussion: '{symbol} End discussion'
 endingDiscussion: 'Stopping {symbol}'
 resumeDiscussion: '{symbol} Resume discussion'
 resumingDiscussion: 'Resuming {symbol}'
+resetDiscussion: '{symbol} Reset discussion'
+resettingDiscussion: 'Resetting {symbol}'
 
 # Discussion duration badge
 discussionOngoing: 'Ongoing'
