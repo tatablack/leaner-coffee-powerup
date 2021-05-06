@@ -6,46 +6,56 @@ const browserstack = require('browserstack-local');
 const getLogger = require('./Logger');
 
 const sleep = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
-
-const Browsers = {
-  Firefox: {
-    capabilities: {
-      browser_version: '71.0',
-      os: 'Windows',
-      os_version: '10'
-    }
-  }
-};
-
 class Browser {
-  constructor(browserName) {
+  constructor(browserName, isLocal) {
     this.logger = getLogger();
+    this.isLocal = isLocal;
 
-    const commonOptions = {
+    const localOptions = {
       logLevel: 'error',
-      waitforTimeout: 10000,
-      // hostname: `${process.env.BROWSERSTACK_USER}:${process.env.BROWSERSTACK_KEY}@hub-cloud.browserstack.com`,
+      capabilities: {
+        'moz:firefoxOptions': {
+          args: ['-headless'],
+          binary: process.env.FIREFOX_BINARY
+        }
+      }
+    };
+
+    const remoteOptions = {
+      logLevel: 'error',
       user: process.env.BROWSERSTACK_USER,
       key: process.env.BROWSERSTACK_KEY,
       capabilities: {
-        name: `Generating Leaner Coffee screenshots in ${browserName}`,
-        browserName,
-        acceptSslCerts: true,
-        resolution: '1680x1050',
         'bstack:options': {
           projectName: 'Leaner Coffee - Screenshots',
+          sessionName: `Generating Leaner Coffee screenshots in ${browserName}`,
           buildName: dateFormat('yyyy-MM-dd', new Date()),
           local: 'true',
           debug: 'true',
           video: 'false',
           seleniumLogs: 'false',
-          maskCommands: 'setValues'
+          maskCommands: 'setValues',
+          resolution: '1680x1050',
+          os: 'Windows',
+          osVersion: '10'
         }
       }
     };
 
-    this.options = merge(commonOptions, Browsers[browserName]);
-    this.setupTunnel();
+    const commonOptions = {
+      waitforTimeout: 10000,
+      capabilities: {
+        browserName,
+        acceptInsecureCerts: true
+      }
+    };
+
+    // https://w3c.github.io/webdriver/#capabilities
+    this.options = merge(commonOptions, this.isLocal ? localOptions : remoteOptions);
+
+    if (!this.isLocal) {
+      this.setupTunnel();
+    }
   }
 
   async setupTunnel() {
@@ -64,14 +74,16 @@ class Browser {
   }
 
   async open() {
-    let attempts = 0;
+    if (!this.isLocal) {
+      let attempts = 0;
 
-    while (!this.tunnel.isRunning()) {
-      if (attempts === 60) { throw new Error('Unable to establish a BrowserStack tunnel after 60 seconds'); }
+      while (!this.tunnel.isRunning()) {
+        if (attempts === 60) { throw new Error('Unable to establish a BrowserStack tunnel after 60 seconds'); }
 
-      // eslint-disable-next-line no-await-in-loop
-      await sleep(1000);
-      attempts++;
+        // eslint-disable-next-line no-await-in-loop
+        await sleep(1000);
+        attempts++;
+      }
     }
 
     try {
@@ -87,13 +99,17 @@ class Browser {
   async close() {
     if (this.remote) { await this.remote.deleteSession(); }
 
-    return new Promise((resolve, reject) => {
-      this.tunnel.stop((error) => {
-        if (error) { reject(error); }
-        this.logger.info('BrowserStack tunnel closed');
-        resolve();
+    if (!this.isLocal) {
+      return new Promise((resolve, reject) => {
+        this.tunnel.stop((error) => {
+          if (error) { reject(error); }
+          this.logger.info('BrowserStack tunnel closed');
+          resolve();
+        });
       });
-    });
+    }
+
+    return true;
   }
 }
 

@@ -5,6 +5,7 @@ const Browser = require('./utils/Browser');
 const SupportedLanguages = require('./utils/SupportedLanguages');
 const LoginPage = require('./pages/LoginPage');
 const TestBoardPage = require('./pages/TestBoardPage');
+const ChangeLanguagePage = require('./pages/ChangeLanguagePage');
 const getLogger = require('./utils/Logger');
 
 const logger = getLogger();
@@ -25,6 +26,11 @@ const { argv } = yargs.scriptName('\n🌟 build-screenshots 🌟')
     type: 'array',
     describe: `one or more target locales from ${supportedLanguagesPath}, e.g. "en", or "zh-Hans", or "en it"`
   })
+  .option('local', {
+    default: false,
+    type: 'boolean',
+    describe: 'Whether to use a locally installed browser, or a remote one through BrowserStack'
+  })
   .check((parsedArgv) => {
     if (!process.env.TRELLO_USERNAME || !process.env.TRELLO_PASSWORD) {
       throw new Error(
@@ -42,6 +48,10 @@ const { argv } = yargs.scriptName('\n🌟 build-screenshots 🌟')
       );
     }
 
+    if (parsedArgv.local && !process.env.FIREFOX_BINARY) {
+      throw new Error('The FIREFOX_BINARY environment variable must be set to the path of the Firefox executable');
+    }
+
     return true;
   })
   .version(false)
@@ -49,26 +59,45 @@ const { argv } = yargs.scriptName('\n🌟 build-screenshots 🌟')
   .help();
 
 (async () => {
-  browserHandler = new Browser('Firefox');
+  browserHandler = new Browser('firefox', argv.local);
   const browser = await browserHandler.open();
+
+  if (!browser) {
+    logger.error('Unable to instantiate a Browser. See above error for details.');
+    process.exit(1);
+  }
+
   await browser.maximizeWindow();
 
   const loginPage = new LoginPage(browser);
   await loginPage.open();
   await loginPage.login(process.env.TRELLO_USERNAME, process.env.TRELLO_PASSWORD);
 
-  const testBoardPage = new TestBoardPage(browser);
-  await testBoardPage.open();
+  // Detect the initial language
+  const changeLanguagePage = new ChangeLanguagePage(browser);
+  await changeLanguagePage.open();
+  const initialLanguage = await changeLanguagePage.getCurrentLanguage();
 
+  /* eslint-disable no-await-in-loop */
   // eslint-disable-next-line no-restricted-syntax
   for (const [languageCode, languageName] of Object.entries(SupportedLanguages)) {
     if (argv.locale[0] === 'all' || argv.locale.includes(languageCode)) {
       currentLanguage = languageCode;
-      // eslint-disable-next-line no-await-in-loop
-      await testBoardPage.takeAllScreenshotsFor(languageCode, languageName);
+
+      await changeLanguagePage.open();
+      await changeLanguagePage.switchLanguageTo(languageName);
+
+      const testBoardPage = new TestBoardPage(browser);
+      await testBoardPage.open();
+      await testBoardPage.takeAllScreenshotsFor(languageCode);
     }
   }
+
+  // Restore initial language
+  await changeLanguagePage.open();
+  await changeLanguagePage.switchLanguageTo(initialLanguage);
 })()
+  /* eslint-enable no-await-in-loop */
   .catch((e) => logger.error({ label: currentLanguage, message: e }))
   .finally(async () => {
     if (browserHandler) {

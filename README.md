@@ -98,11 +98,11 @@ For example,
 
 ```npm run screenshots -- --locale zh-Hans```
 
-The script opens a remote BrowserStack session (for which you'll need to set two environment variables, `BROWSERSTACK_USER` and `BROWSERSTACK_KEY`), and logs in to Trello (for which you'll need to expose credentials through the `TRELLO_USERNAME` and `TRELLO_PASSWORD` environment variables).
+The script opens a remote BrowserStack session (for which you'll need to set two environment variables, `BROWSERSTACK_USER` and `BROWSERSTACK_KEY`), and logs in to Trello (for which you'll need to expose credentials through the `TRELLO_USERNAME` and `TRELLO_PASSWORD` environment variables). *Note*: after Trello's acquisition by Atlassian, the login flow is slightly different, in that the username is typed while on a `trello.com` domain, while the password will be set while on `atlassian.com`. Confusing, but workable.
 
 Access to a specific shared board needs to be pre-arranged for the chosen Trello user, so that specific cards / lists can be included in the screenshots (the board URL is hard-coded in the script).
 
-At the time of writing, taking screenshots in Chrome didn't seem to work, so Firefox will be used instead.
+At the time of the initial implementation, taking screenshots in Chrome didn't seem to work, so Firefox will be used instead.
 
 ## Contributing
 See the [CONTRIBUTING](CONTRIBUTING.md) document.

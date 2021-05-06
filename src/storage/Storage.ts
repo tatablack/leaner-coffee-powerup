@@ -13,6 +13,7 @@ class Storage {
     return t.get(cardId ?? this.scope, this.visibility, key);
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   write(t: Trello.PowerUp.IFrame, key: string, value: any, cardId?: string): PromiseLike<void> {
     return t.set(cardId ?? this.scope, this.visibility, key, value);
   }

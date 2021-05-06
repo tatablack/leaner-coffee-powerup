@@ -1,3 +1,19 @@
-dist
+# Local certificates
 localhost.*
+
+# Local configuration
 .nvmrc
+.envrc
+
+# IDE configuration
+.vscode
+.idea
+*.iml
+
+# Output
+dist
+*.log
+coverage
+
+# Dependencies
+node_modules

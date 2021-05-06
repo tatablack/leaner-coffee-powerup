@@ -4,15 +4,15 @@ const {
   combine, timestamp, colorize, printf
 } = format;
 
-const getLogger = () => createLogger({
-  level: 'info',
+const getLogger = (level = 'info') => createLogger({
+  level,
   format: combine(
     timestamp({
       format: 'YYYY-MM-DD HH:mm:ss'
     }),
     colorize({ message: true }),
     printf(
-      (info) => `${info.timestamp} [${info.label ? info.label : '-'}] ${info.message}`
+      (info) => `${info.timestamp} [${info.label ? info.label : '--'}] ${info.message}`
     )
   ),
   transports: [

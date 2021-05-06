@@ -1,14 +1,18 @@
 // Type definitions for the Trello PowerUp Client v1.20.9
 // Definitions by: Angelo Tata https://github.com/tatablack/
 
-declare global {
-  interface Window {
-    TrelloPowerUp: Trello.PowerUp;
-    locale: string;
-  }
-}
-
 export namespace Trello {
+  interface PowerUp {
+    version: string;
+    Promise: PromiseLike<any>;
+    CallbackCache: Callback.Cache;
+    PostMessageIO: any; // PostMessageIO
+    iframe(options?: PowerUp.IFrameOptions): PowerUp.IFrame;
+    initialize(handlers: PowerUp.CapabilityHandlers, options?: PowerUp.PluginOptions): PowerUp.Plugin | PowerUp.IFrame;
+    restApiError(): any;
+    util: PowerUp.Util;
+  }
+
   namespace Callback {
     type CacheAction = 'run' | 'retain' | 'release';
     type SerializeResult = (value: any, key?: string) => any
@@ -30,21 +34,163 @@ export namespace Trello {
     }
   }
 
-  interface PowerUp {
-    version: string;
-    Promise: PromiseLike<any>;
-    CallbackCache: Callback.Cache;
-    PostMessageIO: any; // PostMessageIO
-    iframe(options?: PowerUp.IFrameOptions): PowerUp.IFrame;
-    initialize(handlers: PowerUp.CapabilityHandlers, options?: PowerUp.PluginOptions): PowerUp.Plugin | PowerUp.IFrame;
-    restApiError(): any;
-    util: PowerUp.Util;
-  }
-
   namespace PowerUp {
-    // INTERNAL TYPES
     type ResourceDictionary = {
       [key: string]: string;
+    }
+
+    type Colors = 'blue' | 'green' | 'orange' | 'red' | 'yellow' |
+      'purple' | 'pink' | 'sky' | 'lime' | 'light-gray' | 'business-blue';
+
+    type MemberType = 'admin' | 'normal' | 'observer'
+
+    interface Organization {
+      id: string;
+      name: string;
+    }
+
+    interface Label {
+      id: string;
+      name: string;
+      color: Colors;
+    }
+
+    interface CustomFieldValue {
+      checked?: string;
+      date?: string;
+      text?: string;
+      number?: string;
+    }
+
+    interface CustomField {
+      id: string;
+      idCustomField: string;
+      idValue?: string;
+      value?: CustomFieldValue;
+    }
+
+    interface Member {
+      id: string;
+      fullName: string | null;
+      username: string | null;
+      initials: string | null;
+      avatar: string | null;
+    }
+
+    interface Membership {
+      deactivated: boolean;
+      id: string;
+      idMember: string;
+      memberType: MemberType;
+      unconfirmed: boolean;
+    }
+
+    interface Preview {
+      bytes: number;
+      height: number;
+      scaled: boolean;
+      url: string;
+      width: number;
+    }
+
+    interface AttachmentSectionBase {
+      claimed: boolean;
+      icon: string;
+      content: {
+        type: string;
+        url: string;
+        height?: number;
+      };
+    }
+
+    interface AttachmentsByType {
+      [key: string]: {
+        board: number;
+        card: number;
+      };
+    }
+
+    interface Attachment {
+      date: string;
+      edgeColor: string;
+      id: string;
+      idMember: string;
+      name: string;
+      previews: Preview[];
+      url: string;
+    }
+
+    interface AttachmentSection extends AttachmentSectionBase {
+      title: string;
+    }
+
+    interface LazyAttachmentSection extends AttachmentSectionBase {
+      id: string;
+      title(): string;
+    }
+
+    interface Coordinates {
+      latitude: number;
+      longitude: number;
+    }
+
+    interface BadgesInfo {
+      attachments: number;
+      attachmentsByType: AttachmentsByType;
+      checkItems: number;
+      checkItemsChecked: number;
+      comments: number;
+      description: boolean;
+      due: string; // timestamp
+      dueComplete: boolean;
+      fogbugz: string;
+      location: boolean;
+      subscribed: boolean;
+      viewingMemberVoted: boolean;
+      votes: number;
+    }
+
+    interface Board {
+      id: string;
+      name: string;
+      url: string; // https://trello.com/c/I5nAdteE/9-test
+      shortLink: string;
+      members: Member[];
+      dateLastActivity: string; // "2019-11-28T15:53:19.709Z"
+      idOrganization: string;
+      customFields: CustomField[];
+      labels: Label[];
+      memberships: Membership[];
+    }
+
+    interface Card {
+      address: string | null;
+      attachments: Attachment[];
+      badges: BadgesInfo;
+      closed: boolean;
+      coordinates: Coordinates | null;
+      cover: Attachment | null;
+      customFieldItems: CustomField[];
+      dateLastActivity: string; // "2019-11-28T15:53:19.709Z"
+      desc: string;
+      due: string | null; // "2019-11-28T15:53:19.709Z"
+      dueComplete: boolean;
+      id: string;
+      idList: string;
+      idShort: number;
+      labels: Label[];
+      locationName: string | null;
+      members: Member[];
+      name: string;
+      pos: number;
+      shortLink: string;
+      url: string; // https://trello.com/c/I5nAdteE/9-test
+    }
+
+    interface List {
+      id: string;
+      name: string;
+      cards: Card[];
     }
 
     type OrganizationFields = keyof Organization;
@@ -53,7 +199,78 @@ export namespace Trello {
     type ListFields = keyof List;
     type MemberFields = keyof Member;
 
-    // USER-FACING TYPES
+    type Condition = 'admin' | 'always' | 'edit' | 'readonly' | 'signedIn' | 'signedOut';
+
+    interface BoardButtonBase {
+      icon: {
+        dark: string;
+        light: string;
+      };
+      text: string;
+      condition?: Condition;
+    }
+
+    interface BoardButtonCallback extends BoardButtonBase {
+      callback: (t: Trello.PowerUp.IFrame) => PromiseLike<void>;
+    }
+
+    interface BoardButtonUrl extends BoardButtonBase {
+      url: string;
+      target?: string;
+    }
+
+    interface CardBackSection {
+      title: string;
+      icon: string;
+      content: {
+        type: 'iframe';
+        url: string;
+        height?: number;
+      };
+    }
+
+    interface CardBadge {
+      text?: string;
+      icon?: string;
+      color?: Colors;
+      refresh?: number;
+    }
+
+    interface CardBadgeDynamic {
+      dynamic(): CardBadge;
+    }
+
+    interface CardButton {
+      icon: string;
+      text: string;
+      condition?: Condition;
+      callback(t: Trello.PowerUp.IFrame): PromiseLike<void>;
+      url?: string;
+      target?: string;
+    }
+
+    interface CardDetailBadge extends CardBadge {
+      title: string;
+      callback?(t: PowerUp.IFrame): void;
+      url?: string;
+      target?: string;
+    }
+
+    interface CardDetailBadgeDynamic {
+      dynamic(): CardDetailBadge;
+    }
+
+    interface ListAction {
+      text: string;
+      callback(t: PowerUp.IFrame): PromiseLike<void>;
+    }
+
+    interface ListSorter {
+      text: string;
+      callback(t: PowerUp.IFrame, options: {
+        cards: Card[];
+      }): PromiseLike<{ sortedIds: string[]}>;
+    }
 
     type CapabilityHandlers = {
       'attachment-sections'?: (t: PowerUp.IFrame, options: {
@@ -77,8 +294,6 @@ export namespace Trello {
       'show-authorization'?: () => void;
     };
 
-    type Condition = 'admin' | 'always' | 'edit' | 'readonly' | 'signedIn' | 'signedOut';
-
     type Model = 'board' | 'card' | 'organization';
     type Scope = Model | 'member';
     type Permissions = 'read' | 'write';
@@ -93,7 +308,7 @@ export namespace Trello {
     interface PopupOptions {
       title: string;
       items: PopupOptionsItem[];
-      mouseEvent: MouseEvent;
+      mouseEvent?: MouseEvent;
     }
 
     interface PopupSearchOptions extends PopupOptions {
@@ -114,7 +329,7 @@ export namespace Trello {
         [key: string]: any;
       };
       height?: number;
-      mouseEvent: MouseEvent;
+      mouseEvent?: MouseEvent;
     }
 
     interface PopupDateOptions {
@@ -126,7 +341,7 @@ export namespace Trello {
       date?: Date;
       minDate?: Date;
       maxDate?: Date;
-      mouseEvent: MouseEvent;
+      mouseEvent?: MouseEvent;
     }
 
     interface PopupConfirmOptions {
@@ -136,7 +351,7 @@ export namespace Trello {
       confirmText: string;
       onConfirm(t: PowerUp.IFrame, opts: any): PromiseLike<void>;
       confirmStyle?: 'primary' | 'danger';
-      mouseEvent: MouseEvent;
+      mouseEvent?: MouseEvent;
     }
 
     interface PopupConfirmWithCancelOptions extends PopupConfirmOptions {
@@ -151,9 +366,6 @@ export namespace Trello {
       position: 'left' | 'right';
       url?: string;
     }
-
-    type Colors = 'blue' | 'green' | 'orange' | 'red' | 'yellow' |
-      'purple' | 'pink' | 'sky' | 'lime' | 'light-gray' | 'business-blue';
 
     type AlertDisplay = 'info' | 'warning' | 'error' | 'success';
 
@@ -175,6 +387,7 @@ export namespace Trello {
       localization?: Localization;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Util {
       color: {
         getHexString(): string;
@@ -222,6 +435,21 @@ export namespace Trello {
       lists(...fields: ['all'] | ListFields[]): PromiseLike<List[]>;
       member(...fields: ['all'] | MemberFields[]): PromiseLike<Member>;
       organization(...fields: ['all'] | OrganizationFields[]): PromiseLike<Organization>;
+    }
+
+    interface Context {
+      board: string;
+      card?: string;
+      command?: string;
+      member: string;
+      organization?: string;
+      enterprise?: string;
+      permissions?: {
+        board: Permissions;
+        card: Permissions;
+        organization: Permissions;
+      };
+      version: string;
     }
 
     interface HostHandlers extends AnonymousHostHandlers {
@@ -304,14 +532,12 @@ export namespace Trello {
       }): PromiseLike<void>;
     }
 
-    // eslint-disable-next-line @typescript-eslint/interface-name-prefix
     interface IFrameOptions extends LocalizerOptions {
       context?: string;
       secret?: string;
       helpfulStacks?: boolean;
     }
 
-    // eslint-disable-next-line @typescript-eslint/interface-name-prefix
     interface IFrame extends HostHandlers {
       io: any | null;
       args: any[];
@@ -345,6 +571,7 @@ export namespace Trello {
       helpfulStacks?: boolean;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Plugin extends AnonymousHostHandlers {
       options: PluginOptions;
       connect(): any; // return an instance of PostMessageIO
@@ -353,242 +580,12 @@ export namespace Trello {
       NotHandled(): any; // return PostMessageIO.NotHandled, whatever that is
     }
 
-    // USER-FACING INTERFACES
-    interface BoardButtonBase {
-      icon: {
-        dark: string;
-        light: string;
-      };
-      text: string;
-      condition?: Condition;
-    }
+  }
+}
 
-    interface BoardButtonCallback extends BoardButtonBase {
-      callback: (t: Trello.PowerUp.IFrame) => PromiseLike<void>;
-    }
-
-    interface BoardButtonUrl extends BoardButtonBase {
-      url: string;
-      target?: string;
-    }
-
-    interface CardBackSection {
-      title: string;
-      icon: string;
-      content: {
-        type: 'iframe';
-        url: string;
-        height?: number;
-      };
-    }
-
-    interface CardBadge {
-      text?: string;
-      icon?: string;
-      color?: Colors;
-      refresh?: number;
-    }
-
-    interface CardBadgeDynamic {
-      dynamic(): CardBadge;
-    }
-
-    interface CardDetailBadge extends CardBadge {
-      title: string;
-      callback?(t: PowerUp.IFrame): void;
-      url?: string;
-      target?: string;
-    }
-
-    interface CardDetailBadgeDynamic {
-      dynamic(): CardDetailBadge;
-    }
-
-    interface ListAction {
-      text: string;
-      callback(t: PowerUp.IFrame): PromiseLike<void>;
-    }
-
-    interface ListSorter {
-      text: string;
-      callback(t: PowerUp.IFrame, options: {
-        cards: Card[];
-      }): PromiseLike<{ sortedIds: string[]}>;
-    }
-
-    interface CardButton {
-      icon: string;
-      text: string;
-      condition?: Condition;
-      callback(t: Trello.PowerUp.IFrame): PromiseLike<void>;
-      url?: string;
-      target?: string;
-    }
-
-    interface AttachmentsByType {
-      [key: string]: {
-        board: number;
-        card: number;
-      };
-    }
-
-    interface Preview {
-      bytes: number;
-      height: number;
-      scaled: boolean;
-      url: string;
-      width: number;
-    }
-
-    interface AttachmentSectionBase {
-      claimed: boolean;
-      icon: string;
-      content: {
-        type: string;
-        url: string;
-        height?: number;
-      };
-    }
-
-    interface AttachmentSection extends AttachmentSectionBase {
-      title: string;
-    }
-
-    interface LazyAttachmentSection extends AttachmentSectionBase {
-      id: string;
-      title(): string;
-    }
-
-    interface Attachment {
-      date: string;
-      edgeColor: string;
-      id: string;
-      idMember: string;
-      name: string;
-      previews: Preview[];
-      url: string;
-    }
-
-    interface BadgesInfo {
-      attachments: number;
-      attachmentsByType: AttachmentsByType;
-      checkItems: number;
-      checkItemsChecked: number;
-      comments: number;
-      description: boolean;
-      due: string; // timestamp
-      dueComplete: boolean;
-      fogbugz: string;
-      location: boolean;
-      subscribed: boolean;
-      viewingMemberVoted: boolean;
-      votes: number;
-    }
-
-    interface Coordinates {
-      latitude: number;
-      longitude: number;
-    }
-
-    interface Label {
-      id: string;
-      name: string;
-      color: Colors;
-    }
-
-    interface CustomField {
-      id: string;
-      idCustomField: string;
-      idValue?: string;
-      value?: CustomFieldValue;
-    }
-
-    interface CustomFieldValue {
-      checked?: string;
-      date?: string;
-      text?: string;
-      number?: string;
-    }
-
-    type MemberType = 'admin' | 'normal' | 'observer'
-
-    interface Membership {
-      deactivated: boolean;
-      id: string;
-      idMember: string;
-      memberType: MemberType;
-      unconfirmed: boolean;
-    }
-
-    interface Organization {
-      id: string;
-      name: string;
-    }
-
-    interface Board {
-      id: string;
-      name: string;
-      url: string; // https://trello.com/c/I5nAdteE/9-test
-      shortLink: string;
-      members: Member[];
-      dateLastActivity: string; // "2019-11-28T15:53:19.709Z"
-      idOrganization: string;
-      customFields: CustomField[];
-      labels: Label[];
-      memberships: Membership[];
-    }
-
-    interface Card {
-      address: string | null;
-      attachments: Attachment[];
-      badges: BadgesInfo;
-      closed: boolean;
-      coordinates: Coordinates | null;
-      cover: Attachment | null;
-      customFieldItems: CustomField[];
-      dateLastActivity: string; // "2019-11-28T15:53:19.709Z"
-      desc: string;
-      due: string | null; // "2019-11-28T15:53:19.709Z"
-      dueComplete: boolean;
-      id: string;
-      idList: string;
-      idShort: number;
-      labels: Label[];
-      locationName: string | null;
-      members: Member[];
-      name: string;
-      pos: number;
-      shortLink: string;
-      url: string; // https://trello.com/c/I5nAdteE/9-test
-    }
-
-    interface List {
-      id: string;
-      name: string;
-      cards: Card[];
-    }
-
-    interface Member {
-      id: string;
-      fullName: string | null;
-      username: string | null;
-      initials: string | null;
-      avatar: string | null;
-    }
-
-    interface Context {
-      board: string;
-      card?: string;
-      command?: string;
-      member: string;
-      organization?: string;
-      enterprise?: string;
-      permissions?: {
-        board: Permissions;
-        card: Permissions;
-        organization: Permissions;
-      };
-      version: string;
-    }
+declare global {
+  interface Window {
+    TrelloPowerUp: Trello.PowerUp;
+    locale: string;
   }
 }
