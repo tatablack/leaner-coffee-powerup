@@ -9,11 +9,13 @@
     "lint": "eslint -c .eslintrc.yml './src/**/*'",
     "dist": "export NODE_ENV=production && webpack --config webpack.prod.js",
     "version": "npm run dist && git add -A docs",
-    "screenshots": "node ./tools/L10nImages/build-screenshots.js"
+    "screenshots": "node ./tools/L10nImages/build-screenshots.js",
+    "screenshotsLocal": "node ./tools/L10nImages/build-screenshots.js --local",
+    "prepare": "husky install"
   },
   "engines": {
-    "node": "^12.19.0",
-    "npm": "^6.14.8"
+    "node": "^16.0.0",
+    "npm": "^7.10.0"
   },
   "keywords": [
     "trello",
@@ -26,37 +28,32 @@
   },
   "devDependencies": {
     "@types/format-duration": "^1.0.1",
-    "@typescript-eslint/eslint-plugin": "^4.8.1",
-    "@typescript-eslint/parser": "^4.8.1",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
     "browserstack-local": "^1.4.8",
     "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^6.3.1",
+    "copy-webpack-plugin": "^8.1.1",
     "date-format": "^3.0.0",
     "deepmerge": "^4.2.2",
-    "eslint": "^7.13.0",
+    "eslint": "^7.25.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-import-resolver-webpack": "^0.13.0",
     "eslint-plugin-import": "^2.22.1",
-    "html-webpack-plugin": "^4.5.0",
-    "husky": "^4.3.0",
-    "js-yaml": "^3.14.0",
-    "lint-staged": "^10.5.1",
-    "snake-case": "^3.0.3",
-    "terser-webpack-plugin": "^5.0.3",
-    "ts-loader": "^8.0.11",
-    "typescript": "^4.0.5",
-    "webdriverio": "^6.9.0",
-    "webpack": "^5.5.1",
-    "webpack-cli": "^4.2.0",
-    "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^5.4.0",
+    "html-webpack-plugin": "^5.3.1",
+    "husky": "^6.0.0",
+    "js-yaml": "^4.1.0",
+    "lint-staged": "^10.5.4",
+    "snake-case": "^3.0.4",
+    "terser-webpack-plugin": "^5.1.1",
+    "ts-loader": "^9.1.2",
+    "typescript": "^4.2.4",
+    "webdriverio": "^7.5.6",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3",
     "winston": "^3.3.3",
-    "yargs": "^16.1.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "yargs": "^17.0.1"
   },
   "lint-staged": {
     "*.js": [

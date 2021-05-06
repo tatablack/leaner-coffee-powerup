@@ -2,7 +2,7 @@ import { Trello } from './types/TrelloPowerUp';
 import CardStorage from './storage/CardStorage';
 import { I18nConfig } from './utils/I18nConfig';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 export const CapabilityHandlers = (powerUp: any): Trello.PowerUp.CapabilityHandlers => ({
   'board-buttons': async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.BoardButtonCallback[]> => {
     if (!await powerUp.updateChecker.hasBeenUpdated(t)) {

@@ -72,7 +72,7 @@ module.exports = {
             to: 'i18n/[name].json',
             transform: (content) => Buffer.from(
               JSON.stringify(
-                yaml.safeLoad(content.toString('utf8'), { schema: yaml.JSON_SCHEMA })
+                yaml.load(content.toString('utf8'), { schema: yaml.JSON_SCHEMA })
               ),
               'utf8'
             )

@@ -107,7 +107,7 @@ First of all, follow the [styleguides](#styleguides). The reviewer(s) may ask yo
     * :arrow_down: `:arrow_down:` when downgrading dependencies
     * :shirt: `:shirt:` when removing linter warnings
 
-### JavaScript Styleguide
+### JavaScript/TypeScript Styleguide
 
 The project provides an ESLint configuration file, which you should use to ensure style conventions are respected.
 
