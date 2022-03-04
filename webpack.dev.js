@@ -5,9 +5,9 @@ const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 
 const PACKAGE_JSON = require('./package.json');
-const common = require('./webpack.common.js');
+const common = require('./webpack.common');
 
-const Config = require('./config/config.dev.js');
+const Config = require('./config/config.dev');
 
 module.exports = merge(common, {
   mode: 'development',
@@ -22,16 +22,22 @@ module.exports = merge(common, {
   ],
 
   devServer: {
-    watchOptions: {
-      ignored: ['error.png', '.github', '.idea', 'assets/listings', 'dist', 'docs', 'node_modules', 'tools'].map(
-        (item) => path.resolve(__dirname, item)
-      )
+    static: {
+      watch: {
+        ignored: ['error.png', '.github', '.idea', 'assets/listings', 'dist', 'docs', 'node_modules', 'tools'].map(
+          (item) => path.resolve(__dirname, item)
+        )
+      }
     },
     open: true,
-    publicPath: '/',
-    clientLogLevel: 'info',
+    client: {
+      logging: 'info'
+    },
     liveReload: false,
-    stats: 'errors-warnings',
+    devMiddleware: {
+      publicPath: '/',
+      stats: 'errors-warnings'
+    },
     https: {
       key: fs.readFileSync('localhost.key'),
       cert: fs.readFileSync('localhost.cert')

@@ -132,7 +132,7 @@ class Discussion {
         BoardStorage.DISCUSSION_INTERVAL_ID
       ]);
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err instanceof Error && err.message ? err.message : 'Error while ending a discussion');
     }
   };
 
