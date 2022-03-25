@@ -38,9 +38,12 @@ module.exports = merge(common, {
       publicPath: '/',
       stats: 'errors-warnings'
     },
-    https: {
-      key: fs.readFileSync('localhost.key'),
-      cert: fs.readFileSync('localhost.cert')
+    server: {
+      type: 'https',
+      options: {
+        key: fs.readFileSync('localhost.key'),
+        cert: fs.readFileSync('localhost.cert')
+      }
     }
   }
 });
