@@ -209,12 +209,10 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   };
 
   start(): void {
-    const trelloPlugin = this.t.initialize(
-      CapabilityHandlers(this), {
-        localization: I18nConfig,
-        helpfulStacks: !this.isRunningInProduction()
-      }
-    ) as Trello.PowerUp.Plugin;
+    const trelloPlugin = this.t.initialize(CapabilityHandlers(this), {
+      localization: I18nConfig,
+      helpfulStacks: !this.isRunningInProduction()
+    }) as Trello.PowerUp.Plugin;
 
     this.discussion.init(trelloPlugin);
   }

@@ -96,9 +96,7 @@ export const CapabilityHandlers = (powerUp: any): Trello.PowerUp.CapabilityHandl
     }
   }]),
 
-  'on-enable': (t: Trello.PowerUp.IFrame): PromiseLike<void> => powerUp.boardStorage.setPowerUpVersion(
-    t, process.env.VERSION
-  ),
+  'on-enable': (t: Trello.PowerUp.IFrame): PromiseLike<void> => powerUp.boardStorage.setPowerUpVersion(t, process.env.VERSION),
 
   'show-settings': (t: Trello.PowerUp.IFrame): PromiseLike<void> => t.popup({
     title: `Leaner Coffee v${process.env.VERSION}`,
