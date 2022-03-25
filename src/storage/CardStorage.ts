@@ -44,6 +44,10 @@ class CardStorage extends Storage {
     return super.write(t, CardStorage.VOTES, newVotes);
   }
 
+  deleteVotes(t: Trello.PowerUp.IFrame): PromiseLike<void> {
+    return super.delete(t, CardStorage.VOTES);
+  }
+
   saveDiscussionButtonLabel(t: Trello.PowerUp.IFrame, newLabel?: string): PromiseLike<void> {
     return super.write(t, CardStorage.DISCUSSION_BUTTON_LABEL, newLabel);
   }

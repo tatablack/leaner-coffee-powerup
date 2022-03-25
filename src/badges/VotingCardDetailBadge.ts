@@ -1,15 +1,22 @@
 import { Trello } from '../types/TrelloPowerUp';
 import VotingCardBadge from './VotingCardBadge';
+import { I18nConfig } from '../utils/I18nConfig';
 
 class VotingCardDetailBadge extends VotingCardBadge {
+  clearVoters = async (t: Trello.PowerUp.IFrame) => {
+    await this.storage.deleteVotes(t);
+  };
+
   showVoters = async (t: Trello.PowerUp.IFrame): Promise<void> => {
     const items = await this.getVoters(t);
 
     if (!items.length) { return; }
 
-    t.popup({
+    await t.popup({
       title: t.localizeKey('voters'),
-      items
+      url: './voters.html',
+      args: { items, localization: I18nConfig },
+      callback: this.clearVoters
     });
   };
 

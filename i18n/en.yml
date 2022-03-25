@@ -26,7 +26,8 @@ discussionDurationTitle: 'Discussion time'
 vote: 'Vote {symbol}'
 
 # List menu items (actions and sorting)
-clearVotes: 'Clear all votes from this list'
+clearVotesFromList: 'Clear all votes from this list'
+clearVotesFromCard: 'Clear votes'
 sortByVote: 'Most Votes'
 
 # Notifications
