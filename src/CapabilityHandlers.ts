@@ -64,7 +64,7 @@ export const CapabilityHandlers = (powerUp: any): Trello.PowerUp.CapabilityHandl
   },
 
   'list-actions': (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.ListAction[]> => Promise.resolve([{
-    text: t.localizeKey('clearVotes'),
+    text: t.localizeKey('clearVotesFromList'),
     callback: async (t2): Promise<void> => {
       const result = await t2.list('cards');
       result.cards.forEach(({ id }) => {
@@ -96,9 +96,7 @@ export const CapabilityHandlers = (powerUp: any): Trello.PowerUp.CapabilityHandl
     }
   }]),
 
-  'on-enable': (t: Trello.PowerUp.IFrame): PromiseLike<void> => powerUp.boardStorage.setPowerUpVersion(
-    t, process.env.VERSION
-  ),
+  'on-enable': (t: Trello.PowerUp.IFrame): PromiseLike<void> => powerUp.boardStorage.setPowerUpVersion(t, process.env.VERSION),
 
   'show-settings': (t: Trello.PowerUp.IFrame): PromiseLike<void> => t.popup({
     title: `Leaner Coffee v${process.env.VERSION}`,

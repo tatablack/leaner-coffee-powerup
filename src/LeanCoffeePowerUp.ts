@@ -37,8 +37,8 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
 
     this.elapsedCardBadge = new ElapsedCardBadge(this.discussion);
     this.elapsedCardDetailBadge = new ElapsedCardDetailBadge(this.discussion);
-    this.votingCardBadge = new VotingCardBadge(this.baseUrl, this.voting);
-    this.votingCardDetailBadge = new VotingCardDetailBadge(this.baseUrl, this.voting);
+    this.votingCardBadge = new VotingCardBadge(this.baseUrl, this.voting, this.cardStorage);
+    this.votingCardDetailBadge = new VotingCardDetailBadge(this.baseUrl, this.voting, this.cardStorage);
   }
 
   handleVoting = async (t: Trello.PowerUp.IFrame): Promise<void> => {
@@ -209,12 +209,10 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   };
 
   start(): void {
-    const trelloPlugin = this.t.initialize(
-      CapabilityHandlers(this), {
-        localization: I18nConfig,
-        helpfulStacks: !this.isRunningInProduction()
-      }
-    ) as Trello.PowerUp.Plugin;
+    const trelloPlugin = this.t.initialize(CapabilityHandlers(this), {
+      localization: I18nConfig,
+      helpfulStacks: !this.isRunningInProduction()
+    }) as Trello.PowerUp.Plugin;
 
     this.discussion.init(trelloPlugin);
   }

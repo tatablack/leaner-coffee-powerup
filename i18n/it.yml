@@ -25,7 +25,8 @@ discussionDurationTitle: 'Durata discussione'
 vote: 'Vota {symbol}'
 
 # List menu items (actions and sorting)
-clearVotes: 'Rimuovi tutti i voti da questa lista'
+clearVotesFromList: 'Rimuovi tutti i voti da questa lista'
+clearVotesFromCard: 'Rimuovi i voti'
 sortByVote: 'Numero di voti'
 
 # Notifications
