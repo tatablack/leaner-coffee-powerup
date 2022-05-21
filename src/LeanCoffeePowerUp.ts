@@ -7,6 +7,7 @@ import VotingCardDetailBadge from './badges/VotingCardDetailBadge';
 import Discussion from './utils/Discussion';
 import Voting from './utils/Voting';
 import UpdateChecker from './utils/UpdateChecker';
+import BoardMenu from './utils/BoardMenu';
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from './LeanCoffeeBase';
 import { CapabilityHandlers } from './CapabilityHandlers';
 import { I18nConfig } from './utils/I18nConfig';
@@ -21,6 +22,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   votingCardBadge: VotingCardBadge;
   votingCardDetailBadge: VotingCardDetailBadge;
   updateChecker: UpdateChecker;
+  boardMenu: BoardMenu;
 
   constructor({
     w, config
@@ -34,6 +36,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     this.discussion = new Discussion(this.w, this.baseUrl, defaultDuration);
     this.voting = new Voting();
     this.updateChecker = new UpdateChecker(this.boardStorage);
+    this.boardMenu = new BoardMenu(this.boardStorage);
 
     this.elapsedCardBadge = new ElapsedCardBadge(this.discussion);
     this.elapsedCardDetailBadge = new ElapsedCardDetailBadge(this.discussion);

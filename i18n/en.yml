@@ -34,12 +34,15 @@ sortByVote: 'Most Votes'
 elapsedNotification: 'The timer has elapsed'
 
 # Board buttons
-boardButtonLabel: 'Leaner Coffee update!'
+boardButtonLabel: 'Leaner Coffee'
 boardButtonPopupTitle: 'Updated from {oldVersion} to {newVersion}'
 
-# Release Notes Popup
-dismiss: 'Dismiss'
-open: 'Open Release Notes'
+# Board menu
+boardMenuActionsHeader: 'Board actions'
+boardMenuActionsClearVotes: 'Clear all votes from this board'
+boardMenuReleaseHeader: 'Current version: '
+boardMenuNewReleaseHeader: 'Updated from {oldVersion} to {newVersion}!'
+boardMenuReleaseOpen: 'Open Release Notes'
 
 # Settings
 settingsMainSection:  'About'

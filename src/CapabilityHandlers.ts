@@ -4,20 +4,14 @@ import { I18nConfig } from './utils/I18nConfig';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
 export const CapabilityHandlers = (powerUp: any): Trello.PowerUp.CapabilityHandlers => ({
-  'board-buttons': async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.BoardButtonCallback[]> => {
-    if (!await powerUp.updateChecker.hasBeenUpdated(t)) {
-      return [];
-    }
-
-    return [{
-      icon: {
-        dark: `${powerUp.baseUrl}/assets/moka_white.svg`,
-        light: `${powerUp.baseUrl}/assets/moka.svg`
-      },
-      text: t.localizeKey('boardButtonLabel'),
-      callback: powerUp.updateChecker.showMenu
-    }];
-  },
+  'board-buttons': async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.BoardButtonCallback[]> => [{
+    icon: {
+      dark: `${powerUp.baseUrl}/assets/moka_white.svg`,
+      light: `${powerUp.baseUrl}/assets/moka.svg`
+    },
+    text: t.localizeKey('boardButtonLabel'),
+    callback: powerUp.boardMenu.show
+  }],
 
   'card-back-section': async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBackSection> => {
     const discussionStatus = await powerUp.discussion.cardStorage.getDiscussionStatus(t);

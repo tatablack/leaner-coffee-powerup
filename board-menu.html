@@ -3,10 +3,27 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Release notes</title>
+    <title>Board actions</title>
     <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" type="text/css" />
 
     <style>
+        .header-wrapper {
+            margin-bottom: 8px;
+            padding-top: 8px;
+            line-height: 16px;
+
+        }
+
+        .header {
+            color: #5e6c84;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 16px;
+            margin-top: 16px;
+            margin: 0;
+        }
+
+        /* Old */
         a > img {
             width: 1em;
             vertical-align: middle;
@@ -29,11 +46,27 @@
 </head>
 
 <body>
+    <div class="header-wrapper">
+        <div class="header" data-i18n-id="boardMenuActionsHeader"></div>
+    </div>
+
     <ul>
-        <li id="dismiss"><a href="#" data-i18n-id="dismiss"></a></li>
+        <li id="clear">
+            <span id="boardMenuActionsClearVotes" data-i18n-id="boardMenuActionsClearVotes"></span>
+        </li>
+    </ul>
+
+    <hr/>
+
+    <div class="header-wrapper">
+        <span class="header" data-i18n-id="boardMenuReleaseHeader"></span>
+        <span id="version"></span>
+    </div>
+
+    <ul>
         <li id="open">
             <a href="#">
-                <span data-i18n-id="open"></span>
+                <span data-i18n-id="boardMenuReleaseOpen"></span>
                 <img src="./assets/powerup/external_link.svg" alt="External link" />
             </a>
         </li>
@@ -43,8 +76,8 @@
     <script>
         const t = window.TrelloPowerUp.iframe();
 
-        document.getElementById('dismiss').addEventListener('click', () => {
-          t.notifyParent('done');
+        document.getElementById('boardMenuActionsClearVotes').addEventListener('click', (evt) => {
+          t.notifyParent('boardMenuActionsClearVotes');
           t.closePopup();
           return false;
         });
@@ -59,8 +92,9 @@
           window.locale,
           { localization: t.arg('localization') }
         ).then(() => {
-          t.localizeNode(document.body);
-          t.sizeTo('body');
+            t.localizeNode(document.body);
+            document.getElementById('version').append(t.arg('version'));
+            t.sizeTo('body');
         });
     </script>
 </body>
