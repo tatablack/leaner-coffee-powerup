@@ -24,10 +24,10 @@
   "author": "Angelo Tata <leanercoffee@tatablack.net>",
   "license": "Apache-2.0",
   "dependencies": {
-    "format-duration": "^1.4.0"
+    "format-duration": "^3.0.2"
   },
   "devDependencies": {
-    "@types/format-duration": "^1.0.1",
+    "@types/format-duration": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
     "browserstack-local": "^1.4.9",
