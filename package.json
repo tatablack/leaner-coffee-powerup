@@ -14,8 +14,8 @@
     "prepare": "husky install"
   },
   "engines": {
-    "node": "^16.14.0",
-    "npm": "^8.3.1"
+    "node": "^20.11.0",
+    "npm": "^10.2.4"
   },
   "keywords": [
     "trello",
