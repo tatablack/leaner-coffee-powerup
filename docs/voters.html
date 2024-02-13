@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <title>Voters</title>
+    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" type="text/css" />
+
+    <style>
+        li {
+            padding: 0.125em;
+        }
+
+        img {
+            border-radius: 25em;
+            height: 2em;
+            object-fit: cover;
+            width: 2em;
+            margin-right: 0.5em;
+            vertical-align: middle;
+        }
+
+        span {
+            line-height: 32px;
+            white-space: nowrap;
+        }
+
+        .button {
+            background-color: #091e420a;
+            border-radius: 3px;
+            box-sizing: border-box;
+            display: inline-block;
+            padding: 6px 12px;
+            position: relative;
+            cursor: pointer;
+            margin: 8px 4px 8px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .button:hover {
+            background-color: #091e4214;
+        }
+    </style>
+</head>
+
+<body>
+    <ul id="voters"></ul>
+    <div id="clear" class="button" data-i18n-id="clearVotesFromCard"></div>
+
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script>
+        const t = window.TrelloPowerUp.iframe();
+
+        document.getElementById('clear').addEventListener('click', () => {
+            t.notifyParent('done');
+            t.closePopup();
+            return false;
+        });
+
+        const items = t.arg('items')
+
+        items.forEach(async (item) => {
+            const wrapper = document.createElement('li');
+
+            const avatar = document.createElement('img');
+            avatar.onerror = (evt) => {
+                evt.target.src = '/assets/person.svg';
+            }
+            avatar.src = item.avatar;
+
+            const name = document.createElement('span');
+            name.append(item.text);
+
+            wrapper.append(avatar);
+            wrapper.append(name);
+
+            document.getElementById('voters').append(wrapper);
+        });
+
+        window.TrelloPowerUp.util.initLocalizer(
+            window.locale,
+            { localization: t.arg('localization') }
+        ).then(() => {
+            t.localizeNode(document.body);
+            t.sizeTo('body');
+        });
+    </script>
+</body>
+
+</html>

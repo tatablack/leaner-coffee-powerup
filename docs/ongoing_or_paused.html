@@ -1,36 +1,14 @@
-<!DOCTYPE html>
-<html lang="en-us">
+<!doctype html><html lang="en-us"><head><title data-i18n-id=""></title><meta charset="utf-8"><link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css"/><style>hr {
+            margin: 8px 0 8px;
+        }
 
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" type="text/css" />
-</head>
+        #start-button {
+            cursor: pointer;
+            display: block;
+            padding: 6px 12px;
+            margin: 0 -12px;
+        }
 
-<body>
-    <div id="message"></div>
-
-    <script src="https://p.trellocdn.com/power-up.min.js"></script>
-    <script>
-        const t = window.TrelloPowerUp.iframe();
-
-        const messageText = `
-            <div>Only one card can be discussed at any given time!</div><br/>
-            <div>A conversation about <b>$CARD</b> $STATUS.</div>
-            <hr/>
-            <div>Once that ends, you can start a new one.</div>
-        `;
-
-        const currentCardBeingDiscussed = t.arg('currentCardBeingDiscussed');
-        const currentDiscussionStatus = t.arg('currentDiscussionStatus');
-
-        document.getElementById('message').innerHTML = messageText.
-            replace('$CARD', currentCardBeingDiscussed).
-            replace('$STATUS', currentDiscussionStatus ==='ONGOING' ?
-                'is currently taking place' :
-                'has already been started and is currently on hold');
-
-        t.sizeTo('#message');
-    </script>
-</body>
-
-</html>
+        #start-button:hover {
+            background-color: rgba(9,30,66,.04);
+        }</style><script defer="defer" src="ongoing_or_paused.5fde22772a19fd424286.js"></script></head><body><div class="message" data-i18n-id="ongoingRunning"></div><div class="message" data-i18n-id="ongoingOnHold"></div><br/><div data-i18n-id="ongoingBottomLine"></div><hr/><a id="start-button" data-i18n-id="startTimer" data-i18n-args='{"symbol": "▶"}'></a><script src="https://p.trellocdn.com/power-up.min.js"></script></body></html>

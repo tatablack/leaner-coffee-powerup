@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+
+    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" type="text/css" />
+
+    <style>
+        .dev-only {
+            display: none;
+        }
+
+        h3 {
+            margin-top: 1em;
+            margin-bottom: 0.2em;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="leanCoffeeSettingsForm">
+        <section>
+            <h3 data-i18n-id="settingsMainSection"></h3>
+            <div data-i18n-id="settingsMainContent"></div>
+            <br>
+            <div>
+                <span data-i18n-id="settingsMainSuggestions"></span>
+                <a target="_blank" href="https://github.com/tatablack/leaner-coffee-powerup/issues">GitHub issues!</a>
+            </div>
+        </section>
+        <section class="dev-only">
+            <h3 data-i18n-id="settingsDebugSection"></h3>
+            <div>
+                <button
+                        id="showData"
+                        data-i18n-id="settingsDebugShowData"
+                        onclick="window.settingsInstance.showData()"></button>
+                <button
+                        id="wipeData"
+                        data-i18n-id="settingsDebugWipeData"
+                        class="mod-danger" onclick="window.settingsInstance.wipeData()"></button>
+            </div>
+        </section>
+    </form>
+
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+</body>
+</html>
