@@ -101,6 +101,7 @@ export default tseslint.config(
       ],
     },
     rules: {
+      "@typescript-eslint/no-require-imports": "off",
       "import-x/no-dynamic-require": "warn",
       "import-x/no-nodejs-modules": "off",
       "import-x/newline-after-import": ["error", { count: 1 }],
