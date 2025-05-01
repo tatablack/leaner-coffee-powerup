@@ -31,6 +31,7 @@
     "@eslint/json": "^0.12.0",
     "@eslint/markdown": "^6.4.0",
     "@types/format-duration": "^1.0.3",
+    "@types/node": "^22.15.3",
     "@typescript-eslint/parser": "^8.30.1",
     "browserstack-local": "^1.5.5",
     "clean-webpack-plugin": "^4.0.0",

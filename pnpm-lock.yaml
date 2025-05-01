@@ -45,6 +45,9 @@ importers:
       '@types/format-duration':
         specifier: ^1.0.3
         version: 1.0.3
+      '@types/node':
+        specifier: ^22.15.3
+        version: 22.15.3
       '@typescript-eslint/parser':
         specifier: ^8.30.1
         version: 8.31.1(eslint@9.25.1)(typescript@5.8.3)
