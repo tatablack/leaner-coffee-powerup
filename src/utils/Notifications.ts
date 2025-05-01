@@ -1,5 +1,5 @@
 export type NotificationType = {
-  [key in 'audio' | 'text']: string;
+  [key in "audio" | "text"]: string;
 };
 
 class Notifications {
@@ -23,27 +23,29 @@ class Notifications {
   }
 
   async play(type: NotificationType): Promise<void> {
-    this.audioContext = this.audioContext || new (AudioContext || this.w.webkitAudioContext)();
+    this.audioContext =
+      this.audioContext || new (AudioContext || this.w.webkitAudioContext)();
     const audio = await this.load(`${this.baseUrl}/${type.audio}`);
     audio.start();
   }
 
   open(type: NotificationType, cardName: string): void {
-    // eslint-disable-next-line no-new
     new Notification(cardName, {
       body: type.text,
-      icon: `${this.baseUrl}/assets/timer.png`
+      icon: `${this.baseUrl}/assets/timer.png`,
     });
   }
 
   show(type: NotificationType, cardName: string): void {
-    if ((!('Notification' in this.w)) || Notification.permission === 'denied') { return; }
+    if (!("Notification" in this.w) || Notification.permission === "denied") {
+      return;
+    }
 
-    if (Notification.permission === 'granted') {
+    if (Notification.permission === "granted") {
       this.open(type, cardName);
     } else {
       Notification.requestPermission((permission) => {
-        if (permission === 'granted') {
+        if (permission === "granted") {
           this.open(type, cardName);
         }
       });

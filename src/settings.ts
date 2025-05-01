@@ -1,4 +1,4 @@
-import LeanCoffeeSettings from './LeanCoffeeSettings';
+import LeanCoffeeSettings from "./LeanCoffeeSettings";
 
 const config: Config = process.env.CONFIG as unknown as Config;
 

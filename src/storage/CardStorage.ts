@@ -1,15 +1,15 @@
-import { Trello } from '../types/TrelloPowerUp';
-import Storage from './Storage';
+import Storage from "./Storage";
+import { Trello } from "../types/TrelloPowerUp";
 
 class CardStorage extends Storage {
-  static DISCUSSION_STATUS = 'leancoffeeDiscussionStatus';
-  static DISCUSSION_ELAPSED = 'leancoffeeDiscussionElapsed';
-  static DISCUSSION_THUMBS = 'leancoffeeDiscussionThumbs';
-  static VOTES = 'leancoffeeVotes';
-  static DISCUSSION_BUTTON_LABEL = 'discussionButtonLabel';
+  static DISCUSSION_STATUS = "leancoffeeDiscussionStatus";
+  static DISCUSSION_ELAPSED = "leancoffeeDiscussionElapsed";
+  static DISCUSSION_THUMBS = "leancoffeeDiscussionThumbs";
+  static VOTES = "leancoffeeVotes";
+  static DISCUSSION_BUTTON_LABEL = "discussionButtonLabel";
 
   constructor() {
-    super('card', 'shared');
+    super("card", "shared");
   }
 
   getDiscussionStatus(t: Trello.PowerUp.IFrame): PromiseLike<DiscussionStatus> {
@@ -28,15 +28,26 @@ class CardStorage extends Storage {
     return super.read(t, CardStorage.DISCUSSION_BUTTON_LABEL);
   }
 
-  saveDiscussionStatus(t: Trello.PowerUp.IFrame, newStatus: DiscussionStatus, cardId?: string): PromiseLike<void> {
+  saveDiscussionStatus(
+    t: Trello.PowerUp.IFrame,
+    newStatus: DiscussionStatus,
+    cardId?: string,
+  ): PromiseLike<void> {
     return super.write(t, CardStorage.DISCUSSION_STATUS, newStatus, cardId);
   }
 
-  saveDiscussionElapsed(t: Trello.PowerUp.IFrame, newElapsed: number, cardId?: string): PromiseLike<void> {
+  saveDiscussionElapsed(
+    t: Trello.PowerUp.IFrame,
+    newElapsed: number,
+    cardId?: string,
+  ): PromiseLike<void> {
     return super.write(t, CardStorage.DISCUSSION_ELAPSED, newElapsed, cardId);
   }
 
-  saveDiscussionThumbs(t: Trello.PowerUp.IFrame, newThumbs: Thumbs): PromiseLike<void> {
+  saveDiscussionThumbs(
+    t: Trello.PowerUp.IFrame,
+    newThumbs: Thumbs,
+  ): PromiseLike<void> {
     return super.write(t, CardStorage.DISCUSSION_THUMBS, newThumbs);
   }
 
@@ -48,7 +59,10 @@ class CardStorage extends Storage {
     return super.delete(t, CardStorage.VOTES);
   }
 
-  saveDiscussionButtonLabel(t: Trello.PowerUp.IFrame, newLabel?: string): PromiseLike<void> {
+  saveDiscussionButtonLabel(
+    t: Trello.PowerUp.IFrame,
+    newLabel?: string,
+  ): PromiseLike<void> {
     return super.write(t, CardStorage.DISCUSSION_BUTTON_LABEL, newLabel);
   }
 

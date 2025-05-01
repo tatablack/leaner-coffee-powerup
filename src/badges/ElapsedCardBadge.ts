@@ -1,6 +1,7 @@
-import formatDuration from 'format-duration';
-import { Trello } from '../types/TrelloPowerUp';
-import Discussion from '../utils/Discussion';
+import formatDuration from "format-duration";
+
+import { Trello } from "../types/TrelloPowerUp";
+import Discussion from "../utils/Discussion";
 
 class ElapsedCardBadge implements ElapsedCardBadge {
   discussion: Discussion;
@@ -10,14 +11,21 @@ class ElapsedCardBadge implements ElapsedCardBadge {
     this.render = this.render.bind(this);
   }
 
-  getText = async (t: Trello.PowerUp.IFrame, elapsed: number): Promise<string> => formatDuration(elapsed);
+  getText = async (
+    t: Trello.PowerUp.IFrame,
+    elapsed: number,
+  ): Promise<string> => formatDuration(elapsed);
 
-  getColor = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.Colors> => {
+  getColor = async (
+    t: Trello.PowerUp.IFrame,
+  ): Promise<Trello.PowerUp.Colors> => {
     const isOngoing = await this.discussion.isOngoingFor(t);
 
-    if (isOngoing) { return 'orange'; }
+    if (isOngoing) {
+      return "orange";
+    }
 
-    return await this.discussion.isPausedFor(t) ? 'yellow' : 'light-gray';
+    return (await this.discussion.isPausedFor(t)) ? "yellow" : "light-gray";
   };
 
   // Unable to use class properties here because I need to call
@@ -28,11 +36,13 @@ class ElapsedCardBadge implements ElapsedCardBadge {
   // NOTE: CHECK whether this is still relevant for ts-loader
   async render(t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBadge> {
     const elapsed = await this.discussion.getElapsed(t);
-    if (!elapsed) { return null; }
+    if (!elapsed) {
+      return null;
+    }
 
     return {
       text: await this.getText(t, elapsed),
-      color: await this.getColor(t)
+      color: await this.getColor(t),
     };
   }
 }

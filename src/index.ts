@@ -1,4 +1,4 @@
-import LeanCoffeePowerUp from './LeanCoffeePowerUp';
+import LeanCoffeePowerUp from "./LeanCoffeePowerUp";
 
 declare global {
   interface Window {
@@ -8,10 +8,9 @@ declare global {
 
 const config: Config = process.env.CONFIG as unknown as Config;
 
-/* eslint-disable prefer-template */
 const instance = new LeanCoffeePowerUp({
   w: window,
-  config
+  config,
 });
 
 instance.start();

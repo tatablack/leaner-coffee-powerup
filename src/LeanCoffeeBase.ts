@@ -1,6 +1,6 @@
-import { Trello } from './types/TrelloPowerUp';
-import BoardStorage from './storage/BoardStorage';
-import CardStorage from './storage/CardStorage';
+import BoardStorage from "./storage/BoardStorage";
+import CardStorage from "./storage/CardStorage";
+import { Trello } from "./types/TrelloPowerUp";
 
 export interface LeanCoffeeBaseParams {
   w: Window;
@@ -21,5 +21,6 @@ export class LeanCoffeeBase {
     this.cardStorage = new CardStorage();
   }
 
-  isRunningInProduction = (): boolean => (process.env.NODE_ENV as Environment) === 'production';
+  isRunningInProduction = (): boolean =>
+    (process.env.NODE_ENV as Environment) === "production";
 }
