@@ -10,8 +10,7 @@
     "dist": "export NODE_ENV=production && webpack --config webpack.prod.js",
     "version": "npm run dist && git add -A docs",
     "screenshots": "node ./tools/L10nImages/build-screenshots.js",
-    "screenshotsLocal": "node ./tools/L10nImages/build-screenshots.js --local",
-    "prepare": "husky install"
+    "screenshotsLocal": "node ./tools/L10nImages/build-screenshots.js --local"
   },
   "engines": {
     "node": "^20.11.0",
