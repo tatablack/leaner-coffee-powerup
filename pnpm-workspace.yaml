@@ -1,0 +1,12 @@
+catalog:
+  typescript: 5.8.3
+  eslint: 9.25.1
+  '@eslint/js': 9.25.1
+  eslint-config-prettier: ^10.1.2
+  typescript-eslint: 8.31.1
+  prettier: ^3.5.3
+
+onlyBuiltDependencies:
+  - edgedriver
+  - geckodriver
+  - unrs-resolver

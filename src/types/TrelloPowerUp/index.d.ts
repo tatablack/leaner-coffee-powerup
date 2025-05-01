@@ -8,18 +8,21 @@ export namespace Trello {
     CallbackCache: Callback.Cache;
     PostMessageIO: any; // PostMessageIO
     iframe(options?: PowerUp.IFrameOptions): PowerUp.IFrame;
-    initialize(handlers: PowerUp.CapabilityHandlers, options?: PowerUp.PluginOptions): PowerUp.Plugin | PowerUp.IFrame;
+    initialize(
+      handlers: PowerUp.CapabilityHandlers,
+      options?: PowerUp.PluginOptions,
+    ): PowerUp.Plugin | PowerUp.IFrame;
     restApiError(): any;
     util: PowerUp.Util;
   }
 
   namespace Callback {
-    type CacheAction = 'run' | 'retain' | 'release';
-    type SerializeResult = (value: any, key?: string) => any
+    type CacheAction = "run" | "retain" | "release";
+    type SerializeResult = (value: any, key?: string) => any;
 
     type SerializeOutput = {
       _callback: string;
-    }
+    };
 
     interface CacheOptions {
       action: CacheAction;
@@ -28,7 +31,11 @@ export namespace Trello {
     }
 
     interface Cache {
-      callback(t: PowerUp.IFrame, options: CacheOptions, serializeResult: SerializeResult): PromiseLike<any>;
+      callback(
+        t: PowerUp.IFrame,
+        options: CacheOptions,
+        serializeResult: SerializeResult,
+      ): PromiseLike<any>;
       serialize(fx: (t: PowerUp.IFrame, args: any) => any): SerializeOutput;
       reset(): void;
     }
@@ -37,12 +44,22 @@ export namespace Trello {
   namespace PowerUp {
     type ResourceDictionary = {
       [key: string]: string;
-    }
+    };
 
-    type Colors = 'blue' | 'green' | 'orange' | 'red' | 'yellow' |
-      'purple' | 'pink' | 'sky' | 'lime' | 'light-gray' | 'business-blue';
+    type Colors =
+      | "blue"
+      | "green"
+      | "orange"
+      | "red"
+      | "yellow"
+      | "purple"
+      | "pink"
+      | "sky"
+      | "lime"
+      | "light-gray"
+      | "business-blue";
 
-    type MemberType = 'admin' | 'normal' | 'observer'
+    type MemberType = "admin" | "normal" | "observer";
 
     interface Organization {
       id: string;
@@ -199,7 +216,13 @@ export namespace Trello {
     type ListFields = keyof List;
     type MemberFields = keyof Member;
 
-    type Condition = 'admin' | 'always' | 'edit' | 'readonly' | 'signedIn' | 'signedOut';
+    type Condition =
+      | "admin"
+      | "always"
+      | "edit"
+      | "readonly"
+      | "signedIn"
+      | "signedOut";
 
     interface BoardButtonBase {
       icon: {
@@ -223,7 +246,7 @@ export namespace Trello {
       title: string;
       icon: string;
       content: {
-        type: 'iframe';
+        type: "iframe";
         url: string;
         height?: number;
       };
@@ -267,38 +290,50 @@ export namespace Trello {
 
     interface ListSorter {
       text: string;
-      callback(t: PowerUp.IFrame, options: {
-        cards: Card[];
-      }): PromiseLike<{ sortedIds: string[]}>;
+      callback(
+        t: PowerUp.IFrame,
+        options: {
+          cards: Card[];
+        },
+      ): PromiseLike<{ sortedIds: string[] }>;
     }
 
     type CapabilityHandlers = {
-      'attachment-sections'?: (t: PowerUp.IFrame, options: {
-        entries: Attachment[];
-      }) => PromiseLike<(AttachmentSection | LazyAttachmentSection)[]>;
-      'attachment-thumbnail'?: () => void;
-      'board-buttons'?: (t: PowerUp.IFrame) => PromiseLike<(BoardButtonUrl | BoardButtonCallback)[]>;
-      'card-back-section'?: (t: PowerUp.IFrame) => PromiseLike<CardBackSection>;
-      'card-badges'?: (t: PowerUp.IFrame) => PromiseLike<(CardBadgeDynamic | CardBadge)[]>;
-      'card-buttons'?: (t: PowerUp.IFrame) => PromiseLike<CardButton[]>;
-      'card-detail-badges'?: (t: PowerUp.IFrame) => PromiseLike<(CardDetailBadgeDynamic | CardDetailBadge)[]>;
-      'card-from-url'?: () => void;
-      'format-url'?: () => void;
-      'list-actions'?: (t: PowerUp.IFrame) => PromiseLike<ListAction[]>;
-      'list-sorters'?: (t: PowerUp.IFrame) => PromiseLike<ListSorter[]>;
-      'on-enable'?: (t: PowerUp.IFrame) => PromiseLike<void>;
-      'on-disable'?: () => void;
-      'remove-data'?: () => void;
-      'show-settings'?: (t: PowerUp.IFrame) => PromiseLike<void>;
-      'authorization-status'?: () => void;
-      'show-authorization'?: () => void;
+      "attachment-sections"?: (
+        t: PowerUp.IFrame,
+        options: {
+          entries: Attachment[];
+        },
+      ) => PromiseLike<(AttachmentSection | LazyAttachmentSection)[]>;
+      "attachment-thumbnail"?: () => void;
+      "board-buttons"?: (
+        t: PowerUp.IFrame,
+      ) => PromiseLike<(BoardButtonUrl | BoardButtonCallback)[]>;
+      "card-back-section"?: (t: PowerUp.IFrame) => PromiseLike<CardBackSection>;
+      "card-badges"?: (
+        t: PowerUp.IFrame,
+      ) => PromiseLike<(CardBadgeDynamic | CardBadge)[]>;
+      "card-buttons"?: (t: PowerUp.IFrame) => PromiseLike<CardButton[]>;
+      "card-detail-badges"?: (
+        t: PowerUp.IFrame,
+      ) => PromiseLike<(CardDetailBadgeDynamic | CardDetailBadge)[]>;
+      "card-from-url"?: () => void;
+      "format-url"?: () => void;
+      "list-actions"?: (t: PowerUp.IFrame) => PromiseLike<ListAction[]>;
+      "list-sorters"?: (t: PowerUp.IFrame) => PromiseLike<ListSorter[]>;
+      "on-enable"?: (t: PowerUp.IFrame) => PromiseLike<void>;
+      "on-disable"?: () => void;
+      "remove-data"?: () => void;
+      "show-settings"?: (t: PowerUp.IFrame) => PromiseLike<void>;
+      "authorization-status"?: () => void;
+      "show-authorization"?: () => void;
     };
 
-    type Model = 'board' | 'card' | 'organization';
-    type Scope = Model | 'member';
-    type Permissions = 'read' | 'write';
+    type Model = "board" | "card" | "organization";
+    type Scope = Model | "member";
+    type Permissions = "read" | "write";
 
-    type Visibility = 'shared' | 'private';
+    type Visibility = "shared" | "private";
 
     interface PopupOptionsItem {
       text: string;
@@ -333,11 +368,14 @@ export namespace Trello {
     }
 
     interface PopupDateOptions {
-      type: 'date' | 'datetime';
+      type: "date" | "datetime";
       title: string;
-      callback(t: PowerUp.IFrame, options: {
-        date: string;
-      }): PromiseLike<void>;
+      callback(
+        t: PowerUp.IFrame,
+        options: {
+          date: string;
+        },
+      ): PromiseLike<void>;
       date?: Date;
       minDate?: Date;
       maxDate?: Date;
@@ -345,12 +383,12 @@ export namespace Trello {
     }
 
     interface PopupConfirmOptions {
-      type: 'confirm';
+      type: "confirm";
       title: string;
       message: string;
       confirmText: string;
       onConfirm(t: PowerUp.IFrame, opts: any): PromiseLike<void>;
-      confirmStyle?: 'primary' | 'danger';
+      confirmStyle?: "primary" | "danger";
       mouseEvent?: MouseEvent;
     }
 
@@ -363,11 +401,11 @@ export namespace Trello {
       icon: string;
       alt: string;
       callback(): void;
-      position: 'left' | 'right';
+      position: "left" | "right";
       url?: string;
     }
 
-    type AlertDisplay = 'info' | 'warning' | 'error' | 'success';
+    type AlertDisplay = "info" | "warning" | "error" | "success";
 
     // INTERNAL INTERFACES
     interface Localizer {
@@ -387,7 +425,6 @@ export namespace Trello {
       localization?: Localization;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Util {
       color: {
         getHexString(): string;
@@ -409,7 +446,10 @@ export namespace Trello {
         sha256Digest(): any;
       };
 
-      initLocalizer(locale: string, options: LocalizerOptions): PromiseLike<void>;
+      initLocalizer(
+        locale: string,
+        options: LocalizerOptions,
+      ): PromiseLike<void>;
       makeErrorEnum(): Error;
       relativeUrl(url: string): string;
     }
@@ -417,24 +457,51 @@ export namespace Trello {
     interface AnonymousHostHandlers {
       requestWithContext(command: string, options: any): PromiseLike<any>;
       getAll(): PromiseLike<any>;
-      get(scope: Scope | string, visibility: Visibility, key?: string, defaultValue?: any): PromiseLike<any>;
-      set(scope: Scope | string, visibility: Visibility, key: string, defaultValue?: any): PromiseLike<void>;
-      set(scope: Scope | string, visibility: Visibility, entries: {
-        [ key: string]: any;
-      }): PromiseLike<void>;
-      remove(scope: Scope | string, visibility: Visibility, key: string): PromiseLike<void>;
-      remove(scope: Scope | string, visibility: Visibility, entries: string[]): PromiseLike<void>;
+      get(
+        scope: Scope | string,
+        visibility: Visibility,
+        key?: string,
+        defaultValue?: any,
+      ): PromiseLike<any>;
+      set(
+        scope: Scope | string,
+        visibility: Visibility,
+        key: string,
+        defaultValue?: any,
+      ): PromiseLike<void>;
+      set(
+        scope: Scope | string,
+        visibility: Visibility,
+        entries: {
+          [key: string]: any;
+        },
+      ): PromiseLike<void>;
+      remove(
+        scope: Scope | string,
+        visibility: Visibility,
+        key: string,
+      ): PromiseLike<void>;
+      remove(
+        scope: Scope | string,
+        visibility: Visibility,
+        entries: string[],
+      ): PromiseLike<void>;
       safe(html: string): string;
-      localizeKey(key: string, data?: {
-        [key: string]: string;
-      }): string;
+      localizeKey(
+        key: string,
+        data?: {
+          [key: string]: string;
+        },
+      ): string;
       localizeKeys(keys: [string | string[]]): string[];
       localizeNode(node: Element): void;
-      board(...fields: ['all'] | BoardFields[]): PromiseLike<Board>;
-      cards(...fields: ['all'] | CardFields[]): PromiseLike<Card[]>;
-      lists(...fields: ['all'] | ListFields[]): PromiseLike<List[]>;
-      member(...fields: ['all'] | MemberFields[]): PromiseLike<Member>;
-      organization(...fields: ['all'] | OrganizationFields[]): PromiseLike<Organization>;
+      board(...fields: ["all"] | BoardFields[]): PromiseLike<Board>;
+      cards(...fields: ["all"] | CardFields[]): PromiseLike<Card[]>;
+      lists(...fields: ["all"] | ListFields[]): PromiseLike<List[]>;
+      member(...fields: ["all"] | MemberFields[]): PromiseLike<Member>;
+      organization(
+        ...fields: ["all"] | OrganizationFields[]
+      ): PromiseLike<Organization>;
     }
 
     interface Context {
@@ -457,7 +524,7 @@ export namespace Trello {
       isMemberSignedIn(): boolean;
       memberCanWriteToModel(modelType: Model): boolean;
       arg(name: string, defaultValue?: any): any;
-      signUrl(url: string, args?: { [key: string]: any}): string;
+      signUrl(url: string, args?: { [key: string]: any }): string;
       navigate(options: { url: string }): any;
       showCard(idCard: string): PromiseLike<void>;
       hideCard(): PromiseLike<void>;
@@ -468,17 +535,22 @@ export namespace Trello {
       }): PromiseLike<void>;
       hideAlert(): PromiseLike<void>;
       popup(
-        options: PopupOptions | PopupSearchOptions |
-          PopupIframeOptions | PopupDateOptions |
-          PopupConfirmOptions | PopupConfirmWithCancelOptions): PromiseLike<void>;
+        options:
+          | PopupOptions
+          | PopupSearchOptions
+          | PopupIframeOptions
+          | PopupDateOptions
+          | PopupConfirmOptions
+          | PopupConfirmWithCancelOptions,
+      ): PromiseLike<void>;
       overlay(options: {
         url: string;
-        args: { [key: string]: any};
+        args: { [key: string]: any };
         inset: unknown;
       }): PromiseLike<void>;
       boardBar(options: {
         url: string;
-        args?: { [key: string]: any};
+        args?: { [key: string]: any };
         height?: number;
         accentColor?: string | Colors;
         callback?(t: PowerUp.IFrame): void;
@@ -494,7 +566,7 @@ export namespace Trello {
         callback?(): void;
         title?: string;
         actions?: HeaderAction[];
-        args?: { [key: string]: any};
+        args?: { [key: string]: any };
       }): PromiseLike<void>;
       updateModal(options: {
         accentColor?: string | Colors;
@@ -505,31 +577,32 @@ export namespace Trello {
       closePopup(): PromiseLike<void>;
       back(): PromiseLike<void>;
       hideOverlay(): PromiseLike<void>;
-      closeOverlay(options?: {
-        inset?: unknown;
-      }): PromiseLike<void>;
+      closeOverlay(options?: { inset?: unknown }): PromiseLike<void>;
       hideBoardBar(): PromiseLike<void>;
       closeBoardBar(): PromiseLike<void>;
       closeModal(): PromiseLike<void>;
       sizeTo(arg: string | number | Element): PromiseLike<void>;
-      card(...fields: ['all'] | CardFields[]): PromiseLike<Card>;
-      list(...fields: ['all'] | ListFields[]): PromiseLike<List>;
-      attach(data: {
-        name: string;
-        url: string;
-      }): PromiseLike<void>;
+      card(...fields: ["all"] | CardFields[]): PromiseLike<Card>;
+      list(...fields: ["all"] | ListFields[]): PromiseLike<List>;
+      attach(data: { name: string; url: string }): PromiseLike<void>;
       requestToken(options: unknown): PromiseLike<string>;
-      authorize(authUrl: string, options?: {
-        height?: number;
-        width?: number;
-        validToken?(value: string): boolean;
-      }): PromiseLike<string>;
+      authorize(
+        authUrl: string,
+        options?: {
+          height?: number;
+          width?: number;
+          validToken?(value: string): boolean;
+        },
+      ): PromiseLike<string>;
       storeSecret(secretKey: string, secretData: string): PromiseLike<void>;
       loadSecret(secretKey: string): PromiseLike<string>;
       clearSecret(secretKey: string): PromiseLike<void>;
-      notifyParent(message: 'done', options?: {
-        targetOrigin: string;
-      }): PromiseLike<void>;
+      notifyParent(
+        message: "done",
+        options?: {
+          targetOrigin: string;
+        },
+      ): PromiseLike<void>;
     }
 
     interface IFrameOptions extends LocalizerOptions {
@@ -555,12 +628,12 @@ export namespace Trello {
 
     interface PluginOptions extends LocalizerOptions {
       Sentry?: {
-        configureScope(callback: (scope: {
-          setTags(name: string, value: string): void;
-          setUser(value: {
-            id: string;
-          }): void;
-        }) => void): void;
+        configureScope(
+          callback: (scope: {
+            setTags(name: string, value: string): void;
+            setUser(value: { id: string }): void;
+          }) => void,
+        ): void;
       };
       appKey?: string;
       appName?: string;
@@ -571,7 +644,6 @@ export namespace Trello {
       helpfulStacks?: boolean;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Plugin extends AnonymousHostHandlers {
       options: PluginOptions;
       connect(): any; // return an instance of PostMessageIO
@@ -579,7 +651,6 @@ export namespace Trello {
       init(): any; // return an instance of PostMessageIO
       NotHandled(): any; // return PostMessageIO.NotHandled, whatever that is
     }
-
   }
 }
 

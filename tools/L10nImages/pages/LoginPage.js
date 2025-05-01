@@ -1,28 +1,31 @@
-const Page = require('./Page');
+const Page = require("./Page");
 
-const sleep = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
+const sleep = (ms) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 
 class LoginPage extends Page {
   constructor(browser) {
     super(browser, {
-      username: '#user',
-      password: '#password',
-      loginButton: '#login',
-      atlassianLoginButton: '#login-submit',
-      boardsMenuButton: '[data-test-id="header-boards-menu-button"]'
+      username: "#user",
+      password: "#password",
+      loginButton: "#login",
+      atlassianLoginButton: "#login-submit",
+      boardsMenuButton: '[data-test-id="header-boards-menu-button"]',
     });
   }
 
   open() {
-    return this.browser.url('https://trello.com/login');
+    return this.browser.url("https://trello.com/login");
   }
 
   async login(username, password) {
-    this.logger.info('┌ Initiating login process');
+    this.logger.info("┌ Initiating login process");
     const usernameField = await this.username;
     await usernameField.setValue(username);
 
-    this.logger.info('├ Setting username');
+    this.logger.info("├ Setting username");
     await sleep(2000);
 
     const loginBtn = await this.loginButton;
@@ -31,7 +34,7 @@ class LoginPage extends Page {
     const passwordField = await this.password;
     await passwordField.setValue(password);
 
-    this.logger.info('├ Setting password');
+    this.logger.info("├ Setting password");
 
     const atlassianLoginBtn = await this.atlassianLoginButton;
     await atlassianLoginBtn.click();

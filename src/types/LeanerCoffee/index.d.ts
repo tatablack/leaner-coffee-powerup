@@ -1,8 +1,8 @@
-type DiscussionStatus = 'ONGOING' | 'PAUSED' | 'ENDED';
+type DiscussionStatus = "ONGOING" | "PAUSED" | "ENDED";
 type DiscussionIntervalId = number | null;
 type DiscussionStartedAt = number | null;
 type DiscussionPreviousElapsed = number | null;
-type Environment = 'production' | 'development';
+type Environment = "production" | "development";
 
 type Config = {
   [key in Environment]: {
@@ -21,7 +21,7 @@ interface Votes {
   };
 }
 
-type Thumb = 'UP' | 'DOWN' | 'MIDDLE'
+type Thumb = "UP" | "DOWN" | "MIDDLE";
 
 interface Thumbs {
   [memberId: string]: Thumb;
