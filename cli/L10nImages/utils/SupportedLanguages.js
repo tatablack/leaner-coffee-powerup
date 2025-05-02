@@ -3,4 +3,4 @@ const SupportedLanguages = {
   en: "English (UK)",
 };
 
-module.exports = SupportedLanguages;
+export default SupportedLanguages;

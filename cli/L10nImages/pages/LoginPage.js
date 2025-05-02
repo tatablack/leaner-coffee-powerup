@@ -1,4 +1,4 @@
-const Page = require("./Page");
+import Page from "./Page.js";
 
 const sleep = (ms) =>
   new Promise((resolve) => {
@@ -8,7 +8,7 @@ const sleep = (ms) =>
 class LoginPage extends Page {
   constructor(browser) {
     super(browser, {
-      username: "#user",
+      username: "#username",
       password: "#password",
       loginButton: "#login",
       atlassianLoginButton: "#login-submit",
@@ -65,4 +65,4 @@ class LoginPage extends Page {
   }
 }
 
-module.exports = LoginPage;
+export default LoginPage;

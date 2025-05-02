@@ -1,13 +1,13 @@
-const path = require("path");
+import path from "node:path";
 
-const yargs = require("yargs");
+import yargs from "yargs";
 
-const ChangeLanguagePage = require("./pages/ChangeLanguagePage");
-const LoginPage = require("./pages/LoginPage");
-const TestBoardPage = require("./pages/TestBoardPage");
-const Browser = require("./utils/Browser");
-const getLogger = require("./utils/Logger");
-const SupportedLanguages = require("./utils/SupportedLanguages");
+import ChangeLanguagePage from "./pages/ChangeLanguagePage.js";
+import LoginPage from "./pages/LoginPage.js";
+import TestBoardPage from "./pages/TestBoardPage.js";
+import Browser from "./utils/Browser.js";
+import getLogger from "./utils/Logger.js";
+import SupportedLanguages from "./utils/SupportedLanguages.js";
 
 const logger = getLogger();
 
@@ -18,7 +18,7 @@ const supportedLanguagesPath = path.relative(
 let browserHandler;
 let currentLanguage;
 
-const { argv } = yargs
+const { argv } = yargs()
   .scriptName("\n🌟 build-screenshots 🌟")
   .usage(
     "$0 [args]",

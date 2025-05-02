@@ -1,4 +1,4 @@
-const Page = require("./Page");
+import Page from "./Page.js";
 
 class ChangeLanguagePage extends Page {
   constructor(browser) {
@@ -64,4 +64,4 @@ class ChangeLanguagePage extends Page {
   }
 }
 
-module.exports = ChangeLanguagePage;
+export default ChangeLanguagePage;
