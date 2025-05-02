@@ -24,16 +24,9 @@ module.exports = merge(common, {
   devServer: {
     static: {
       watch: {
-        ignored: [
-          "error.png",
-          ".github",
-          ".idea",
-          "assets/listings",
-          "dist",
-          "docs",
-          "node_modules",
-          "tools",
-        ].map((item) => path.resolve(__dirname, item)),
+        ignored: ["error.png", "dist", "node_modules"].map((item) =>
+          path.resolve(__dirname, item),
+        ),
       },
     },
     open: true,

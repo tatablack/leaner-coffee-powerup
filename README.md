@@ -52,10 +52,10 @@ Once enabled for a board, this Power-Up implements:
     - discussion status (when ongoing)
     - a simple UI to vote on a discussion to determine the next step (when paused)
 
-Card Badges | Card Back Section | Menu
-------------|--------------------| ----
-![Votes][CardBadgeVoting]  | ![Votes][CardBackSectionOngoing] | ![Votes][PowerUpButtons]
-![Votes][CardBadgeOngoing] | ![Votes][CardBackSectionPaused] | 
+| Card Badges                | Card Back Section                | Menu                     |
+|----------------------------|----------------------------------|--------------------------|
+| ![Votes][CardBadgeVoting]  | ![Votes][CardBackSectionOngoing] | ![Votes][PowerUpButtons] |
+| ![Votes][CardBadgeOngoing] | ![Votes][CardBackSectionPaused]  |                          |
 
 [CardBadgeVoting]: ./assets/readme/card_badge_voting.png
 [CardBadgeOngoing]: ./assets/readme/card_badge_ongoing.png

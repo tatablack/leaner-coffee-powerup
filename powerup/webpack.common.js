@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const yaml = require("js-yaml");
 
-const OUTPUT_FOLDER = "docs";
+const OUTPUT_FOLDER = "../docs";
 
 module.exports = {
   entry: {
@@ -61,7 +61,8 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: "assets/**/*",
+          from: path.resolve(__dirname, "..", "assets"),
+          to: "assets",
           globOptions: {
             ignore:
               process.env.NODE_ENV === "production"
@@ -84,6 +85,9 @@ module.exports = {
         },
         { from: "*.html", globOptions: { ignore: ["_*"] } },
       ],
+      options: {
+        concurrency: 100,
+      },
     }),
   ],
 };
