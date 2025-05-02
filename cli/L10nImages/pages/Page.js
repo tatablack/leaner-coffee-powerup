@@ -1,4 +1,4 @@
-const getLogger = require("../utils/Logger");
+import getLogger from "../utils/Logger.js";
 
 class Page {
   constructor(browser, selectors, level = "info") {
@@ -7,4 +7,4 @@ class Page {
   }
 }
 
-module.exports = Page;
+export default Page;

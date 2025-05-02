@@ -1,6 +1,7 @@
 import js from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import { createNextImportResolver } from "eslint-import-resolver-next";
+import nodePlugin from "eslint-plugin-n";
 
 import globals from "globals";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
@@ -12,17 +13,22 @@ export default defineConfig({
     js.configs.recommended,
     eslintPluginImportX.flatConfigs.recommended,
     eslintPluginImportX.flatConfigs.typescript,
+    nodePlugin.configs["flat/recommended-module"],
     eslintConfigPrettier,
   ],
   languageOptions: {
     globals: globals.node,
+    sourceType: "module",
   },
   settings: {
     "import-x/resolver-next": [createNextImportResolver({})],
   },
   rules: {
+    "n/no-process-exit": "off",
+    "n/prefer-node-protocol": ["error"],
+    "n/file-extension-in-import": ["error"],
     "import-x/no-dynamic-require": "warn",
-    "import-x/no-nodejs-modules": "off",
+    "import-x/no-commonjs": ["error"],
     "import-x/newline-after-import": ["error", { count: 1 }],
     "import-x/order": [
       "error",

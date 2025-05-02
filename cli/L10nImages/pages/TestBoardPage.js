@@ -1,6 +1,6 @@
-const { snakeCase } = require("snake-case");
+import { snakeCase } from "snake-case";
 
-const Page = require("./Page");
+import Page from "./Page.js";
 
 class TestBoardPage extends Page {
   constructor(browser) {
@@ -112,4 +112,4 @@ class TestBoardPage extends Page {
   }
 }
 
-module.exports = TestBoardPage;
+export default TestBoardPage;

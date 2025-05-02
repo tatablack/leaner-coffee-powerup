@@ -1,4 +1,4 @@
-const { createLogger, format, transports } = require("winston");
+import { createLogger, format, transports } from "winston";
 
 const { combine, timestamp, colorize, printf } = format;
 
@@ -18,4 +18,4 @@ const getLogger = (level = "info") =>
     transports: [new transports.Console()],
   });
 
-module.exports = getLogger;
+export default getLogger;

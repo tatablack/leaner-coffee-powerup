@@ -31,7 +31,6 @@
     "@typescript-eslint/parser": "^8.30.1",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^10.2.4",
-    "date-format": "^4.0.14",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-import-resolver-typescript": "^4.3.4",

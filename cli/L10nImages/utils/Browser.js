@@ -1,9 +1,9 @@
-const browserstack = require("browserstack-local");
-const dateFormat = require("date-format");
-const merge = require("deepmerge");
-const { remote } = require("webdriverio");
+import browserstack from "browserstack-local";
+import dateFormat from "date-format";
+import merge from "deepmerge";
+import { remote } from "webdriverio";
 
-const getLogger = require("./Logger");
+import getLogger from "./Logger.js";
 
 const sleep = (ms) =>
   new Promise((resolve) => {
@@ -18,7 +18,6 @@ class Browser {
       logLevel: "error",
       capabilities: {
         "moz:firefoxOptions": {
-          args: ["-headless"],
           binary: process.env.FIREFOX_BINARY,
         },
       },
@@ -123,4 +122,4 @@ class Browser {
   }
 }
 
-module.exports = Browser;
+export default Browser;
