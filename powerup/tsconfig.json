@@ -21,9 +21,6 @@
     ]
   },
   "exclude": [
-    "node_modules",
-    "config",
-    "docs",
-    "dist"
+    "node_modules", "config"
   ]
 }

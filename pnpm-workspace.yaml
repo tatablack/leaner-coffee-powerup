@@ -1,3 +1,7 @@
+packages:
+  - 'powerup'
+  - 'cli'
+
 catalog:
   typescript: 5.8.3
   eslint: 9.25.1

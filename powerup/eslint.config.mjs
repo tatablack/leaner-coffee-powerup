@@ -9,7 +9,6 @@ import * as tsParser from "@typescript-eslint/parser";
 import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript";
 
 export default tseslint.config(
-  { ignores: ["assets", "docs"] },
   {
     files: ["**/*.md"],
     plugins: {
