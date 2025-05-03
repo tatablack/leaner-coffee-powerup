@@ -1,8 +1,8 @@
-const path = require("path");
+const path = require("node:path");
 
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const dotenvx = require("@dotenvx/dotenvx");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const yaml = require("js-yaml");
 const webpack = require("webpack");
 

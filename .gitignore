@@ -2,8 +2,7 @@
 localhost.*
 
 # Local configuration
-.nvmrc
-.envrc
+.mise.toml
 
 # IDE configuration
 .vscode
@@ -11,7 +10,6 @@ localhost.*
 *.iml
 
 # Output
-dist
 *.log
 coverage
 
