@@ -23,6 +23,12 @@ const Config = {
   },
 };
 
+const SentryDefaultOptions = {
+  sendDefaultPii: false,
+  release: process.env.VERSION,
+  environment: process.env.NODE_ENV,
+};
+
 module.exports = {
   mode: process.env.NODE_ENV,
 
@@ -57,6 +63,7 @@ module.exports = {
       NODE_ENV: process.env.NODE_ENV,
       CONFIG: Config,
       VERSION: process.env.VERSION,
+      SENTRY_DSN: process.env.SENTRY_DSN,
     }),
 
     new HtmlWebpackPlugin({
@@ -108,7 +115,21 @@ module.exports = {
               "utf8",
             ),
         },
-        { from: "*.html", globOptions: { ignore: ["_*"] } },
+        {
+          from: "*.html",
+          transform: (content) =>
+            Buffer.from(
+              content
+                .toString("utf8")
+                .replace("SENTRY_CDN", process.env.SENTRY_CDN)
+                .replace(
+                  "SentryDefaultOptions",
+                  JSON.stringify(SentryDefaultOptions),
+                ),
+              "utf8",
+            ),
+          globOptions: { ignore: ["_*"] },
+        },
       ],
       options: {
         concurrency: 100,

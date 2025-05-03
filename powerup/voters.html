@@ -49,7 +49,11 @@
     <div id="clear" class="button" data-i18n-id="clearVotesFromCard"></div>
 
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script src="SENTRY_CDN" crossorigin="anonymous"></script>
     <script>
+        window.sentryOnLoad = function () {
+            Sentry.init(SentryDefaultOptions);
+        };
         const t = window.TrelloPowerUp.iframe();
 
         document.getElementById('clear').addEventListener('click', () => {
