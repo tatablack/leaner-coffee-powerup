@@ -20,9 +20,11 @@
   "author": "Angelo Tata <leanercoffee@tatablack.net>",
   "license": "Apache-2.0",
   "dependencies": {
+    "@sentry/browser": "^9.15.0",
     "format-duration": "^3.0.2"
   },
   "devDependencies": {
+    "@dotenvx/dotenvx": "^1.42.2",
     "@eslint/js": "catalog:",
     "@eslint/json": "^0.12.0",
     "@eslint/markdown": "^6.4.0",
