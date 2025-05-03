@@ -2,11 +2,30 @@ const path = require("path");
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const dotenvx = require("@dotenvx/dotenvx");
 const yaml = require("js-yaml");
+const webpack = require("webpack");
 
 const OUTPUT_FOLDER = "../docs";
 
+// Load configuration
+dotenvx.config({
+  strict: true,
+  path: process.env.NODE_ENV === "development" ? ".env.development" : ".env",
+});
+
+const Config = {
+  [process.env.NODE_ENV]: {
+    hostname: process.env.HOSTNAME,
+    port: process.env.PORT ? parseInt(process.env.PORT, 10) : undefined,
+    defaultDuration: parseInt(process.env.DEFAULT_DURATION, 10),
+    supportedLocales: JSON.parse(process.env.SUPPORTED_LOCALES),
+  },
+};
+
 module.exports = {
+  mode: process.env.NODE_ENV,
+
   entry: {
     main: "./src/index.ts",
     settings: "./src/settings.ts",
@@ -34,6 +53,12 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: process.env.NODE_ENV,
+      CONFIG: Config,
+      VERSION: process.env.VERSION,
+    }),
+
     new HtmlWebpackPlugin({
       title: "Lean Coffee Trello Power-up",
       template: "_index.html",

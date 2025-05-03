@@ -141,7 +141,7 @@ export const CapabilityHandlers = (
 
   "show-settings": (t: Trello.PowerUp.IFrame): PromiseLike<void> =>
     t.popup({
-      title: `Leaner Coffee v${process.env.VERSION}`,
+      title: `Leaner Coffee ${process.env.VERSION}`,
       url: `${powerUp.baseUrl}/settings.html`,
       height: 184,
       args: {

@@ -17,3 +17,6 @@ coverage
 
 # Dependencies
 node_modules
+
+# Local configuration
+.env.development

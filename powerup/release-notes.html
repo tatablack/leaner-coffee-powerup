@@ -40,7 +40,12 @@
     </ul>
 
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script src="SENTRY_CDN" crossorigin="anonymous"></script>
     <script>
+        window.sentryOnLoad = function () {
+            Sentry.init(SentryDefaultOptions);
+        };
+
         const t = window.TrelloPowerUp.iframe();
 
         document.getElementById('dismiss').addEventListener('click', () => {
@@ -50,7 +55,7 @@
         });
 
         document.getElementById('open').addEventListener('click', () => {
-          window.open(`https://github.com/tatablack/leaner-coffee-powerup/releases/tag/v${t.arg('version')}`);
+          window.open(`https://github.com/tatablack/leaner-coffee-powerup/releases/tag/${t.arg('version')}`);
           t.closePopup();
           return false;
         });
