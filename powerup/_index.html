@@ -7,8 +7,13 @@
 </head>
 
 <body>
+  <script>
+    window.sentryOnLoad = function () {
+      Sentry.init(<%= SENTRY_DEFAULT_OPTIONS %>);
+    };
+  </script>
+  <script src="<%= SENTRY_LOADER %>" crossorigin="anonymous"></script>
   <script src="https://p.trellocdn.com/power-up.min.js"></script>
-
 
   <% if (htmlWebpackPlugin.options.devServer) { %>
     <script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>

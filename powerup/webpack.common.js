@@ -23,10 +23,17 @@ const Config = {
   },
 };
 
+// We need to sanitise the release name to avoid issues with Sentry. See:
+// https://github.com/getsentry/relay/blob/3df33b87bbbf71d65a74e285e3a43853da5ea1d9/relay-event-schema/src/protocol/event.rs#L321-L327
 const SentryDefaultOptions = {
   sendDefaultPii: false,
-  release: process.env.VERSION,
+  release: process.env.VERSION.replaceAll(/[^a-zA-Z0-9_.-]/g, "-"),
   environment: process.env.NODE_ENV,
+};
+
+const TEMPLATE_PARAMETERS = {
+  SENTRY_LOADER: process.env.SENTRY_LOADER,
+  SENTRY_DEFAULT_OPTIONS: JSON.stringify(SentryDefaultOptions),
 };
 
 module.exports = {
@@ -63,7 +70,6 @@ module.exports = {
       NODE_ENV: process.env.NODE_ENV,
       CONFIG: Config,
       VERSION: process.env.VERSION,
-      SENTRY_DSN: process.env.SENTRY_DSN,
     }),
 
     new HtmlWebpackPlugin({
@@ -71,24 +77,28 @@ module.exports = {
       template: "_index.html",
       filename: "index.html",
       chunks: ["main"],
+      templateParameters: TEMPLATE_PARAMETERS,
     }),
     new HtmlWebpackPlugin({
       title: "Lean Coffee Settings",
       template: "_settings.html",
       filename: "settings.html",
       chunks: ["settings"],
+      templateParameters: TEMPLATE_PARAMETERS,
     }),
     new HtmlWebpackPlugin({
       title: "Discussion UI",
       template: "_discussion-ui.html",
       filename: "discussion-ui.html",
       chunks: ["discussion_ui"],
+      templateParameters: TEMPLATE_PARAMETERS,
     }),
     new HtmlWebpackPlugin({
       title: "Ongoing or paused",
       template: "_ongoing_or_paused.html",
       filename: "ongoing_or_paused.html",
       chunks: ["ongoing_or_paused"],
+      templateParameters: TEMPLATE_PARAMETERS,
     }),
     new CopyWebpackPlugin({
       patterns: [
@@ -121,9 +131,9 @@ module.exports = {
             Buffer.from(
               content
                 .toString("utf8")
-                .replace("SENTRY_CDN", process.env.SENTRY_CDN)
+                .replace("SENTRY_LOADER", process.env.SENTRY_LOADER)
                 .replace(
-                  "SentryDefaultOptions",
+                  "SENTRY_DEFAULT_OPTIONS",
                   JSON.stringify(SentryDefaultOptions),
                 ),
               "utf8",
