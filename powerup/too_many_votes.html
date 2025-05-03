@@ -18,7 +18,11 @@
     </div>
 
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script src="SENTRY_CDN" crossorigin="anonymous"></script>
     <script>
+        window.sentryOnLoad = function () {
+            Sentry.init(SentryDefaultOptions);
+        };
         const t = window.TrelloPowerUp.iframe();
         const maxVotes = t.arg('maxVotes');
 
