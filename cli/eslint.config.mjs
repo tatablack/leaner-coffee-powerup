@@ -1,18 +1,16 @@
 import js from "@eslint/js";
 import { defineConfig } from "eslint/config";
-import { createNextImportResolver } from "eslint-import-resolver-next";
-import nodePlugin from "eslint-plugin-n";
-
-import globals from "globals";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
+import { createNextImportResolver } from "eslint-import-resolver-next";
 import eslintPluginImportX from "eslint-plugin-import-x";
+import nodePlugin from "eslint-plugin-n";
+import globals from "globals";
 
 export default defineConfig({
-  files: ["L10nImages/**/*.{js,mjs,cjs}"],
+  files: ["L10nImages/**/*.{js,mjs,cjs}", "*.mjs"],
   extends: [
     js.configs.recommended,
     eslintPluginImportX.flatConfigs.recommended,
-    eslintPluginImportX.flatConfigs.typescript,
     nodePlugin.configs["flat/recommended-module"],
     eslintConfigPrettier,
   ],
