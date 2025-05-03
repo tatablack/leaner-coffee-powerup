@@ -39,13 +39,14 @@
         </li>
     </ul>
 
-    <script src="https://p.trellocdn.com/power-up.min.js"></script>
-    <script src="SENTRY_CDN" crossorigin="anonymous"></script>
     <script>
         window.sentryOnLoad = function () {
-            Sentry.init(SentryDefaultOptions);
+            Sentry.init(SENTRY_DEFAULT_OPTIONS);
         };
-
+    </script>
+    <script src="SENTRY_LOADER" crossorigin="anonymous"></script>
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script>
         const t = window.TrelloPowerUp.iframe();
 
         document.getElementById('dismiss').addEventListener('click', () => {
