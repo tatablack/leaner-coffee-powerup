@@ -31,9 +31,27 @@ importers:
 
   cli:
     dependencies:
+      browserstack-local:
+        specifier: ^1.5.6
+        version: 1.5.6
       date-format:
         specifier: ^4.0.14
         version: 4.0.14
+      deepmerge:
+        specifier: ^4.3.1
+        version: 4.3.1
+      just-snake-case:
+        specifier: ^3.2.0
+        version: 3.2.0
+      webdriverio:
+        specifier: ^9.12.7
+        version: 9.12.7
+      winston:
+        specifier: ^3.17.0
+        version: 3.17.0
+      yargs:
+        specifier: ^17.7.2
+        version: 17.7.2
     devDependencies:
       '@eslint/js':
         specifier: 'catalog:'
@@ -41,12 +59,6 @@ importers:
       '@types/node':
         specifier: ^22.15.3
         version: 22.15.3
-      browserstack-local:
-        specifier: ^1.5.6
-        version: 1.5.6
-      deepmerge:
-        specifier: ^4.3.1
-        version: 4.3.1
       eslint:
         specifier: 'catalog:'
         version: 9.25.1
@@ -68,18 +80,6 @@ importers:
       prettier:
         specifier: 'catalog:'
         version: 3.5.3
-      snake-case:
-        specifier: ^4.0.0
-        version: 4.0.0
-      webdriverio:
-        specifier: ^9.12.7
-        version: 9.12.7
-      winston:
-        specifier: ^3.11.0
-        version: 3.17.0
-      yargs:
-        specifier: ^17.7.2
-        version: 17.7.2
 
   powerup:
     dependencies:
@@ -406,8 +406,8 @@ packages:
   '@promptbook/utils@0.69.5':
     resolution: {integrity: sha512-xm5Ti/Hp3o4xHrsK9Yy3MS6KbDxYbq485hDsFvxqaNA7equHLPdo8H8faTitTeb14QCDfLW4iwCxdVYu5sn6YQ==}
 
-  '@puppeteer/browsers@2.10.2':
-    resolution: {integrity: sha512-i4Ez+s9oRWQbNjtI/3+jxr7OH508mjAKvza0ekPJem0ZtmsYHP3B5dq62+IaBHKaGCOuqJxXzvFLUhJvQ6jtsQ==}
+  '@puppeteer/browsers@2.10.3':
+    resolution: {integrity: sha512-iPpnFpX25gKIVsHsqVjHV+/GzW36xPgsscWkCnrrETndcdxNsXLdCrTwhkCJNR/FGWr122dJUBeyV4niz/j3TA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -2277,6 +2277,9 @@ packages:
   jszip@3.10.1:
     resolution: {integrity: sha512-xXDvecyTpGLrqFrvkrUSoxxfJI5AH7U8zxxtVclpsUtMCq4JQ290LY8AW5c7Ggnr/Y/oK+bQMbqK2qmtk3pN4g==}
 
+  just-snake-case@3.2.0:
+    resolution: {integrity: sha512-iugHP9bSE0jOq3BzN0W0rdu/OOkFirPe8FtUw6v9y37UlbUDgJ1x4xiGNfUhI6mV9dc/paaifyiyn+F+mrm8gw==}
+
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
@@ -2595,10 +2598,6 @@ packages:
 
   no-case@3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
-
-  no-case@4.0.0:
-    resolution: {integrity: sha512-WmS3EUGw+vXHlTgiUPi3NzbZNwH6+uGX0QLGgqG+aFSJ5rkX/Ee0nuwHBJfZTfQwwR8lGO819NEIwQ7CGhkdEQ==}
-    deprecated: Use `change-case`
 
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
@@ -3143,10 +3142,6 @@ packages:
   smart-buffer@4.2.0:
     resolution: {integrity: sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==}
     engines: {node: '>= 6.0.0', npm: '>= 3.0.0'}
-
-  snake-case@4.0.0:
-    resolution: {integrity: sha512-slvG6efKZ3GYUUZdhPOq/lLIqutwQ4TdPViD1VKqsbf0u76U/aPRswPKjOaAS9T7fAPmRmXuN6C/nM0xsMaFLQ==}
-    deprecated: Use `change-case`
 
   sockjs@0.3.24:
     resolution: {integrity: sha512-GJgLTZ7vYb/JtPSSZ10hsOYIvEYsjbNU+zPdIHcUaWVNUEPivzxku31865sSSud0Da0W4lEeOPlmw93zLQchuQ==}
@@ -3903,7 +3898,7 @@ snapshots:
     dependencies:
       spacetrim: 0.11.59
 
-  '@puppeteer/browsers@2.10.2':
+  '@puppeteer/browsers@2.10.3':
     dependencies:
       debug: 4.4.0
       extract-zip: 2.0.1
@@ -4224,7 +4219,7 @@ snapshots:
 
   '@wdio/utils@9.12.6':
     dependencies:
-      '@puppeteer/browsers': 2.10.2
+      '@puppeteer/browsers': 2.10.3
       '@wdio/logger': 9.4.4
       '@wdio/types': 9.12.6
       decamelize: 6.0.0
@@ -6083,6 +6078,8 @@ snapshots:
       readable-stream: 2.3.8
       setimmediate: 1.0.5
 
+  just-snake-case@3.2.0: {}
+
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
@@ -6553,8 +6550,6 @@ snapshots:
     dependencies:
       lower-case: 2.0.2
       tslib: 2.8.1
-
-  no-case@4.0.0: {}
 
   node-domexception@1.0.0: {}
 
@@ -7157,10 +7152,6 @@ snapshots:
   slash@4.0.0: {}
 
   smart-buffer@4.2.0: {}
-
-  snake-case@4.0.0:
-    dependencies:
-      no-case: 4.0.0
 
   sockjs@0.3.24:
     dependencies:
