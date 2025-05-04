@@ -1,4 +1,4 @@
-import { snakeCase } from "snake-case";
+import snakeCase from "just-snake-case";
 
 import Page from "./Page.js";
 
