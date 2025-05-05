@@ -658,5 +658,9 @@ declare global {
   interface Window {
     TrelloPowerUp: Trello.PowerUp;
     locale: string;
+    umami: {
+      track: (p1?: any, p2?: any) => void;
+      identify: () => void;
+    };
   }
 }

@@ -65,7 +65,9 @@
             });
 
             document.getElementById('open').addEventListener('click', () => {
-          window.open(`https://github.com/tatablack/leaner-coffee-powerup/releases/tag/${t.arg('version')}`);
+              const url = `https://github.com/tatablack/leaner-coffee-powerup/releases/tag/${t.arg('version')}`;
+              window.umami.track('outbound-link-click', {url});
+              window.open(url);
               t.closePopup();
               return false;
             });
