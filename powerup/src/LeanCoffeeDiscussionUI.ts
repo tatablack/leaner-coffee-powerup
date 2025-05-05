@@ -82,7 +82,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
 
     switch (discussionStatus) {
       case "ENDED": {
-        // when discussion ends, hide badge and display message
+        // when the discussion ends, hide badge and display a message
         this.toggleBadges(false);
         this.toggleFields(".message", "discussionUiMessageEnded");
         break;
@@ -101,7 +101,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
         break;
       }
       case "PAUSED": {
-        // when discussion is paused, update badge (display elapsed and three buttons to deal with discussion)
+        // when discussion is paused, update the badge (display elapsed and three buttons to deal with discussion)
         if (this.previousStatus !== discussionStatus) {
           this.toggleFields(".message", "");
           this.toggleVoting(true);
