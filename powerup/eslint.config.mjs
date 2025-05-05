@@ -1,9 +1,12 @@
 import js from "@eslint/js";
 import json from "@eslint/json";
 import markdown from "@eslint/markdown";
+import htmlmarkup from "@html-eslint/eslint-plugin";
+import * as htmlParser from "@html-eslint/parser";
 import * as tsParser from "@typescript-eslint/parser";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript";
+import html from "eslint-plugin-html";
 import eslintPluginImportX from "eslint-plugin-import-x";
 import nodePlugin from "eslint-plugin-n";
 import globals from "globals";
@@ -36,6 +39,25 @@ export default tseslint.config(
       markdown,
     },
     extends: [...markdown.configs.recommended, eslintConfigPrettier],
+  },
+  {
+    files: ["**/*.html"],
+    ignores: ["**/_*.html"],
+    plugins: { html, "@html-eslint": htmlmarkup },
+    languageOptions: { parser: htmlParser },
+    ...htmlmarkup.configs["flat/recommended"],
+    settings: {
+      "html/indent": "+4",
+      "html/report-bad-indent": "error",
+    },
+    rules: {
+      "@html-eslint/attrs-newline": [
+        "error",
+        {
+          ifAttrsMoreThan: 3,
+        },
+      ],
+    },
   },
   {
     files: ["**/*.json"],
