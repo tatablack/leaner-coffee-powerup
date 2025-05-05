@@ -1,74 +1,82 @@
 <!DOCTYPE html>
 <html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <title>Release notes</title>
+        <link
+            rel="stylesheet"
+            href="https://p.trellocdn.com/power-up.min.css"
+            type="text/css"
+        >
 
-<head>
-    <meta charset="utf-8">
-    <title>Release notes</title>
-    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" type="text/css" />
+        <style>
+            a > img {
+                width: 1em;
+                vertical-align: middle;
+            }
 
-    <style>
-        a > img {
-            width: 1em;
-            vertical-align: middle;
-        }
+            a {
+                cursor: pointer;
+                display: block;
+                font-weight: 400;
+                padding: 6px 12px;
+                position: relative;
+                margin: 0 -12px;
+                text-decoration: none;
+            }
 
-        a {
-            cursor: pointer;
-            display: block;
-            font-weight: 400;
-            padding: 6px 12px;
-            position: relative;
-            margin: 0 -12px;
-            text-decoration: none;
-        }
+            a:hover {
+                background-color: rgba(9,30,66,.04);
+            }
+        </style>
+        <script
+                defer
+                src="https://cloud.umami.is/script.js"
+                data-website-id="1502b785-3f33-469d-8d36-174179c5a01f"
+                data-tag="ENVIRONMENT">
+        </script>
+    </head>
 
-        a:hover {
-            background-color: rgba(9,30,66,.04);
-        }
-    </style>
-</head>
+    <body>
+        <ul>
+            <li id="dismiss"><a href="#" data-i18n-id="dismiss"></a></li>
+            <li id="open">
+                <a href="#">
+                    <span data-i18n-id="open"></span>
+                    <img src="../assets/powerup/external_link.svg" alt="External link">
+                </a>
+            </li>
+        </ul>
 
-<body>
-    <ul>
-        <li id="dismiss"><a href="#" data-i18n-id="dismiss"></a></li>
-        <li id="open">
-            <a href="#">
-                <span data-i18n-id="open"></span>
-                <img src="../assets/powerup/external_link.svg" alt="External link" />
-            </a>
-        </li>
-    </ul>
+        <script>
+            window.sentryOnLoad = function () {
+                Sentry.init(SENTRY_DEFAULT_OPTIONS);
+            };
+        </script>
+        <script src="SENTRY_LOADER" crossorigin="anonymous"></script>
+        <script src="https://p.trellocdn.com/power-up.min.js"></script>
+        <script>
+            const t = window.TrelloPowerUp.iframe();
 
-    <script>
-        window.sentryOnLoad = function () {
-            Sentry.init(SENTRY_DEFAULT_OPTIONS);
-        };
-    </script>
-    <script src="SENTRY_LOADER" crossorigin="anonymous"></script>
-    <script src="https://p.trellocdn.com/power-up.min.js"></script>
-    <script>
-        const t = window.TrelloPowerUp.iframe();
+            document.getElementById('dismiss').addEventListener('click', () => {
+              t.notifyParent('done');
+              t.closePopup();
+              return false;
+            });
 
-        document.getElementById('dismiss').addEventListener('click', () => {
-          t.notifyParent('done');
-          t.closePopup();
-          return false;
-        });
-
-        document.getElementById('open').addEventListener('click', () => {
+            document.getElementById('open').addEventListener('click', () => {
           window.open(`https://github.com/tatablack/leaner-coffee-powerup/releases/tag/${t.arg('version')}`);
-          t.closePopup();
-          return false;
-        });
+              t.closePopup();
+              return false;
+            });
 
-        window.TrelloPowerUp.util.initLocalizer(
-          window.locale,
-          { localization: t.arg('localization') }
-        ).then(() => {
-          t.localizeNode(document.body);
-          t.sizeTo('body');
-        });
-    </script>
-</body>
-
+            window.TrelloPowerUp.util.initLocalizer(
+              window.locale,
+              { localization: t.arg('localization') }
+            ).then(() => {
+              t.localizeNode(document.body);
+              t.sizeTo('body');
+            });
+        </script>
+    </body>
 </html>

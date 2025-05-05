@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <script
+        defer
+        src="https://cloud.umami.is/script.js"
+        data-website-id="1502b785-3f33-469d-8d36-174179c5a01f"
+        data-tag="<%= ENVIRONMENT %>"
+    >
+    </script>
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <title><%= htmlWebpackPlugin.options.title %></title>
-</head>
+  <body>
+    <script>
+      window.sentryOnLoad = function () {
+        Sentry.init(<%= SENTRY_DEFAULT_OPTIONS %>);
+      };
+    </script>
+    <script src="<%= SENTRY_LOADER %>" crossorigin="anonymous"></script>
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
 
-<body>
-  <script>
-    window.sentryOnLoad = function () {
-      Sentry.init(<%= SENTRY_DEFAULT_OPTIONS %>);
-    };
-  </script>
-  <script src="<%= SENTRY_LOADER %>" crossorigin="anonymous"></script>
-  <script src="https://p.trellocdn.com/power-up.min.js"></script>
-
-  <% if (htmlWebpackPlugin.options.devServer) { %>
-    <script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
-  <% } %>
-</body>
-
+    <% if (htmlWebpackPlugin.options.devServer) { %>
+      <script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
+    <% } %>
+  </body>
 </html>
