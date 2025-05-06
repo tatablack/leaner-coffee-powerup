@@ -1,9 +1,12 @@
 import js from "@eslint/js";
 import json from "@eslint/json";
 import markdown from "@eslint/markdown";
+import htmlmarkup from "@html-eslint/eslint-plugin";
+import * as htmlParser from "@html-eslint/parser";
 import * as tsParser from "@typescript-eslint/parser";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript";
+import html from "eslint-plugin-html";
 import eslintPluginImportX from "eslint-plugin-import-x";
 import nodePlugin from "eslint-plugin-n";
 import globals from "globals";
@@ -30,6 +33,7 @@ const importOrderConfig = {
 };
 
 export default tseslint.config(
+  // Markdown files
   {
     files: ["**/*.md"],
     plugins: {
@@ -37,6 +41,27 @@ export default tseslint.config(
     },
     extends: [...markdown.configs.recommended, eslintConfigPrettier],
   },
+  // HTML files (excludes EJS templates with .html extension)
+  {
+    files: ["**/*.html"],
+    ignores: ["**/_*.html"],
+    plugins: { html, "@html-eslint": htmlmarkup },
+    languageOptions: { parser: htmlParser },
+    ...htmlmarkup.configs["flat/recommended"],
+    settings: {
+      "html/indent": "+4",
+      "html/report-bad-indent": "error",
+    },
+    rules: {
+      "@html-eslint/attrs-newline": [
+        "error",
+        {
+          ifAttrsMoreThan: 3,
+        },
+      ],
+    },
+  },
+  // JSON files
   {
     files: ["**/*.json"],
     language: "json/json",
@@ -45,8 +70,9 @@ export default tseslint.config(
     },
     extends: [json.configs.recommended, eslintConfigPrettier],
   },
+  // Source files (TypeScript)
   {
-    files: ["src/**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx}"],
+    files: ["src/**/*.ts"],
     extends: [
       js.configs.recommended,
       eslintPluginImportX.flatConfigs.recommended,
@@ -76,6 +102,7 @@ export default tseslint.config(
       "import-x/order": ["error", importOrderConfig],
     },
   },
+  // Configuration files (Webpack, ESLint, etc.)
   {
     files: ["*.{js,mjs}"],
     extends: [

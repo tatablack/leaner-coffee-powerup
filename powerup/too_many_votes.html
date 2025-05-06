@@ -1,44 +1,55 @@
 <!DOCTYPE html>
 <html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <link
+            rel="stylesheet"
+            href="https://p.trellocdn.com/power-up.min.css"
+            type="text/css"
+        >
+        <script
+            defer
+            src="https://cloud.umami.is/script.js"
+            data-website-id="1502b785-3f33-469d-8d36-174179c5a01f"
+            data-tag="ENVIRONMENT">
+        </script>
+    </head>
 
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" type="text/css" />
-</head>
+    <body>
+        <div data-i18n-id="maxVotes"></div>
+        <hr>
+        <div>
+            <span data-i18n-id="maxVotesRationale"></span>
+            <a
+                target="_blank"
+                data-umami-event="outbound-link-click"
+                data-umami-event-url="http://www.leanmath.com/blog-entry/multi-voting-math-or-n3"
+                href="http://www.leanmath.com/blog-entry/multi-voting-math-or-n3"
+            ><span data-i18n-id="maxVotesLink"></span></a>.
+        </div>
 
-<body>
-    <div data-i18n-id="maxVotes"></div>
-    <hr/>
-    <div>
-        <span data-i18n-id="maxVotesRationale"></span>
-        <a
-            href="http://www.leanmath.com/blog-entry/multi-voting-math-or-n3"
-            target="_blank"
-        ><span data-i18n-id="maxVotesLink"></span></a>.
-    </div>
+        <script>
+            window.sentryOnLoad = function () {
+                Sentry.init(SENTRY_DEFAULT_OPTIONS);
+            };
+        </script>
+        <script src="SENTRY_LOADER" crossorigin="anonymous"></script>
+        <script src="https://p.trellocdn.com/power-up.min.js"></script>
+        <script>
+            const t = window.TrelloPowerUp.iframe();
+            const maxVotes = t.arg('maxVotes');
 
-    <script>
-        window.sentryOnLoad = function () {
-            Sentry.init(SENTRY_DEFAULT_OPTIONS);
-        };
-    </script>
-    <script src="SENTRY_LOADER" crossorigin="anonymous"></script>
-    <script src="https://p.trellocdn.com/power-up.min.js"></script>
-    <script>
-        const t = window.TrelloPowerUp.iframe();
-        const maxVotes = t.arg('maxVotes');
+            const maxVotesElement = document.querySelector('[data-i18n-id="maxVotes"');
+            maxVotesElement.dataset.i18nArgs = JSON.stringify({ maxVotes });
 
-        const maxVotesElement = document.querySelector('[data-i18n-id="maxVotes"');
-        maxVotesElement.dataset.i18nArgs = JSON.stringify({ maxVotes });
-
-        window.TrelloPowerUp.util.initLocalizer(
-          window.locale,
-          { localization: t.arg('localization') }
-        ).then(() => {
-          t.localizeNode(document.body);
-          t.sizeTo('body');
-        });
-    </script>
-</body>
-
+            window.TrelloPowerUp.util.initLocalizer(
+              window.locale,
+              { localization: t.arg('localization') }
+            ).then(() => {
+              t.localizeNode(document.body);
+              t.sizeTo('body');
+            });
+        </script>
+    </body>
 </html>
+

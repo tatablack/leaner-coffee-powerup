@@ -6,6 +6,7 @@ import VotingCardBadge from "./badges/VotingCardBadge";
 import VotingCardDetailBadge from "./badges/VotingCardDetailBadge";
 import BoardStorage from "./storage/BoardStorage";
 import { Trello } from "./types/TrelloPowerUp";
+import Analytics from "./utils/Analytics";
 import Discussion from "./utils/Discussion";
 import { I18nConfig } from "./utils/I18nConfig";
 import UpdateChecker from "./utils/UpdateChecker";
@@ -37,11 +38,13 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     this.elapsedCardBadge = new ElapsedCardBadge(this.discussion);
     this.elapsedCardDetailBadge = new ElapsedCardDetailBadge(this.discussion);
     this.votingCardBadge = new VotingCardBadge(
+      this.w,
       this.baseUrl,
       this.voting,
       this.cardStorage,
     );
     this.votingCardDetailBadge = new VotingCardDetailBadge(
+      this.w,
       this.baseUrl,
       this.voting,
       this.cardStorage,
@@ -69,22 +72,36 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       "avatar",
     );
 
+    let outcome: string;
+
     if (votes[currentMember.id]) {
       delete votes[currentMember.id];
+      outcome = "removed";
     } else {
       votes[currentMember.id] = {
         username: currentMember.username,
         fullName: currentMember.fullName,
         avatar: currentMember.avatar, // currently unused
       };
+      outcome = "added";
     }
 
-    return this.cardStorage.saveVotes(t, votes);
+    await this.cardStorage.saveVotes(t, votes);
+    await Analytics.event(this.w, "voted", { outcome: outcome });
   };
 
   stopAndStart = async (t: Trello.PowerUp.IFrame): Promise<void> => {
+    await Analytics.event(this.w, "discussionStatusOverridden");
+
     await this.discussion.end(t);
+    await Analytics.event(this.w, "discussionStatusChanged", {
+      newStatus: "stopped",
+    });
+
     await this.discussion.start(t);
+    await Analytics.event(this.w, "discussionStatusChanged", {
+      newStatus: "started",
+    });
   };
 
   handleDiscussion = async (t: Trello.PowerUp.IFrame): Promise<void> => {
@@ -114,6 +131,10 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
         `Card with id ${cardId} not found in current board, most likely archived. Cleaning up.`,
       );
 
+      await Analytics.event(this.w, "discussionMenuOpened", {
+        status: "ongoing other",
+      });
+
       await this.boardStorage.deleteMultiple(t, [
         BoardStorage.DISCUSSION_STATUS,
         BoardStorage.DISCUSSION_CARD_ID,
@@ -123,7 +144,8 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       ]);
     }
 
-    let items;
+    let items: Trello.PowerUp.PopupOptionsItem[] = [];
+    let status: string;
 
     switch (true) {
       case await this.discussion.isOngoingFor(t):
@@ -131,6 +153,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
           {
             text: t.localizeKey("pauseTimer", { symbol: "❙ ❙" }), // MEDIUM VERTICAL BAR + NARROW NO-BREAK SPACE
             callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+              await Analytics.event(this.w, "discussionStatusChanged", {
+                newStatus: "paused",
+              });
               await this.discussion.pause(t2);
               await t2.closePopup();
               await this.discussion.cardStorage.saveDiscussionButtonLabel(
@@ -142,6 +167,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
           {
             text: t.localizeKey("endDiscussion", { symbol: "■" }), // BLACK SQUARE
             callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+              await Analytics.event(this.w, "discussionStatusChanged", {
+                newStatus: "stopped",
+              });
               await this.discussion.end(t2);
               await t2.closePopup();
               await this.discussion.cardStorage.saveDiscussionButtonLabel(
@@ -151,12 +179,16 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
             },
           },
         ];
+        status = "ongoing";
         break;
       case await this.discussion.isPausedFor(t):
         items = [
           {
             text: t.localizeKey("resumeDiscussion", { symbol: "▶" }), // BLACK RIGHT-POINTING TRIANGLE
             callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+              await Analytics.event(this.w, "discussionStatusChanged", {
+                newStatus: "resumed",
+              });
               await this.discussion.start(t2);
               await t2.closePopup();
               await this.discussion.cardStorage.saveDiscussionButtonLabel(
@@ -168,6 +200,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
           {
             text: t.localizeKey("endDiscussion", { symbol: "■" }), // BLACK SQUARE
             callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+              await Analytics.event(this.w, "discussionStatusChanged", {
+                newStatus: "stopped",
+              });
               await this.discussion.end(t2);
               await t2.closePopup();
               await this.discussion.cardStorage.saveDiscussionButtonLabel(
@@ -177,12 +212,16 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
             },
           },
         ];
+        status = "paused";
         break;
       default:
         items = [
           {
             text: t.localizeKey("startTimer", { symbol: "▶" }), // BLACK RIGHT-POINTING TRIANGLE
             callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+              await Analytics.event(this.w, "discussionStatusChanged", {
+                newStatus: "started",
+              });
               await this.discussion.start(t2);
               await t2.closePopup();
               await this.discussion.cardStorage.saveDiscussionButtonLabel(
@@ -197,6 +236,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
           items.push({
             text: t.localizeKey("resetDiscussion", { symbol: "↺" }), // ANTICLOCKWISE OPEN CIRCLE ARROW
             callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+              await Analytics.event(this.w, "discussionStatusChanged", {
+                newStatus: "reset",
+              });
               await this.discussion.reset(t2);
               await t2.closePopup();
               await this.discussion.cardStorage.saveDiscussionButtonLabel(
@@ -205,8 +247,13 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
               );
             },
           });
+          status = "discussed before";
+        } else {
+          status = "never discussed";
         }
     }
+
+    await Analytics.event(this.w, "discussionMenuOpened", { status });
 
     return t.popup({
       title: "Leaner Coffee",

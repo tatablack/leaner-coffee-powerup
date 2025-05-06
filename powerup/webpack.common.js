@@ -34,6 +34,7 @@ const SentryDefaultOptions = {
 const TEMPLATE_PARAMETERS = {
   SENTRY_LOADER: process.env.SENTRY_LOADER,
   SENTRY_DEFAULT_OPTIONS: JSON.stringify(SentryDefaultOptions),
+  ENVIRONMENT: process.env.NODE_ENV,
 };
 
 module.exports = {
@@ -132,6 +133,7 @@ module.exports = {
               content
                 .toString("utf8")
                 .replace("SENTRY_LOADER", process.env.SENTRY_LOADER)
+                .replace("ENVIRONMENT", process.env.NODE_ENV)
                 .replace(
                   "SENTRY_DEFAULT_OPTIONS",
                   JSON.stringify(SentryDefaultOptions),

@@ -1,3 +1,4 @@
+import Analytics from "./Analytics";
 import Notifications, { NotificationType } from "./Notifications";
 import BoardStorage from "../storage/BoardStorage";
 import CardStorage from "../storage/CardStorage";
@@ -72,10 +73,13 @@ class Discussion {
     const startedAt = await this.boardStorage.getDiscussionStartedAt(t);
     const elapsed = Date.now() - startedAt;
 
+    await this.saveElapsed(t);
+
     if (elapsed > this.maxDiscussionDuration) {
       await this.pause(t, true);
-    } else {
-      await this.saveElapsed(t);
+      await Analytics.event(this.w, "discussionStatusChanged", {
+        newStatus: "ended",
+      });
     }
   };
 

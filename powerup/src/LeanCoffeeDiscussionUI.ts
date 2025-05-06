@@ -2,6 +2,7 @@ import formatDuration from "format-duration";
 
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from "./LeanCoffeeBase";
 import { Trello } from "./types/TrelloPowerUp";
+import Analytics from "./utils/Analytics";
 import { I18nConfig } from "./utils/I18nConfig";
 
 enum ThumbDirection {
@@ -82,7 +83,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
 
     switch (discussionStatus) {
       case "ENDED": {
-        // when discussion ends, hide badge and display message
+        // when the discussion ends, hide badge and display a message
         this.toggleBadges(false);
         this.toggleFields(".message", "discussionUiMessageEnded");
         break;
@@ -101,7 +102,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
         break;
       }
       case "PAUSED": {
-        // when discussion is paused, update badge (display elapsed and three buttons to deal with discussion)
+        // when discussion is paused, update the badge (display elapsed and three buttons to deal with discussion)
         if (this.previousStatus !== discussionStatus) {
           this.toggleFields(".message", "");
           this.toggleVoting(true);
@@ -173,8 +174,16 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
 
     if (thumbs[currentMember] === thumb) {
       delete thumbs[currentMember];
+      await Analytics.event(this.w, "keepDiscussingVoted", {
+        outcome: "removed",
+        choice: thumb,
+      });
     } else {
       thumbs[currentMember] = thumb;
+      await Analytics.event(this.w, "keepDiscussingVoted", {
+        outcome: "added",
+        choice: thumb,
+      });
     }
 
     return this.cardStorage.saveDiscussionThumbs(this.t, thumbs);

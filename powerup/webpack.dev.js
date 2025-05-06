@@ -9,6 +9,12 @@ module.exports = merge(common, {
   devtool: "inline-source-map",
 
   devServer: {
+    allowedHosts: ["localhost", "trello.com", ".trello.com"],
+    setupMiddlewares: (middlewares) => {
+      return middlewares.filter(
+        (middleware) => middleware.name !== "cross-origin-header-check",
+      );
+    },
     static: {
       watch: {
         ignored: ["error.png", "node_modules"].map((item) =>
@@ -17,10 +23,13 @@ module.exports = merge(common, {
       },
     },
     open: true,
+    compress: true,
+    hot: true,
+    liveReload: false,
     client: {
       logging: "info",
+      overlay: true,
     },
-    liveReload: false,
     devMiddleware: {
       publicPath: "/",
       stats: "errors-warnings",
