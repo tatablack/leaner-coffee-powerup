@@ -72,10 +72,10 @@ class Discussion {
     const startedAt = await this.boardStorage.getDiscussionStartedAt(t);
     const elapsed = Date.now() - startedAt;
 
+    await this.saveElapsed(t);
+
     if (elapsed > this.maxDiscussionDuration) {
       await this.pause(t, true);
-    } else {
-      await this.saveElapsed(t);
     }
   };
 
