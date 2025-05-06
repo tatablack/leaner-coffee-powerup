@@ -17,10 +17,13 @@ module.exports = merge(common, {
       },
     },
     open: true,
+    compress: true,
+    hot: true,
+    liveReload: false,
     client: {
       logging: "info",
+      overlay: true,
     },
-    liveReload: false,
     devMiddleware: {
       publicPath: "/",
       stats: "errors-warnings",
