@@ -32,11 +32,9 @@ class VotingCardBadge {
     );
   };
 
-  // Unable to use class properties here because I need to call
-  // it from a subclass, and it's currently broken - see:
-  // https://github.com/babel/babel/issues/5104
-  //
-  // Upgrading to Babel 7.x should solve it.
+  // Unable to use class properties here because in subclasses
+  // I need to user `super`, and it wouldn't be possible. See:
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super#accessing_super_in_class_field_declaration
   async render(t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBadge> {
     const voters = await this.getVoters(t);
 
