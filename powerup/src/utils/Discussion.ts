@@ -1,3 +1,4 @@
+import Analytics from "./Analytics";
 import Notifications, { NotificationType } from "./Notifications";
 import BoardStorage from "../storage/BoardStorage";
 import CardStorage from "../storage/CardStorage";
@@ -76,6 +77,9 @@ class Discussion {
 
     if (elapsed > this.maxDiscussionDuration) {
       await this.pause(t, true);
+      await Analytics.event(this.w, "discussionStatusChanged", {
+        newStatus: "ended",
+      });
     }
   };
 

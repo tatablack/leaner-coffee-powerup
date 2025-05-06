@@ -1,5 +1,6 @@
 import CardStorage from "./storage/CardStorage";
 import { Trello } from "./types/TrelloPowerUp";
+import Analytics from "./utils/Analytics";
 import { I18nConfig } from "./utils/I18nConfig";
 
 export const CapabilityHandlers = (
@@ -93,7 +94,10 @@ export const CapabilityHandlers = (
           result.cards.forEach(({ id }) => {
             powerUp.cardStorage.deleteMultiple(t2, [CardStorage.VOTES], id);
           });
-          return t2.closePopup();
+          await Analytics.event(
+            (t2 as any).source?.window[0],
+            "listVotesCleared",
+          );
         },
       },
     ]),
@@ -129,6 +133,11 @@ export const CapabilityHandlers = (
             return 0;
           });
 
+          await Analytics.event(
+            (t2 as any).source?.window[0],
+            "listVotesSorted",
+          );
+
           return {
             sortedIds: sortedCards.map((card) => card.id),
           };
@@ -136,8 +145,14 @@ export const CapabilityHandlers = (
       },
     ]),
 
-  "on-enable": (t: Trello.PowerUp.IFrame): PromiseLike<void> =>
-    powerUp.boardStorage.setPowerUpVersion(t, process.env.VERSION),
+  "on-enable": async (t: Trello.PowerUp.IFrame): Promise<void> => {
+    await Analytics.event((t as any).source?.window[0], "enabled");
+    await powerUp.boardStorage.setPowerUpVersion(t, process.env.VERSION);
+  },
+
+  "on-disable": async (t: Trello.PowerUp.IFrame): Promise<void> => {
+    await Analytics.event((t as any).source?.window[0], "disabled");
+  },
 
   "show-settings": (t: Trello.PowerUp.IFrame): PromiseLike<void> =>
     t.popup({

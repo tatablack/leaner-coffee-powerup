@@ -3,11 +3,18 @@ import { Trello } from "../types/TrelloPowerUp";
 import Voting from "../utils/Voting";
 
 class VotingCardBadge {
+  w: Window;
   baseUrl: string;
   voting: Voting;
   storage: CardStorage;
 
-  constructor(baseUrl: string, voting: Voting, storage: CardStorage) {
+  constructor(
+    w: Window,
+    baseUrl: string,
+    voting: Voting,
+    storage: CardStorage,
+  ) {
+    this.w = w;
     this.baseUrl = baseUrl;
     this.voting = voting;
     this.storage = storage;

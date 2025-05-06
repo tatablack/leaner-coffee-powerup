@@ -323,7 +323,7 @@ export namespace Trello {
       "list-actions"?: (t: PowerUp.IFrame) => PromiseLike<ListAction[]>;
       "list-sorters"?: (t: PowerUp.IFrame) => PromiseLike<ListSorter[]>;
       "on-enable"?: (t: PowerUp.IFrame) => PromiseLike<void>;
-      "on-disable"?: () => void;
+      "on-disable"?: (t: Trello.PowerUp.IFrame) => PromiseLike<void>;
       "remove-data"?: () => void;
       "show-settings"?: (t: PowerUp.IFrame) => PromiseLike<void>;
       "authorization-status"?: () => void;

@@ -2,6 +2,7 @@ import formatDuration from "format-duration";
 
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from "./LeanCoffeeBase";
 import { Trello } from "./types/TrelloPowerUp";
+import Analytics from "./utils/Analytics";
 import { I18nConfig } from "./utils/I18nConfig";
 
 enum ThumbDirection {
@@ -173,8 +174,16 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
 
     if (thumbs[currentMember] === thumb) {
       delete thumbs[currentMember];
+      await Analytics.event(this.w, "keepDiscussingVoted", {
+        outcome: "removed",
+        choice: thumb,
+      });
     } else {
       thumbs[currentMember] = thumb;
+      await Analytics.event(this.w, "keepDiscussingVoted", {
+        outcome: "added",
+        choice: thumb,
+      });
     }
 
     return this.cardStorage.saveDiscussionThumbs(this.t, thumbs);
