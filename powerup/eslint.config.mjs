@@ -33,6 +33,7 @@ const importOrderConfig = {
 };
 
 export default tseslint.config(
+  // Markdown files
   {
     files: ["**/*.md"],
     plugins: {
@@ -40,6 +41,7 @@ export default tseslint.config(
     },
     extends: [...markdown.configs.recommended, eslintConfigPrettier],
   },
+  // HTML files (excludes EJS templates with .html extension)
   {
     files: ["**/*.html"],
     ignores: ["**/_*.html"],
@@ -59,6 +61,7 @@ export default tseslint.config(
       ],
     },
   },
+  // JSON files
   {
     files: ["**/*.json"],
     language: "json/json",
@@ -67,8 +70,9 @@ export default tseslint.config(
     },
     extends: [json.configs.recommended, eslintConfigPrettier],
   },
+  // Source files (TypeScript)
   {
-    files: ["src/**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx}"],
+    files: ["src/**/*.ts"],
     extends: [
       js.configs.recommended,
       eslintPluginImportX.flatConfigs.recommended,
@@ -98,6 +102,7 @@ export default tseslint.config(
       "import-x/order": ["error", importOrderConfig],
     },
   },
+  // Configuration files (Webpack, ESLint, etc.)
   {
     files: ["*.{js,mjs}"],
     extends: [
