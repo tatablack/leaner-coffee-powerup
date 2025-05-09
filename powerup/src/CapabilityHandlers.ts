@@ -146,10 +146,18 @@ export const CapabilityHandlers = (
     ]),
 
   "on-enable": async (t: Trello.PowerUp.IFrame): Promise<void> => {
+    const window = (t as any).source?.window[1];
+
     if (
       powerUp.initialising ||
       (await powerUp.boardStorage.getInitialised(t))
     ) {
+      powerUp.intervalId = window.setInterval(async () => {
+        if (!powerUp.initialising) {
+          await Analytics.event(window, "enabled");
+          window.clearInterval(powerUp.intervalId);
+        }
+      }, 500);
       return;
     }
 
@@ -158,10 +166,13 @@ export const CapabilityHandlers = (
     powerUp.initialising = true;
     await powerUp.handlePowerupEnabled(t);
     powerUp.initialising = false;
+
+    await Analytics.event(window, "enabled");
   },
 
   "on-disable": async (t: Trello.PowerUp.IFrame): Promise<void> => {
-    await Analytics.event((t as any).source?.window[0], "disabled");
+    const window = (t as any).source?.window[1]; // The order is not guaranteed
+    await Analytics.event(window, "disabled");
   },
 
   "show-settings": (t: Trello.PowerUp.IFrame): PromiseLike<void> =>
