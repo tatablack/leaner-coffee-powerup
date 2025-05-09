@@ -21,7 +21,7 @@ From a developer's perspective, it's also a platform which can be extended using
 Yep. This project implements a Power-Up meant to support "Lean Coffee"-style sessions based on a Trello board.
 
 ## What is "Lean Coffee", then?
-From the [official page](http://leancoffee.org/):
+From the [official page](https://leancoffee.org/):
 
     Lean Coffee is a structured, but agenda-less meeting.
 
@@ -114,7 +114,7 @@ We use [SemVer](http://semver.org/) for versioning.
 Angelo Tata @tatablack
 
 ## Disclaimer
-Lean Coffee(tm) is a trademark of Modus Cooperandi (as mentioned [here](http://leancoffee.org/)); we are not affiliated with them, or with the original creators of the technique, in any way. We just happened to run plenty of Lean Coffee sessions on Trello, and we wanted to make our own lives easier. Once this proved useful, well, sharing was the next step.
+Lean Coffee(tm) is a trademark of Modus Cooperandi (as mentioned [here](https://leancoffee.org/)); we are not affiliated with them, or with the original creators of the technique, in any way. We just happened to run plenty of Lean Coffee sessions on Trello, and we wanted to make our own lives easier. Once this proved useful, well, sharing was the next step.
 
 ## License
 Apache-2.0. See [LICENSE](./LICENSE).

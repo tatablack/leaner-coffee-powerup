@@ -39,7 +39,7 @@ class Voting {
   getMaxVotes = async (t: Trello.PowerUp.IFrame): Promise<number> => {
     const currentList = await t.list("cards");
 
-    // http://www.leanmath.com/blog-entry/multi-voting-math-or-n3
+    // https://www.talcottridge.com/multi-voting-math-or-n3
     return Math.ceil(currentList.cards.length / 3);
   };
 

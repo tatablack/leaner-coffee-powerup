@@ -1,6 +1,6 @@
 **Cos'è la tecnica del Lean Coffee?**
 
-Dal [sito ufficiale](http://leancoffee.org/) (trad. nostra):
+Dal [sito ufficiale](https://leancoffee.org/) (trad. nostra):
 
     Lean Coffee è un tipo di meeting strutturato, ma senza un'agenda predefinita.
 
@@ -91,7 +91,7 @@ Se avete una domanda che preferireste non porre pubblicamente tramite [GitHub Is
 
 **Disclaimer**
 
-Lean Coffee(tm) è un marchio registrato da Modus Cooperandi (come riportato [qui](http://leancoffee.org/)); non abbiamo alcun legame con loro, nè con gli ideatori di questa tecnica. Semplicemente, ci siamo trovati di frequente in sessioni in stile Lean Coffee che usavano Trello, e volevamo semplificarci la vita. Una volta dimostrata l'utilità del power-up, beh, condividerlo era l'ovvio passo successivo.
+Lean Coffee(tm) è un marchio registrato da Modus Cooperandi (come riportato [qui](https://leancoffee.org/)); non abbiamo alcun legame con loro, nè con gli ideatori di questa tecnica. Semplicemente, ci siamo trovati di frequente in sessioni in stile Lean Coffee che usavano Trello, e volevamo semplificarci la vita. Una volta dimostrata l'utilità del power-up, beh, condividerlo era l'ovvio passo successivo.
 
 ---
 
