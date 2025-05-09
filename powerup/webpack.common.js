@@ -23,18 +23,51 @@ const Config = {
   },
 };
 
-// We need to sanitise the release name to avoid issues with Sentry. See:
-// https://github.com/getsentry/relay/blob/3df33b87bbbf71d65a74e285e3a43853da5ea1d9/relay-event-schema/src/protocol/event.rs#L321-L327
-const SentryDefaultOptions = {
-  sendDefaultPii: false,
-  release: process.env.VERSION.replaceAll(/[^a-zA-Z0-9_.-]/g, "-"),
-  environment: process.env.NODE_ENV,
+const TEMPLATES = {
+  // We need to sanitise the release name to avoid issues with Sentry. See:
+  // https://github.com/getsentry/relay/blob/3df33b87bbbf71d65a74e285e3a43853da5ea1d9/relay-event-schema/src/protocol/event.rs#L321-L327
+  SentryDefaultOptions: {
+    sendDefaultPii: false,
+    release: process.env.VERSION.replaceAll(/[^a-zA-Z0-9_.-]/g, "-"),
+    environment: process.env.NODE_ENV,
+  },
+
+  sanitiseUrl: (urlString) => {
+    const url = new URL(urlString);
+    return (
+      url.protocol +
+      url.hostname +
+      (url.port ? `:${url.port}` : "") +
+      url.pathname
+    );
+  },
+
+  beforeSend: (event, payload) => {
+    // eslint-disable-next-line no-undef
+    const url = sanitiseUrl(payload.url);
+    return {
+      ...payload,
+      ...{
+        // eslint-disable-next-line no-undef
+        referrer: window.LeanerCoffeeAnalyticsReferrer,
+        // eslint-disable-next-line no-undef
+        hostname: window.LeanerCoffeeAnalyticsHostname,
+      },
+      url,
+    };
+  },
 };
 
 const TEMPLATE_PARAMETERS = {
   SENTRY_LOADER: process.env.SENTRY_LOADER,
-  SENTRY_DEFAULT_OPTIONS: JSON.stringify(SentryDefaultOptions),
-  ENVIRONMENT: process.env.NODE_ENV,
+  UMAMI_LOADER: process.env.UMAMI_LOADER,
+  SENTRY_DEFAULT_OPTIONS: JSON.stringify(TEMPLATES.SentryDefaultOptions),
+  ANALYTICS_SANITISE_URL: TEMPLATES.sanitiseUrl.toString(),
+  ANALYTICS_BEFORE_SEND: TEMPLATES.beforeSend.toString(),
+  ANALYTICS_TAG: `${process.env.NODE_ENV}_${process.env.VERSION}`.substring(
+    0,
+    50,
+  ),
 };
 
 module.exports = {
@@ -133,10 +166,19 @@ module.exports = {
               content
                 .toString("utf8")
                 .replace("SENTRY_LOADER", process.env.SENTRY_LOADER)
-                .replace("ENVIRONMENT", process.env.NODE_ENV)
+                .replace("UMAMI_LOADER", process.env.UMAMI_LOADER)
+                .replace("ANALYTICS_TAG", process.env.NODE_ENV)
                 .replace(
                   "SENTRY_DEFAULT_OPTIONS",
-                  JSON.stringify(SentryDefaultOptions),
+                  JSON.stringify(TEMPLATES.SentryDefaultOptions),
+                )
+                .replace(
+                  "ANALYTICS_SANITISE_URL",
+                  TEMPLATES.sanitiseUrl.toString(),
+                )
+                .replace(
+                  "ANALYTICS_BEFORE_SEND",
+                  TEMPLATES.beforeSend.toString(),
                 ),
               "utf8",
             ),

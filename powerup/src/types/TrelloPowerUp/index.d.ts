@@ -660,5 +660,11 @@ declare global {
     TrelloPowerUp: Trello.PowerUp;
     locale: string;
     umami: umami.umami;
+    LeanerCoffeeAnalyticsBeforeSend: (
+      event: string,
+      payload: umami.CustomPayload,
+    ) => umami.CustomPayload;
+    LeanerCoffeeAnalyticsReferrer: string;
+    LeanerCoffeeAnalyticsHostname: string;
   }
 }

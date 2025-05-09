@@ -12,24 +12,32 @@ class CardStorage extends Storage {
     super("card", "shared");
   }
 
-  getDiscussionStatus(t: Trello.PowerUp.IFrame): PromiseLike<DiscussionStatus> {
+  getDiscussionStatus(
+    t: Trello.PowerUp.AnonymousHostHandlers,
+  ): PromiseLike<DiscussionStatus> {
     return super.read(t, CardStorage.DISCUSSION_STATUS);
   }
 
-  getDiscussionElapsed(t: Trello.PowerUp.IFrame): PromiseLike<number> {
+  getDiscussionElapsed(
+    t: Trello.PowerUp.AnonymousHostHandlers,
+  ): PromiseLike<number> {
     return super.read(t, CardStorage.DISCUSSION_ELAPSED);
   }
 
-  getDiscussionThumbs(t: Trello.PowerUp.IFrame): PromiseLike<Thumbs> {
+  getDiscussionThumbs(
+    t: Trello.PowerUp.AnonymousHostHandlers,
+  ): PromiseLike<Thumbs> {
     return super.read(t, CardStorage.DISCUSSION_THUMBS);
   }
 
-  getDiscussionButtonLabel(t: Trello.PowerUp.IFrame): PromiseLike<string> {
+  getDiscussionButtonLabel(
+    t: Trello.PowerUp.AnonymousHostHandlers,
+  ): PromiseLike<string> {
     return super.read(t, CardStorage.DISCUSSION_BUTTON_LABEL);
   }
 
   saveDiscussionStatus(
-    t: Trello.PowerUp.IFrame,
+    t: Trello.PowerUp.AnonymousHostHandlers,
     newStatus: DiscussionStatus,
     cardId?: string,
   ): PromiseLike<void> {
@@ -37,7 +45,7 @@ class CardStorage extends Storage {
   }
 
   saveDiscussionElapsed(
-    t: Trello.PowerUp.IFrame,
+    t: Trello.PowerUp.AnonymousHostHandlers,
     newElapsed: number,
     cardId?: string,
   ): PromiseLike<void> {
@@ -45,28 +53,33 @@ class CardStorage extends Storage {
   }
 
   saveDiscussionThumbs(
-    t: Trello.PowerUp.IFrame,
+    t: Trello.PowerUp.AnonymousHostHandlers,
     newThumbs: Thumbs,
   ): PromiseLike<void> {
     return super.write(t, CardStorage.DISCUSSION_THUMBS, newThumbs);
   }
 
-  saveVotes(t: Trello.PowerUp.IFrame, newVotes: Votes): PromiseLike<void> {
+  saveVotes(
+    t: Trello.PowerUp.AnonymousHostHandlers,
+    newVotes: Votes,
+  ): PromiseLike<void> {
     return super.write(t, CardStorage.VOTES, newVotes);
   }
 
-  deleteVotes(t: Trello.PowerUp.IFrame): PromiseLike<void> {
+  deleteVotes(t: Trello.PowerUp.AnonymousHostHandlers): PromiseLike<void> {
     return super.delete(t, CardStorage.VOTES);
   }
 
   saveDiscussionButtonLabel(
-    t: Trello.PowerUp.IFrame,
+    t: Trello.PowerUp.AnonymousHostHandlers,
     newLabel?: string,
   ): PromiseLike<void> {
     return super.write(t, CardStorage.DISCUSSION_BUTTON_LABEL, newLabel);
   }
 
-  deleteDiscussionThumbs(t: Trello.PowerUp.IFrame): PromiseLike<void> {
+  deleteDiscussionThumbs(
+    t: Trello.PowerUp.AnonymousHostHandlers,
+  ): PromiseLike<void> {
     return super.delete(t, CardStorage.DISCUSSION_THUMBS);
   }
 }

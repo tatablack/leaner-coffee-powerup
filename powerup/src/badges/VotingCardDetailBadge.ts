@@ -7,7 +7,7 @@ class VotingCardDetailBadge extends VotingCardBadge {
   clearVoters = async (t: Trello.PowerUp.IFrame) => {
     const totalVoters = await this.getVoters(t);
 
-    await this.storage.deleteVotes(t);
+    await this.cardStorage.deleteVotes(t);
     await Analytics.event(this.w, "votesCleared", {
       total: totalVoters.length,
     });
@@ -22,8 +22,11 @@ class VotingCardDetailBadge extends VotingCardBadge {
 
     await t.popup({
       title: t.localizeKey("voters"),
-      url: "./voters.html",
-      args: { items, localization: I18nConfig },
+      url: `./voters.html?${await Analytics.getOverrides(this.boardStorage, t)}`,
+      args: {
+        items,
+        localization: I18nConfig,
+      },
       callback: this.clearVoters,
     });
   };

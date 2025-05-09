@@ -2,16 +2,22 @@
 <html lang="en-us">
     <head>
         <meta charset="utf-8">
+        <title>Too many votes</title>
         <link
             rel="stylesheet"
             href="https://p.trellocdn.com/power-up.min.css"
             type="text/css"
         >
         <script
-            defer
-            src="https://cloud.umami.is/script.js"
+            src="UMAMI_LOADER"
+            data-host-url="https://cloud.umami.is"
             data-website-id="1502b785-3f33-469d-8d36-174179c5a01f"
-            data-tag="ENVIRONMENT">
+            data-tag="ANALYTICS_TAG"
+            data-auto-track="false"
+            data-exclude-search="true"
+            data-exclude-hash="true"
+            data-before-send="LeanerCoffeeAnalyticsBeforeSend"
+        >
         </script>
     </head>
 
@@ -49,6 +55,14 @@
               t.localizeNode(document.body);
               t.sizeTo('body');
             });
+
+            const params = new URLSearchParams(window.location.search);
+            window.LeanerCoffeeAnalyticsReferrer = params.get("referrer");
+            window.LeanerCoffeeAnalyticsHostname = params.get("hostname");
+
+            const sanitiseUrl = eval(ANALYTICS_SANITISE_URL);
+            window.LeanerCoffeeAnalyticsBeforeSend = eval(ANALYTICS_BEFORE_SEND);
+            window.umami && window.umami.track();
         </script>
     </body>
 </html>

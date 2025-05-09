@@ -1,10 +1,11 @@
+import LeanCoffeePowerUp from "./LeanCoffeePowerUp";
 import CardStorage from "./storage/CardStorage";
 import { Trello } from "./types/TrelloPowerUp";
 import Analytics from "./utils/Analytics";
 import { I18nConfig } from "./utils/I18nConfig";
 
 export const CapabilityHandlers = (
-  powerUp: any,
+  powerUp: LeanCoffeePowerUp,
 ): Trello.PowerUp.CapabilityHandlers => ({
   "board-buttons": async (
     t: Trello.PowerUp.IFrame,
@@ -39,7 +40,9 @@ export const CapabilityHandlers = (
       icon: `${powerUp.baseUrl}/assets/powerup/timer.svg`,
       content: {
         type: "iframe",
-        url: t.signUrl(`${powerUp.baseUrl}/discussion-ui.html`),
+        url: t.signUrl(
+          `${powerUp.baseUrl}/discussion-ui.html?${await Analytics.getOverrides(powerUp.boardStorage, t)}`,
+        ),
       },
     };
   },
@@ -175,13 +178,14 @@ export const CapabilityHandlers = (
     await Analytics.event(window, "disabled");
   },
 
-  "show-settings": (t: Trello.PowerUp.IFrame): PromiseLike<void> =>
-    t.popup({
+  "show-settings": async (t: Trello.PowerUp.IFrame): Promise<void> => {
+    return t.popup({
       title: `Leaner Coffee ${process.env.VERSION}`,
-      url: `${powerUp.baseUrl}/settings.html`,
+      url: `${powerUp.baseUrl}/settings.html?${await Analytics.getOverrides(powerUp.boardStorage, t)}`,
       height: 184,
       args: {
         localization: I18nConfig,
       },
-    }),
+    });
+  },
 });
