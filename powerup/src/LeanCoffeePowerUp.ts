@@ -8,6 +8,7 @@ import BoardStorage from "./storage/BoardStorage";
 import { Trello } from "./types/TrelloPowerUp";
 import Analytics from "./utils/Analytics";
 import Discussion from "./utils/Discussion";
+import { digestMessage } from "./utils/Hashing";
 import { I18nConfig } from "./utils/I18nConfig";
 import UpdateChecker from "./utils/UpdateChecker";
 import Voting from "./utils/Voting";
@@ -22,6 +23,8 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   votingCardBadge: VotingCardBadge;
   votingCardDetailBadge: VotingCardDetailBadge;
   updateChecker: UpdateChecker;
+  initialising: boolean = false;
+  intervalId: number;
 
   constructor({ w, config }: LeanCoffeeBaseParams) {
     super({ w, config });
@@ -41,12 +44,14 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       this.w,
       this.baseUrl,
       this.voting,
+      this.boardStorage,
       this.cardStorage,
     );
     this.votingCardDetailBadge = new VotingCardDetailBadge(
       this.w,
       this.baseUrl,
       this.voting,
+      this.boardStorage,
       this.cardStorage,
     );
   }
@@ -55,7 +60,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     if (!(await this.voting.canCurrentMemberVote(t))) {
       return t.popup({
         title: "Leaner Coffee",
-        url: `${this.baseUrl}/too_many_votes.html`,
+        url: `${this.baseUrl}/too_many_votes.html?${await Analytics.getOverrides(this.boardStorage, t)}`,
         args: {
           maxVotes: await this.voting.getMaxVotes(t),
           localization: I18nConfig,
@@ -117,7 +122,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
         return t.popup({
           callback: this.stopAndStart,
           title: "Leaner Coffee",
-          url: `${this.baseUrl}/ongoing_or_paused.html`,
+          url: `${this.baseUrl}/ongoing_or_paused.html?${await Analytics.getOverrides(this.boardStorage, t)}`,
           args: {
             currentCardBeingDiscussed: cardBeingDiscussed.name,
             currentDiscussionStatus: boardStatus,
@@ -275,13 +280,48 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     return label;
   };
 
-  start(): void {
+  handlePowerupEnabled = async (t: Trello.PowerUp.AnonymousHostHandlers) => {
+    const organisation = await t.organization("id");
+    const board = await t.board("id");
+    const organisationIdHash = await digestMessage(organisation.id);
+    const boardIdHash = await digestMessage(board.id);
+
+    await this.boardStorage.writeMultiple(t, {
+      [BoardStorage.POWER_UP_VERSION]: process.env.VERSION,
+      [BoardStorage.POWER_UP_INSTALLATION_DATE]: new Date().toISOString(),
+      [BoardStorage.ORGANISATION_HASH]: organisationIdHash,
+      [BoardStorage.BOARD_HASH]: boardIdHash,
+    });
+  };
+
+  async start(): Promise<void> {
     const trelloPlugin = this.t.initialize(CapabilityHandlers(this), {
       localization: I18nConfig,
       helpfulStacks: !this.isRunningInProduction(),
     }) as Trello.PowerUp.Plugin;
 
     this.discussion.init(trelloPlugin);
+
+    if (
+      !this.initialising &&
+      !(await this.boardStorage.getInitialised(trelloPlugin))
+    ) {
+      this.initialising = true;
+      await this.handlePowerupEnabled(trelloPlugin);
+      this.initialising = false;
+    }
+
+    const organisationIdHash =
+      await this.boardStorage.getOrganisationIdHash(trelloPlugin);
+    const boardIdHash = await this.boardStorage.getBoardIdHash(trelloPlugin);
+
+    this.w.LeanerCoffeeAnalyticsReferrer = "https://" + organisationIdHash;
+    this.w.LeanerCoffeeAnalyticsHostname = boardIdHash;
+    this.w.LeanerCoffeeAnalyticsBeforeSend = Analytics.beforeSend;
+
+    setTimeout(async () => {
+      await Analytics.pageview(this.w);
+    }, 0);
   }
 }
 

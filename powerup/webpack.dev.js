@@ -22,7 +22,7 @@ module.exports = merge(common, {
         ),
       },
     },
-    open: true,
+    open: process.env.OPEN_ON_START !== "false",
     compress: true,
     hot: true,
     liveReload: false,

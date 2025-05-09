@@ -1,10 +1,11 @@
+import LeanCoffeePowerUp from "./LeanCoffeePowerUp";
 import CardStorage from "./storage/CardStorage";
 import { Trello } from "./types/TrelloPowerUp";
 import Analytics from "./utils/Analytics";
 import { I18nConfig } from "./utils/I18nConfig";
 
 export const CapabilityHandlers = (
-  powerUp: any,
+  powerUp: LeanCoffeePowerUp,
 ): Trello.PowerUp.CapabilityHandlers => ({
   "board-buttons": async (
     t: Trello.PowerUp.IFrame,
@@ -39,7 +40,9 @@ export const CapabilityHandlers = (
       icon: `${powerUp.baseUrl}/assets/powerup/timer.svg`,
       content: {
         type: "iframe",
-        url: t.signUrl(`${powerUp.baseUrl}/discussion-ui.html`),
+        url: t.signUrl(
+          `${powerUp.baseUrl}/discussion-ui.html?${await Analytics.getOverrides(powerUp.boardStorage, t)}`,
+        ),
       },
     };
   },
@@ -146,21 +149,43 @@ export const CapabilityHandlers = (
     ]),
 
   "on-enable": async (t: Trello.PowerUp.IFrame): Promise<void> => {
-    await Analytics.event((t as any).source?.window[0], "enabled");
-    await powerUp.boardStorage.setPowerUpVersion(t, process.env.VERSION);
+    const window = (t as any).source?.window[1];
+
+    if (
+      powerUp.initialising ||
+      (await powerUp.boardStorage.getInitialised(t))
+    ) {
+      powerUp.intervalId = window.setInterval(async () => {
+        if (!powerUp.initialising) {
+          await Analytics.event(window, "enabled");
+          window.clearInterval(powerUp.intervalId);
+        }
+      }, 500);
+      return;
+    }
+
+    // If we are here, on-enable was called before the power-up was initialised.
+    // I've never seen it happen, but I suppose it is possible
+    powerUp.initialising = true;
+    await powerUp.handlePowerupEnabled(t);
+    powerUp.initialising = false;
+
+    await Analytics.event(window, "enabled");
   },
 
   "on-disable": async (t: Trello.PowerUp.IFrame): Promise<void> => {
-    await Analytics.event((t as any).source?.window[0], "disabled");
+    const window = (t as any).source?.window[1]; // The order is not guaranteed
+    await Analytics.event(window, "disabled");
   },
 
-  "show-settings": (t: Trello.PowerUp.IFrame): PromiseLike<void> =>
-    t.popup({
+  "show-settings": async (t: Trello.PowerUp.IFrame): Promise<void> => {
+    return t.popup({
       title: `Leaner Coffee ${process.env.VERSION}`,
-      url: `${powerUp.baseUrl}/settings.html`,
+      url: `${powerUp.baseUrl}/settings.html?${await Analytics.getOverrides(powerUp.boardStorage, t)}`,
       height: 184,
       args: {
         localization: I18nConfig,
       },
-    }),
+    });
+  },
 });

@@ -28,12 +28,9 @@ class ElapsedCardBadge implements ElapsedCardBadge {
     return (await this.discussion.isPausedFor(t)) ? "yellow" : "light-gray";
   };
 
-  // Unable to use class properties here because I need to call
-  // it from a subclass, and it's currently broken - see:
-  // https://github.com/babel/babel/issues/5104
-  //
-  // Upgrading to Babel 7.x should solve it.
-  // NOTE: CHECK whether this is still relevant for ts-loader
+  // Unable to use class properties here because in subclasses
+  // I need to user `super`, and it wouldn't be possible. See:
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super#accessing_super_in_class_field_declaration
   async render(t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBadge> {
     const elapsed = await this.discussion.getElapsed(t);
     if (!elapsed) {

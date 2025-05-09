@@ -12,7 +12,7 @@ class Storage {
   }
 
   read(
-    t: Trello.PowerUp.IFrame,
+    t: Trello.PowerUp.AnonymousHostHandlers,
     key: string,
     cardId?: string,
   ): PromiseLike<any> {
@@ -20,7 +20,7 @@ class Storage {
   }
 
   write(
-    t: Trello.PowerUp.IFrame,
+    t: Trello.PowerUp.AnonymousHostHandlers,
     key: string,
     value: any,
     cardId?: string,
@@ -29,7 +29,7 @@ class Storage {
   }
 
   writeMultiple(
-    t: Trello.PowerUp.IFrame,
+    t: Trello.PowerUp.AnonymousHostHandlers,
     entries: {
       [key: string]: any;
     },
@@ -39,7 +39,7 @@ class Storage {
   }
 
   delete(
-    t: Trello.PowerUp.IFrame,
+    t: Trello.PowerUp.AnonymousHostHandlers,
     key: string,
     cardId?: string,
   ): PromiseLike<void> {
@@ -47,7 +47,7 @@ class Storage {
   }
 
   deleteMultiple(
-    t: Trello.PowerUp.IFrame,
+    t: Trello.PowerUp.AnonymousHostHandlers,
     entries: string[],
     cardId?: string,
   ): PromiseLike<void> {

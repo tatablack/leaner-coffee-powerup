@@ -1,3 +1,4 @@
+import BoardStorage from "../storage/BoardStorage";
 import CardStorage from "../storage/CardStorage";
 import { Trello } from "../types/TrelloPowerUp";
 import Voting from "../utils/Voting";
@@ -6,18 +7,21 @@ class VotingCardBadge {
   w: Window;
   baseUrl: string;
   voting: Voting;
-  storage: CardStorage;
+  boardStorage: BoardStorage;
+  cardStorage: CardStorage;
 
   constructor(
     w: Window,
     baseUrl: string,
     voting: Voting,
-    storage: CardStorage,
+    boardStorage: BoardStorage,
+    cardStorage: CardStorage,
   ) {
     this.w = w;
     this.baseUrl = baseUrl;
     this.voting = voting;
-    this.storage = storage;
+    this.boardStorage = boardStorage;
+    this.cardStorage = cardStorage;
     this.render = this.render.bind(this);
   }
 

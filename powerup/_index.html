@@ -3,11 +3,17 @@
   <head>
     <meta charset="utf-8">
     <title><%= htmlWebpackPlugin.options.title %></title>
+
     <script
         defer
-        src="https://cloud.umami.is/script.js"
+        src="<%= UMAMI_LOADER %>"
+        data-host-url="https://cloud.umami.is"
         data-website-id="1502b785-3f33-469d-8d36-174179c5a01f"
-        data-tag="<%= ENVIRONMENT %>"
+        data-tag="<%= ANALYTICS_TAG %>"
+        data-auto-track="false"
+        data-exclude-search="true"
+        data-exclude-hash="true"
+        data-before-send="LeanerCoffeeAnalyticsBeforeSend"
     >
     </script>
   </head>
