@@ -146,8 +146,18 @@ export const CapabilityHandlers = (
     ]),
 
   "on-enable": async (t: Trello.PowerUp.IFrame): Promise<void> => {
-    await Analytics.event((t as any).source?.window[0], "enabled");
-    await powerUp.boardStorage.setPowerUpVersion(t, process.env.VERSION);
+    if (
+      powerUp.initialising ||
+      (await powerUp.boardStorage.getInitialised(t))
+    ) {
+      return;
+    }
+
+    // If we are here, on-enable was called before the power-up was initialised.
+    // I've never seen it happen, but I suppose it is possible
+    powerUp.initialising = true;
+    await powerUp.handlePowerupEnabled(t);
+    powerUp.initialising = false;
   },
 
   "on-disable": async (t: Trello.PowerUp.IFrame): Promise<void> => {

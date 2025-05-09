@@ -8,6 +8,7 @@ import BoardStorage from "./storage/BoardStorage";
 import { Trello } from "./types/TrelloPowerUp";
 import Analytics from "./utils/Analytics";
 import Discussion from "./utils/Discussion";
+import { digestMessage } from "./utils/Hashing";
 import { I18nConfig } from "./utils/I18nConfig";
 import UpdateChecker from "./utils/UpdateChecker";
 import Voting from "./utils/Voting";
@@ -22,6 +23,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   votingCardBadge: VotingCardBadge;
   votingCardDetailBadge: VotingCardDetailBadge;
   updateChecker: UpdateChecker;
+  initialising: boolean = false;
 
   constructor({ w, config }: LeanCoffeeBaseParams) {
     super({ w, config });
@@ -275,13 +277,36 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     return label;
   };
 
-  start(): void {
+  handlePowerupEnabled = async (t: Trello.PowerUp.AnonymousHostHandlers) => {
+    const organisation = await t.organization("id");
+    const board = await t.board("id");
+    const organisationIdHash = await digestMessage(organisation.id);
+    const boardIdHash = await digestMessage(board.id);
+
+    await this.boardStorage.writeMultiple(t, {
+      [BoardStorage.POWER_UP_VERSION]: process.env.VERSION,
+      [BoardStorage.POWER_UP_INSTALLATION_DATE]: new Date().toISOString(),
+      [BoardStorage.ORGANISATION_HASH]: organisationIdHash,
+      [BoardStorage.BOARD_HASH]: boardIdHash,
+    });
+  };
+
+  async start(): Promise<void> {
     const trelloPlugin = this.t.initialize(CapabilityHandlers(this), {
       localization: I18nConfig,
       helpfulStacks: !this.isRunningInProduction(),
     }) as Trello.PowerUp.Plugin;
 
     this.discussion.init(trelloPlugin);
+
+    if (
+      !this.initialising &&
+      !(await this.boardStorage.getInitialised(trelloPlugin))
+    ) {
+      this.initialising = true;
+      await this.handlePowerupEnabled(trelloPlugin);
+      this.initialising = false;
+    }
   }
 }
 
