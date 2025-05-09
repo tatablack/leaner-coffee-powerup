@@ -1,6 +1,6 @@
 **What is Lean Coffee?**
 
-From the [official page](http://leancoffee.org/):
+From the [official page](https://leancoffee.org/):
 
     Lean Coffee is a structured, but agenda-less meeting.
 
@@ -91,7 +91,7 @@ If you have a question which you'd rather not ask publicly using [GitHub Issues]
 
 **Disclaimer**
 
-Lean Coffee(tm) is a trademark of Modus Cooperandi (as mentioned [here](http://leancoffee.org/)); we are not affiliated with them, or with the original creators of the technique, in any way. We just happened to run plenty of Lean Coffee sessions on Trello, and we wanted to make our own lives easier. Once this proved useful, well, sharing was the next step.
+Lean Coffee(tm) is a trademark of Modus Cooperandi (as mentioned [here](https://leancoffee.org/)); we are not affiliated with them, or with the original creators of the technique, in any way. We just happened to run plenty of Lean Coffee sessions on Trello, and we wanted to make our own lives easier. Once this proved useful, well, sharing was the next step.
 
 ---
 
