@@ -67,7 +67,7 @@
 
             document.getElementById('open').addEventListener('click', async () => {
               const url = `https://github.com/tatablack/leaner-coffee-powerup/releases/tag/${t.arg('version')}`;
-              await Analytics.event(window, 'outbound-link-click', {url});
+              window.umami.track("outbound-link-click", {url});
               window.open(url);
               t.closePopup();
               return false;
