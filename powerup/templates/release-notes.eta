@@ -81,6 +81,6 @@
               t.sizeTo('body');
             });
         </script>
-        <%~ include('inline/umami_init.eta') %>
+        <%~ include('inline/umami_init') %>
     </body>
 </html>

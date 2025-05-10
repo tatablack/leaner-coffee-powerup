@@ -115,6 +115,6 @@
         <script src="<%= it.SENTRY_LOADER %>" crossorigin="anonymous"></script>
         <script src="https://p.trellocdn.com/power-up.min.js"></script>
         <script src="@scripts/discussion-ui.ts" defer="defer"></script>
-        <%~ include('inline/umami_init.eta') %>
+        <%~ include('inline/umami_init') %>
     </body>
 </html>
