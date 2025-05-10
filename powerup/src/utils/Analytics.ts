@@ -1,7 +1,7 @@
-import CustomPayload = umami.CustomPayload;
-
 import BoardStorage from "../storage/BoardStorage";
 import { Trello } from "../types/TrelloPowerUp";
+
+import CustomPayload = umami.CustomPayload;
 
 const sanitiseUrl = (urlString: string): string => {
   const url = new URL(urlString);
