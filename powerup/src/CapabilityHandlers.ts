@@ -180,7 +180,7 @@ export const CapabilityHandlers = (
 
   "show-settings": async (t: Trello.PowerUp.IFrame): Promise<void> => {
     return t.popup({
-      title: `Leaner Coffee ${process.env.VERSION}`,
+      title: `Leaner Coffee ${__BUILDTIME_VERSION__}`,
       url: `${powerUp.baseUrl}/settings.html?${await Analytics.getOverrides(powerUp.boardStorage, t)}`,
       height: 184,
       args: {

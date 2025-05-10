@@ -69,10 +69,13 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.DefinePlugin({
+      __BUILDTIME_VERSION__: isProduction
+        ? JSON.stringify(PACKAGE_JSON.version)
+        : JSON.stringify(process.env.VERSION),
+    }),
     new webpack.EnvironmentPlugin({
-      NODE_ENV: process.env.NODE_ENV,
       CONFIG: Config,
-      VERSION: process.env.VERSION,
     }),
 
     new HtmlBundlerPlugin({
@@ -135,10 +138,7 @@ module.exports = {
           from: path.resolve(__dirname, "..", "assets"),
           to: "assets",
           globOptions: {
-            ignore:
-              process.env.NODE_ENV === "production"
-                ? []
-                : ["assets/listings/**/*"],
+            ignore: isProduction ? [] : ["assets/listings/**/*"],
           },
         },
         {
