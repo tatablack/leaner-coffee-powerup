@@ -4,8 +4,8 @@
         // https://github.com/getsentry/relay/blob/3df33b87bbbf71d65a74e285e3a43853da5ea1d9/relay-event-schema/src/protocol/event.rs#L321-L327
         Sentry.init({
         sendDefaultPii: false,
-        release: process.env.VERSION.replaceAll(/[^a-zA-Z0-9_.-]/g, "-"),
-        environment: process.env.NODE_ENV,
+        release: "<%= it.BUILDTIME_VERSION %>".replaceAll(/[^a-zA-Z0-9_.-]/g, "-"),
+        environment: "<%= it.ENVIRONMENT %>",
       });
     };
 </script>
