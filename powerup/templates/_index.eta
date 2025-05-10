@@ -2,7 +2,7 @@
 <html lang="en-us">
   <head>
     <meta charset="utf-8">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <title><%= title %></title>
 
     <script
         defer
@@ -19,16 +19,9 @@
   </head>
 
   <body>
-    <script>
-      window.sentryOnLoad = function () {
-        Sentry.init(<%= SENTRY_DEFAULT_OPTIONS %>);
-      };
-    </script>
+    <%~ include('inline/sentry_init.eta') %>
     <script src="<%= SENTRY_LOADER %>" crossorigin="anonymous"></script>
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
-
-    <% if (htmlWebpackPlugin.options.devServer) { %>
-      <script src="<%= htmlWebpackPlugin.options.devServer%>/webpack-dev-server.js"></script>
-    <% } %>
+    <script src="@scripts/index.ts" defer="defer"></script>
   </body>
 </html>

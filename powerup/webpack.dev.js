@@ -15,6 +15,12 @@ module.exports = merge(common, {
         (middleware) => middleware.name !== "cross-origin-header-check",
       );
     },
+    watchFiles: {
+      paths: ["src/**/*.ts", "inline/**/*.eta", "templates/**/*.eta"],
+      options: {
+        usePolling: false,
+      },
+    },
     static: {
       watch: {
         ignored: ["error.png", "node_modules"].map((item) =>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <title><%= title %></title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css" type="text/css" />
+
+        <style>
+            hr {
+                margin: 8px 0 8px;
+            }
+
+            #start-button {
+                cursor: pointer;
+                display: block;
+                padding: 6px 12px;
+                margin: 0 -12px;
+            }
+
+            #start-button:hover {
+                background-color: rgba(9,30,66,.04);
+            }
+        </style>
+        <script
+            src="<%= UMAMI_LOADER %>"
+            data-host-url="https://cloud.umami.is"
+            data-website-id="1502b785-3f33-469d-8d36-174179c5a01f"
+            data-tag="<%= ANALYTICS_TAG %>"
+            data-auto-track="false"
+            data-exclude-search="true"
+            data-exclude-hash="true"
+            data-before-send="LeanerCoffeeAnalyticsBeforeSend"
+        >
+        </script>
+    </head>
+
+    <body>
+        <div class="message" data-i18n-id="ongoingRunning"></div>
+        <div class="message" data-i18n-id="ongoingOnHold"></div>
+        <br/>
+        <div data-i18n-id="ongoingBottomLine"></div>
+        <hr/>
+        <a id="start-button" data-i18n-id="startTimer" data-i18n-args='{"symbol": "▶"}'></a>
+
+        <%~ include('inline/sentry_init.eta') %>
+        <script src="<%= SENTRY_LOADER %>" crossorigin="anonymous"></script>
+        <script src="https://p.trellocdn.com/power-up.min.js"></script>
+        <script src="@scripts/popups/ongoing_or_paused.ts" defer="defer"></script>
+        <%~ include('inline/umami_init.eta') %>
+    </body>
+</html>
