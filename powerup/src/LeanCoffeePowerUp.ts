@@ -287,7 +287,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     const boardIdHash = await digestMessage(board.id);
 
     await this.boardStorage.writeMultiple(t, {
-      [BoardStorage.POWER_UP_VERSION]: process.env.VERSION,
+      [BoardStorage.POWER_UP_VERSION]: __BUILDTIME_VERSION__,
       [BoardStorage.POWER_UP_INSTALLATION_DATE]: new Date().toISOString(),
       [BoardStorage.ORGANISATION_HASH]: organisationIdHash,
       [BoardStorage.BOARD_HASH]: boardIdHash,

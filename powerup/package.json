@@ -7,7 +7,8 @@
     "start": "NODE_ENV=development webpack serve --config ./webpack.dev.js",
     "lint": "eslint .",
     "dist": "NODE_ENV=production webpack --config webpack.prod.js",
-    "version": "npm run dist && git add -A ../docs"
+    "preversion": "pnpm run lint",
+    "version": "pnpm run dist && git add -A ../docs"
   },
   "engines": {
     "node": "^20.11.0"
