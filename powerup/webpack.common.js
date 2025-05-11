@@ -6,6 +6,8 @@ const HtmlBundlerPlugin = require("html-bundler-webpack-plugin");
 const yaml = require("js-yaml");
 const webpack = require("webpack");
 
+const PACKAGE_JSON = require("./package.json");
+
 const OUTPUT_FOLDER = "../docs";
 
 // Load configuration
@@ -13,6 +15,11 @@ dotenvx.config({
   strict: true,
   path: process.env.NODE_ENV === "development" ? ".env.development" : ".env",
 });
+
+const isProduction = process.env.NODE_ENV === "production";
+const BUILDTIME_VERSION = isProduction
+  ? PACKAGE_JSON.version
+  : process.env.VERSION;
 
 const Config = {
   [process.env.NODE_ENV]: {
@@ -26,10 +33,12 @@ const Config = {
 const TEMPLATE_PARAMETERS = {
   SENTRY_LOADER: process.env.SENTRY_LOADER,
   UMAMI_LOADER: process.env.UMAMI_LOADER,
-  ANALYTICS_TAG: `${process.env.NODE_ENV}_${process.env.VERSION}`.substring(
+  ANALYTICS_TAG: `${process.env.NODE_ENV}_${BUILDTIME_VERSION}`.substring(
     0,
     50,
   ),
+  BUILDTIME_VERSION,
+  ENVIRONMENT: process.env.NODE_ENV,
 };
 
 module.exports = {
@@ -63,55 +72,59 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.DefinePlugin({
+      __BUILDTIME_VERSION__: JSON.stringify(BUILDTIME_VERSION),
+    }),
     new webpack.EnvironmentPlugin({
-      NODE_ENV: process.env.NODE_ENV,
       CONFIG: Config,
-      VERSION: process.env.VERSION,
     }),
 
     new HtmlBundlerPlugin({
+      preprocessorOptions: {
+        useWith: false,
+      },
       entry: [
         {
-          data: {
-            title: "Lean Coffee Trello Power-up",
-            ...TEMPLATE_PARAMETERS,
-          },
-          import: "./templates/_index.eta",
+          data: { title: "Lean Coffee Trello Power-up" },
+          import: "templates/_index.eta",
           filename: "index.html",
         },
         {
-          data: { title: "Lean Coffee Settings", ...TEMPLATE_PARAMETERS },
-          import: "./templates/_settings.eta",
+          data: { title: "Lean Coffee Settings" },
+          import: "templates/_settings.eta",
           filename: "settings.html",
         },
         {
-          data: { title: "Discussion UI", ...TEMPLATE_PARAMETERS },
-          import: "./templates/_discussion-ui.eta",
+          data: { title: "Discussion UI" },
+          import: "templates/_discussion-ui.eta",
           filename: "discussion-ui.html",
         },
         {
-          data: { title: "Ongoing or paused", ...TEMPLATE_PARAMETERS },
-          import: "./templates/_ongoing_or_paused.eta",
+          data: { title: "Ongoing or paused" },
+          import: "templates/_ongoing_or_paused.eta",
           filename: "ongoing_or_paused.html",
         },
         {
-          data: { title: "Release notes", ...TEMPLATE_PARAMETERS },
-          import: "./templates/release-notes.eta",
+          data: { title: "Release notes" },
+          import: "templates/release-notes.eta",
           filename: "release-notes.html",
         },
         {
-          data: { title: "Too many voets", ...TEMPLATE_PARAMETERS },
-          import: "./templates/too_many_votes.eta",
+          data: { title: "Too many votes" },
+          import: "templates/too_many_votes.eta",
           filename: "too_many_votes.html",
         },
         {
-          data: { title: "Voters", ...TEMPLATE_PARAMETERS },
-          import: "./templates/voters.eta",
+          data: { title: "Voters" },
+          import: "templates/voters.eta",
           filename: "voters.html",
         },
       ],
       js: {
         filename: "[name].[fullhash].js",
+      },
+      data: {
+        ...TEMPLATE_PARAMETERS,
       },
       integrity: "auto",
       minify: "auto",
@@ -126,10 +139,7 @@ module.exports = {
           from: path.resolve(__dirname, "..", "assets"),
           to: "assets",
           globOptions: {
-            ignore:
-              process.env.NODE_ENV === "production"
-                ? []
-                : ["assets/listings/**/*"],
+            ignore: isProduction ? [] : ["assets/listings/**/*"],
           },
         },
         {

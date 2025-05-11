@@ -42,7 +42,7 @@ const event = async (
   if (window.umami) {
     await window.umami.track(eventName, eventData);
   } else {
-    console.warn("Umami not available for event", eventData);
+    console.warn("Umami not available for event " + eventName, eventData);
   }
 };
 

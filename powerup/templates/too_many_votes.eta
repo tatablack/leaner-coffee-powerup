@@ -2,17 +2,17 @@
 <html lang="en-us">
     <head>
         <meta charset="utf-8">
-        <title><%= title %></title>
+        <title><%= it.title %></title>
         <link
             rel="stylesheet"
             href="https://p.trellocdn.com/power-up.min.css"
             type="text/css"
         >
         <script
-            src="<%= UMAMI_LOADER %>"
+            src="<%= it.UMAMI_LOADER %>"
             data-host-url="https://cloud.umami.is"
             data-website-id="1502b785-3f33-469d-8d36-174179c5a01f"
-            data-tag="<%= ANALYTICS_TAG %>"
+            data-tag="<%= it.ANALYTICS_TAG %>"
             data-auto-track="false"
             data-exclude-search="true"
             data-exclude-hash="true"
@@ -34,8 +34,8 @@
             ><span data-i18n-id="maxVotesLink"></span></a>.
         </div>
 
-        <%~ include('inline/sentry_init.eta') %>
-        <script src="<%= SENTRY_LOADER %>" crossorigin="anonymous"></script>
+        <%~ include('inline/sentry_init', { BUILDTIME_VERSION, ENVIRONMENT }) %>
+        <script src="<%= it.SENTRY_LOADER %>" crossorigin="anonymous"></script>
         <script src="https://p.trellocdn.com/power-up.min.js"></script>
         <script>
             const t = window.TrelloPowerUp.iframe();
@@ -52,7 +52,7 @@
               t.sizeTo('body');
             });
         </script>
-        <%~ include('inline/umami_init.eta') %>
+        <%~ include('inline/umami_init') %>
     </body>
 </html>
 

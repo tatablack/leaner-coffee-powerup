@@ -15,7 +15,7 @@ class UpdateChecker {
 
   hasBeenUpdated = async (t: Trello.PowerUp.IFrame): Promise<boolean> => {
     this.storedVersion = await this.boardStorage.getPowerUpVersion(t);
-    return !this.storedVersion || this.storedVersion !== process.env.VERSION;
+    return !this.storedVersion || this.storedVersion !== __BUILDTIME_VERSION__;
   };
 
   showMenu = async (t: Trello.PowerUp.IFrame): Promise<void> => {
@@ -23,17 +23,17 @@ class UpdateChecker {
     return t.popup({
       title: t.localizeKey("boardButtonPopupTitle", {
         oldVersion: storedVersion || LAST_UNCHECKED_VERSION,
-        newVersion: process.env.VERSION,
+        newVersion: __BUILDTIME_VERSION__,
       }),
       url: `./release-notes.html?${await Analytics.getOverrides(this.boardStorage, t)}`,
-      args: { version: process.env.VERSION, localization: I18nConfig },
+      args: { version: __BUILDTIME_VERSION__, localization: I18nConfig },
       callback: this.storeNewVersion,
       height: 65,
     });
   };
 
   storeNewVersion = async (t: Trello.PowerUp.IFrame): Promise<void> => {
-    await this.boardStorage.setPowerUpVersion(t, process.env.VERSION);
+    await this.boardStorage.setPowerUpVersion(t, __BUILDTIME_VERSION__);
   };
 }
 
