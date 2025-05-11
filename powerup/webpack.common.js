@@ -17,6 +17,9 @@ dotenvx.config({
 });
 
 const isProduction = process.env.NODE_ENV === "production";
+const BUILDTIME_VERSION = isProduction
+  ? PACKAGE_JSON.version
+  : process.env.VERSION;
 
 const Config = {
   [process.env.NODE_ENV]: {
@@ -30,11 +33,11 @@ const Config = {
 const TEMPLATE_PARAMETERS = {
   SENTRY_LOADER: process.env.SENTRY_LOADER,
   UMAMI_LOADER: process.env.UMAMI_LOADER,
-  ANALYTICS_TAG: `${process.env.NODE_ENV}_${process.env.VERSION}`.substring(
+  ANALYTICS_TAG: `${process.env.NODE_ENV}_${BUILDTIME_VERSION}`.substring(
     0,
     50,
   ),
-  BUILDTIME_VERSION: isProduction ? PACKAGE_JSON.version : process.env.VERSION,
+  BUILDTIME_VERSION,
   ENVIRONMENT: process.env.NODE_ENV,
 };
 
@@ -70,9 +73,7 @@ module.exports = {
 
   plugins: [
     new webpack.DefinePlugin({
-      __BUILDTIME_VERSION__: isProduction
-        ? JSON.stringify(PACKAGE_JSON.version)
-        : JSON.stringify(process.env.VERSION),
+      __BUILDTIME_VERSION__: JSON.stringify(BUILDTIME_VERSION),
     }),
     new webpack.EnvironmentPlugin({
       CONFIG: Config,
