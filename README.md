@@ -75,10 +75,14 @@ The official version of this Power-Up is currently hosted on GitHub Pages, based
 
 A new version can be released by executing `npm version [major|minor|patch]`.
 This will:
-- bump the version number in both `package.json` and `package-lock.json`
-- trigger a production build (output in the `docs` folder)
+- run the `preversion` script (which lints the code, and applies a workaround for [this `npm` issue](https://github.com/npm/cli/issues/2010))
+- bump the version number in `package.json`
+- run the `version` script, which triggers a production build and stages the output
 - create a commit with these changes
 - create a git tag with the same version number
+- run the `postversion` script, which performs some cleanup 
+
+See npm's official [documentation](https://docs.npmjs.com/cli/v11/commands/npm-version) for more details.
 
 The Release Drafter GitHub App will take care of drafting/updating a GitHub release every time a PR gets merged; after the steps above the current draft release can be published (tied to the tag just created).
 
