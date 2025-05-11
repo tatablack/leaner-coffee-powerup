@@ -139,7 +139,9 @@ module.exports = {
           from: path.resolve(__dirname, "..", "assets"),
           to: "assets",
           globOptions: {
-            ignore: isProduction ? [] : ["assets/listings/**/*"],
+            ignore: isProduction
+              ? ["**/umami-2.18.0-debug.js"]
+              : ["**/listings/**/*"],
           },
         },
         {
