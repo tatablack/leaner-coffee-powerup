@@ -97,10 +97,7 @@ export const CapabilityHandlers = (
           result.cards.forEach(({ id }) => {
             powerUp.cardStorage.deleteMultiple(t2, [CardStorage.VOTES], id);
           });
-          await Analytics.event(
-            (t2 as any).source?.window[0],
-            "listVotesCleared",
-          );
+          await Analytics.event(window, "listVotesCleared");
         },
       },
     ]),
@@ -136,10 +133,7 @@ export const CapabilityHandlers = (
             return 0;
           });
 
-          await Analytics.event(
-            (t2 as any).source?.window[0],
-            "listVotesSorted",
-          );
+          await Analytics.event(window, "listVotesSorted");
 
           return {
             sortedIds: sortedCards.map((card) => card.id),
@@ -149,32 +143,28 @@ export const CapabilityHandlers = (
     ]),
 
   "on-enable": async (t: Trello.PowerUp.IFrame): Promise<void> => {
-    const window = (t as any).source?.window[1];
-
-    if (
-      powerUp.initialising ||
-      (await powerUp.boardStorage.getInitialised(t))
-    ) {
-      powerUp.intervalId = window.setInterval(async () => {
-        if (!powerUp.initialising) {
-          await Analytics.event(window, "enabled");
-          window.clearInterval(powerUp.intervalId);
+    // There can be a race condition between the power-up starting
+    // and the on-enable event being triggered.
+    await navigator.locks.request(
+      "powerup_init",
+      { ifAvailable: true },
+      async (lock) => {
+        const isInitialised = await powerUp.boardStorage.getInitialised(t);
+        // if the lock is null, it means LeanCoffeePowerup::start is taking care of initialisation
+        if (lock === null || isInitialised) {
+          return;
         }
-      }, 500);
-      return;
-    }
 
-    // If we are here, on-enable was called before the power-up was initialised.
-    // I've never seen it happen, but I suppose it is possible
-    powerUp.initialising = true;
-    await powerUp.handlePowerupEnabled(t);
-    powerUp.initialising = false;
+        if (!isInitialised) {
+          await powerUp.handlePowerupEnabled(t);
+        }
+      },
+    );
 
     await Analytics.event(window, "enabled");
   },
 
-  "on-disable": async (t: Trello.PowerUp.IFrame): Promise<void> => {
-    const window = (t as any).source?.window[1]; // The order is not guaranteed
+  "on-disable": async (): Promise<void> => {
     await Analytics.event(window, "disabled");
   },
 

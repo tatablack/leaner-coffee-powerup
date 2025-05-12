@@ -23,8 +23,6 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   votingCardBadge: VotingCardBadge;
   votingCardDetailBadge: VotingCardDetailBadge;
   updateChecker: UpdateChecker;
-  initialising: boolean = false;
-  intervalId: number;
 
   constructor({ w, config }: LeanCoffeeBaseParams) {
     super({ w, config });
@@ -302,14 +300,22 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
 
     this.discussion.init(trelloPlugin);
 
-    if (
-      !this.initialising &&
-      !(await this.boardStorage.getInitialised(trelloPlugin))
-    ) {
-      this.initialising = true;
-      await this.handlePowerupEnabled(trelloPlugin);
-      this.initialising = false;
-    }
+    // There can be a race condition between the power-up starting
+    // and the on-enable event being triggered.
+    await navigator.locks.request(
+      "powerup_init",
+      { ifAvailable: true },
+      async (lock) => {
+        // if the lock is null, it means the on-enable handler is taking care of initialisation
+        if (lock === null) {
+          return;
+        }
+
+        if (!(await this.boardStorage.getInitialised(trelloPlugin))) {
+          await this.handlePowerupEnabled(trelloPlugin);
+        }
+      },
+    );
 
     const organisationIdHash =
       await this.boardStorage.getOrganisationIdHash(trelloPlugin);
