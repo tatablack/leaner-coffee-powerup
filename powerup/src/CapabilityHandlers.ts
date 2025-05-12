@@ -97,10 +97,7 @@ export const CapabilityHandlers = (
           result.cards.forEach(({ id }) => {
             powerUp.cardStorage.deleteMultiple(t2, [CardStorage.VOTES], id);
           });
-          await Analytics.event(
-            (t2 as any).source?.window[0],
-            "listVotesCleared",
-          );
+          await Analytics.event(window, "listVotesCleared");
         },
       },
     ]),
@@ -136,10 +133,7 @@ export const CapabilityHandlers = (
             return 0;
           });
 
-          await Analytics.event(
-            (t2 as any).source?.window[0],
-            "listVotesSorted",
-          );
+          await Analytics.event(window, "listVotesSorted");
 
           return {
             sortedIds: sortedCards.map((card) => card.id),
@@ -170,8 +164,7 @@ export const CapabilityHandlers = (
     await Analytics.event(window, "enabled");
   },
 
-  "on-disable": async (t: Trello.PowerUp.IFrame): Promise<void> => {
-    const window = (t as any).source?.window[1]; // The order is not guaranteed
+  "on-disable": async (): Promise<void> => {
     await Analytics.event(window, "disabled");
   },
 
