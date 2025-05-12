@@ -28,8 +28,7 @@
             <span data-i18n-id="maxVotesRationale"></span>
             <a
                 target="_blank"
-                data-umami-event="outbound-link-click"
-                data-umami-event-url="https://www.talcottridge.com/multi-voting-math-or-n3"
+                data-umami-event="multiVotingOpened"
                 href="https://www.talcottridge.com/multi-voting-math-or-n3"
             ><span data-i18n-id="maxVotesLink"></span></a>.
         </div>
