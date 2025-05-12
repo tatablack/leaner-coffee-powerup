@@ -60,6 +60,7 @@
             const t = window.TrelloPowerUp.iframe();
 
             document.getElementById('dismiss').addEventListener('click', () => {
+              window.umami && window.umami.track("updateAcknowledged");
               t.notifyParent('done');
               t.closePopup();
               return false;
