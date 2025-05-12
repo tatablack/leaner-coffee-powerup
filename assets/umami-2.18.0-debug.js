@@ -141,17 +141,17 @@
             (dnt && hasDoNotTrack());
 
         const send = async (payload, type = 'event') => {
-            if (trackingDisabled()) return;
-
             const callback = window[beforeSend];
 
             if (typeof callback === 'function') {
                 payload = callback(type, payload);
             }
 
-            console.groupCollapsed("Umami Debug");
+            console.groupCollapsed("Umami Debug" + (trackingDisabled() ? " (disabled)" : ""));
             console.log(payload);
             console.groupEnd();
+
+            if (trackingDisabled()) return;
 
             if (!payload) return;
 
