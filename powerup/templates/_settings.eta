@@ -59,8 +59,8 @@
 
         <%~ include('inline/sentry_init', { BUILDTIME_VERSION, ENVIRONMENT }) %>
         <script src="<%= it.SENTRY_LOADER %>" crossorigin="anonymous"></script>
-        <script src="https://p.trellocdn.com/power-up.min.js"></script>
-        <script src="@scripts/settings.ts" defer="defer"></script>
+        <script src="https://p.trellocdn.com/power-up.min.js" crossorigin="anonymous"></script>
+        <script src="@scripts/settings.ts" defer></script>
         <%~ include('inline/umami_init') %>
     </body>
 </html>
