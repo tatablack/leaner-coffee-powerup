@@ -10,7 +10,7 @@ export const CapabilityHandlers = (
   "board-buttons": async (
     t: Trello.PowerUp.IFrame,
   ): Promise<Trello.PowerUp.BoardButtonCallback[]> => {
-    if (!(await powerUp.updateChecker.hasBeenUpdated(t))) {
+    if (!(await powerUp.updateChecker.isThereANewMinorOrMajor(t))) {
       return [];
     }
 

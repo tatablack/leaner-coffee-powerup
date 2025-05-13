@@ -1,3 +1,5 @@
+import { parseSemVer } from "semver-parser";
+
 import Analytics from "./Analytics";
 import { I18nConfig } from "./I18nConfig";
 import BoardStorage from "../storage/BoardStorage";
@@ -7,15 +9,26 @@ const LAST_UNCHECKED_VERSION = "0.6.2";
 
 class UpdateChecker {
   boardStorage: BoardStorage;
-  storedVersion: string;
 
   constructor(storage: BoardStorage) {
     this.boardStorage = storage;
   }
 
-  hasBeenUpdated = async (t: Trello.PowerUp.IFrame): Promise<boolean> => {
-    this.storedVersion = await this.boardStorage.getPowerUpVersion(t);
-    return !this.storedVersion || this.storedVersion !== __BUILDTIME_VERSION__;
+  isThereANewMinorOrMajor = async (
+    t: Trello.PowerUp.IFrame,
+  ): Promise<boolean> => {
+    const storedVersion = parseSemVer(
+      await this.boardStorage.getPowerUpVersion(t),
+    );
+    const newVersion = parseSemVer(__BUILDTIME_VERSION__);
+
+    // We don't want to show the board button for the release notes
+    // if there is a new patch version, but only for minor and major updates.
+    const isNewer =
+      newVersion.major > storedVersion.major ||
+      newVersion.minor > storedVersion.minor;
+
+    return !storedVersion || isNewer;
   };
 
   showMenu = async (t: Trello.PowerUp.IFrame): Promise<void> => {
