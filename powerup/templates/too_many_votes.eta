@@ -37,7 +37,8 @@
         <script src="<%= it.SENTRY_LOADER %>" crossorigin="anonymous"></script>
         <script src="https://p.trellocdn.com/power-up.min.js"></script>
         <script>
-            const t = window.TrelloPowerUp.iframe();
+            const t = window.TrelloPowerUp.iframe({ helpfulStacks: <% if (it.ENVIRONMENT === "development") { %>true,<% } else { %>false<% } %> });
+
             const maxVotes = t.arg('maxVotes');
 
             const maxVotesElement = document.querySelector('[data-i18n-id="maxVotes"');

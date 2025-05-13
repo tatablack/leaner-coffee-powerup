@@ -66,7 +66,7 @@
         <script src="<%= it.SENTRY_LOADER %>" crossorigin="anonymous"></script>
         <script src="https://p.trellocdn.com/power-up.min.js"></script>
         <script>
-            const t = window.TrelloPowerUp.iframe();
+            const t = window.TrelloPowerUp.iframe({ helpfulStacks: <% if (it.ENVIRONMENT === "development") { %>true,<% } else { %>false<% } %> });
 
             document.getElementById('clear').addEventListener('click', () => {
                 t.notifyParent('done');
