@@ -1,10 +1,10 @@
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
-const { merge } = require("webpack-merge");
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
+import TerserPlugin from "terser-webpack-plugin";
+import { merge } from "webpack-merge";
 
-const common = require("./webpack.common.js");
+import common from "./webpack.common.js";
 
-module.exports = merge(common, {
+const prod = merge(common, {
   devtool: "source-map",
 
   plugins: [
@@ -18,3 +18,5 @@ module.exports = merge(common, {
     minimizer: [new TerserPlugin()],
   },
 });
+
+export default prod;
