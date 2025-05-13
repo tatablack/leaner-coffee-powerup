@@ -1,9 +1,8 @@
 import formatDuration from "format-duration";
 
-import { LeanCoffeeBase, LeanCoffeeBaseParams } from "./LeanCoffeeBase";
-import { Trello } from "./types/TrelloPowerUp";
+import { LeanCoffeeBaseParams } from "./LeanCoffeeBase";
+import { LeanCoffeeIFrame } from "./LeanCoffeeIFrame";
 import Analytics from "./utils/Analytics";
-import { I18nConfig } from "./utils/I18nConfig";
 
 enum ThumbDirection {
   "UP" = "UP",
@@ -11,8 +10,7 @@ enum ThumbDirection {
   "MIDDLE" = "MIDDLE",
 }
 
-class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
-  t: Trello.PowerUp.IFrame;
+class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
   badges: HTMLElement;
   badgeElapsed: HTMLElement;
   badgeHeaderStatus: HTMLElement;
@@ -25,10 +23,6 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeBase {
 
   constructor({ w, config }: LeanCoffeeBaseParams) {
     super({ w, config });
-    this.t = w.TrelloPowerUp.iframe({
-      localization: I18nConfig,
-      helpfulStacks: !this.isRunningInProduction(),
-    });
 
     this.badges = this.w.document.querySelector(".badges");
     this.badgeElapsed = this.w.document.querySelector(".badge-elapsed");

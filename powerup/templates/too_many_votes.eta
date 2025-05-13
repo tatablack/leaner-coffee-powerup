@@ -39,6 +39,15 @@
         <script>
             const t = window.TrelloPowerUp.iframe({ helpfulStacks: <% if (it.ENVIRONMENT === "development") { %>true,<% } else { %>false<% } %> });
 
+            if (window.Sentry) {
+                window.Sentry.onLoad(async () => {
+                    window.Sentry.setTags({
+                        organisationIdHash: t.arg("organisationIdHash"),
+                        boardIdHash: t.arg("boardIdHash"),
+                    });
+                });
+            }
+
             const maxVotes = t.arg('maxVotes');
 
             const maxVotesElement = document.querySelector('[data-i18n-id="maxVotes"');

@@ -1,20 +1,8 @@
-import { LeanCoffeeBase, LeanCoffeeBaseParams } from "./LeanCoffeeBase";
-import { Trello } from "./types/TrelloPowerUp";
+import { LeanCoffeeIFrame } from "./LeanCoffeeIFrame";
 import Debug from "./utils/Debug";
-import { I18nConfig } from "./utils/I18nConfig";
-
-class LeanCoffeeSettings extends LeanCoffeeBase {
-  t: Trello.PowerUp.IFrame;
-
-  constructor({ w, config }: LeanCoffeeBaseParams) {
-    super({ w, config });
-    this.t = w.TrelloPowerUp.iframe({
-      localization: I18nConfig,
-      helpfulStacks: !this.isRunningInProduction(),
-    });
-  }
 import { isRunningInProduction } from "./utils/Errors";
 
+class LeanCoffeeSettings extends LeanCoffeeIFrame {
   init(): void {
     if (!isRunningInProduction()) {
       (

@@ -1,6 +1,7 @@
 import { parseSemVer } from "semver-parser";
 
 import Analytics from "./Analytics";
+import { getTagsForReporting } from "./Errors";
 import { I18nConfig } from "./I18nConfig";
 import BoardStorage from "../storage/BoardStorage";
 import MemberStorage from "../storage/MemberStorage";
@@ -53,7 +54,7 @@ class VersionChecker {
 
     return t.popup({
       title: title,
-      url: `./release-notes.html?${await Analytics.getOverrides(this.boardStorage, t)}`,
+      url: `./release-notes.html?${await Analytics.getOverrides(this.boardStorage, t)}&${await getTagsForReporting(this.boardStorage, t)}`,
       args: { version: __BUILDTIME_VERSION__, localization: I18nConfig },
       callback: this.storeNewVersion,
       height: 65,

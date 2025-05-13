@@ -8,6 +8,7 @@ import BoardStorage from "./storage/BoardStorage";
 import { Trello } from "./types/TrelloPowerUp";
 import Analytics from "./utils/Analytics";
 import Discussion from "./utils/Discussion";
+import { getTagsForReporting, isRunningInProduction } from "./utils/Errors";
 import { digestMessage } from "./utils/Hashing";
 import { I18nConfig } from "./utils/I18nConfig";
 import VersionChecker from "./utils/VersionChecker";
@@ -61,7 +62,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     if (!(await this.voting.canCurrentMemberVote(t))) {
       return t.popup({
         title: "Leaner Coffee",
-        url: `${this.baseUrl}/too_many_votes.html?${await Analytics.getOverrides(this.boardStorage, t)}`,
+        url: `${this.baseUrl}/too_many_votes.html?${await Analytics.getOverrides(this.boardStorage, t)}&${await getTagsForReporting(this.boardStorage, t)}`,
         args: {
           maxVotes: await this.voting.getMaxVotes(t),
           localization: I18nConfig,
@@ -323,11 +324,20 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       await this.boardStorage.getOrganisationIdHash(trelloPlugin);
     const boardIdHash = await this.boardStorage.getBoardIdHash(trelloPlugin);
 
+    if (window.Sentry) {
+      window.Sentry.onLoad(async () => {
+        window.Sentry.setTags({
+          organisationIdHash: organisationIdHash,
+          boardIdHash: boardIdHash,
+        });
+      });
+    }
+
     this.w.LeanerCoffeeAnalyticsReferrer = "https://" + organisationIdHash;
     this.w.LeanerCoffeeAnalyticsHostname = boardIdHash;
     this.w.LeanerCoffeeAnalyticsBeforeSend = Analytics.beforeSend;
 
-    setTimeout(async () => {
+    window.setTimeout(async () => {
       await Analytics.pageview(this.w);
     }, 0);
   }
