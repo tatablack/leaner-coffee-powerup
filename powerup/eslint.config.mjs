@@ -108,13 +108,15 @@ export default tseslint.config(
     extends: [
       js.configs.recommended,
       eslintPluginImportX.flatConfigs.recommended,
-      eslintPluginImportX.flatConfigs.typescript,
       nodePlugin.configs["flat/recommended-module"],
       eslintConfigPrettier,
     ],
     languageOptions: {
       globals: globals.node,
-      sourceType: "module",
+      parserOptions: {
+        ecmaVersion: 2025,
+        sourceType: "module",
+      },
     },
     settings: {
       "import-x/resolver-next": [

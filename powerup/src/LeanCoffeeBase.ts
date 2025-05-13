@@ -1,5 +1,6 @@
 import BoardStorage from "./storage/BoardStorage";
 import CardStorage from "./storage/CardStorage";
+import MemberStorage from "./storage/MemberStorage";
 import { Trello } from "./types/TrelloPowerUp";
 
 export interface LeanCoffeeBaseParams {
@@ -12,6 +13,7 @@ export class LeanCoffeeBase {
   w: Window;
   boardStorage: BoardStorage;
   cardStorage: CardStorage;
+  memberStorage: MemberStorage;
   config: Config;
 
   constructor({ w, config }: LeanCoffeeBaseParams) {
@@ -19,6 +21,7 @@ export class LeanCoffeeBase {
     this.config = config;
     this.boardStorage = new BoardStorage();
     this.cardStorage = new CardStorage();
+    this.memberStorage = new MemberStorage();
   }
 
   isRunningInProduction = (): boolean =>

@@ -1,13 +1,17 @@
-const path = require("node:path");
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const dotenvx = require("@dotenvx/dotenvx");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const HtmlBundlerPlugin = require("html-bundler-webpack-plugin");
-const yaml = require("js-yaml");
-const webpack = require("webpack");
+import dotenvx from "@dotenvx/dotenvx";
+import CopyWebpackPlugin from "copy-webpack-plugin";
+import HtmlBundlerPlugin from "html-bundler-webpack-plugin";
+import yaml from "js-yaml";
+import { parseSemVer } from "semver-parser";
+import webpack from "webpack";
 
-const PACKAGE_JSON = require("./package.json");
+import PACKAGE_JSON from "./package.json" with { type: "json" };
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const OUTPUT_FOLDER = "../docs";
 
 // Load configuration
@@ -17,9 +21,13 @@ dotenvx.config({
 });
 
 const isProduction = process.env.NODE_ENV === "production";
-const BUILDTIME_VERSION = isProduction
-  ? PACKAGE_JSON.version
-  : process.env.VERSION;
+const getVersion = () => {
+  const currentVersion = parseSemVer(process.env.VERSION);
+  console.log("Current version:", currentVersion);
+  return `v${currentVersion.major}.${currentVersion.minor}.${currentVersion.patch + 1}${currentVersion.pre ? `-${currentVersion.pre[0].replace("-", ".")}` : ""}${currentVersion.build.length ? `+${currentVersion.build.join(".")}` : ""}`;
+};
+
+const BUILDTIME_VERSION = isProduction ? PACKAGE_JSON.version : getVersion();
 
 const Config = {
   [process.env.NODE_ENV]: {
@@ -41,7 +49,7 @@ const TEMPLATE_PARAMETERS = {
   ENVIRONMENT: process.env.NODE_ENV,
 };
 
-module.exports = {
+const common = {
   mode: process.env.NODE_ENV,
 
   output: {
@@ -162,3 +170,5 @@ module.exports = {
     }),
   ],
 };
+
+export default common;

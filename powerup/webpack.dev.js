@@ -1,11 +1,15 @@
-const fs = require("node:fs");
-const path = require("node:path");
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const { merge } = require("webpack-merge");
+import { merge } from "webpack-merge";
 
-const common = require("./webpack.common");
+import common from "./webpack.common.js";
 
-module.exports = merge(common, {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const dev = merge(common, {
   devtool: "inline-source-map",
 
   devServer: {
@@ -49,3 +53,5 @@ module.exports = merge(common, {
     },
   },
 });
+
+export default dev;

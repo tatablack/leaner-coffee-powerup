@@ -2,6 +2,7 @@
   "name": "leancoffee-powerup",
   "private": true,
   "version": "0.9.0",
+  "type": "module",
   "description": "Everything you need to conduct a lean coffee session in Trello!",
   "scripts": {
     "start": "NODE_ENV=development webpack serve --config ./webpack.dev.js",
@@ -22,7 +23,8 @@
   "author": "Angelo Tata <leanercoffee@tatablack.net>",
   "license": "Apache-2.0",
   "dependencies": {
-    "format-duration": "^3.0.2"
+    "format-duration": "^3.0.2",
+    "semver-parser": "^4.1.8"
   },
   "devDependencies": {
     "@dotenvx/dotenvx": "^1.42.2",

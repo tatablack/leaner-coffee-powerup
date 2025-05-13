@@ -10,7 +10,9 @@ export const CapabilityHandlers = (
   "board-buttons": async (
     t: Trello.PowerUp.IFrame,
   ): Promise<Trello.PowerUp.BoardButtonCallback[]> => {
-    if (!(await powerUp.updateChecker.hasBeenUpdated(t))) {
+    // We don't want to show the board button for the release notes
+    // if there is a new patch version: only for minor and major updates.
+    if (!(await powerUp.versionChecker.isThereANewMinorOrMajor(t))) {
       return [];
     }
 
@@ -21,7 +23,7 @@ export const CapabilityHandlers = (
           light: `${powerUp.baseUrl}/assets/moka.svg`,
         },
         text: t.localizeKey("boardButtonLabel"),
-        callback: powerUp.updateChecker.showMenu,
+        callback: powerUp.versionChecker.showMenu,
       },
     ];
   },
