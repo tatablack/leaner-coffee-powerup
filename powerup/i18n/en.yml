@@ -36,6 +36,7 @@ elapsedNotification: 'The timer has elapsed'
 # Board buttons
 boardButtonLabel: 'Leaner Coffee update!'
 boardButtonPopupTitle: 'Updated from {oldVersion} to {newVersion}'
+boardButtonPopupTitleMissingVersion: 'Updated to {newVersion}'
 
 # Release Notes Popup
 dismiss: 'Dismiss'

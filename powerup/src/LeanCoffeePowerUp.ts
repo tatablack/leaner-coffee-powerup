@@ -10,7 +10,7 @@ import Analytics from "./utils/Analytics";
 import Discussion from "./utils/Discussion";
 import { digestMessage } from "./utils/Hashing";
 import { I18nConfig } from "./utils/I18nConfig";
-import UpdateChecker from "./utils/UpdateChecker";
+import VersionChecker from "./utils/VersionChecker";
 import Voting from "./utils/Voting";
 
 class LeanCoffeePowerUp extends LeanCoffeeBase {
@@ -22,7 +22,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   elapsedCardDetailBadge: ElapsedCardDetailBadge;
   votingCardBadge: VotingCardBadge;
   votingCardDetailBadge: VotingCardDetailBadge;
-  updateChecker: UpdateChecker;
+  versionChecker: VersionChecker;
 
   constructor({ w, config }: LeanCoffeeBaseParams) {
     super({ w, config });
@@ -34,7 +34,10 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
 
     this.discussion = new Discussion(this.w, this.baseUrl, defaultDuration);
     this.voting = new Voting();
-    this.updateChecker = new UpdateChecker(this.boardStorage);
+    this.versionChecker = new VersionChecker(
+      this.boardStorage,
+      this.memberStorage,
+    );
 
     this.elapsedCardBadge = new ElapsedCardBadge(this.discussion);
     this.elapsedCardDetailBadge = new ElapsedCardDetailBadge(this.discussion);
@@ -285,7 +288,6 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     const boardIdHash = await digestMessage(board.id);
 
     await this.boardStorage.writeMultiple(t, {
-      [BoardStorage.POWER_UP_VERSION]: __BUILDTIME_VERSION__,
       [BoardStorage.POWER_UP_INSTALLATION_DATE]: new Date().toISOString(),
       [BoardStorage.ORGANISATION_HASH]: organisationIdHash,
       [BoardStorage.BOARD_HASH]: boardIdHash,

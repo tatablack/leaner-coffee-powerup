@@ -7,7 +7,6 @@ class BoardStorage extends Storage {
   static DISCUSSION_STARTED_AT = "leancoffeeDiscussionStartedAt";
   static DISCUSSION_PREVIOUS_ELAPSED = "leancoffeeDiscussionPreviousElapsed";
   static DISCUSSION_INTERVAL_ID = "leancoffeeDiscussionIntervalId";
-  static POWER_UP_VERSION = "powerUpVersion";
   static POWER_UP_INSTALLATION_DATE = "powerUpInstallationDate";
   static ORGANISATION_HASH = "organisationHash";
   static BOARD_HASH = "boardHash";
@@ -46,34 +45,10 @@ class BoardStorage extends Storage {
     return super.read(t, BoardStorage.DISCUSSION_INTERVAL_ID);
   }
 
-  async getPowerUpVersion(
-    t: Trello.PowerUp.AnonymousHostHandlers,
-  ): Promise<string> {
-    return super.read(t, BoardStorage.POWER_UP_VERSION);
-  }
-
-  setPowerUpVersion(
-    t: Trello.PowerUp.AnonymousHostHandlers,
-    version: string,
-  ): PromiseLike<void> {
-    return super.write(t, BoardStorage.POWER_UP_VERSION, version);
-  }
-
   async getPowerUpInstallationDate(
     t: Trello.PowerUp.AnonymousHostHandlers,
   ): Promise<string> {
     return super.read(t, BoardStorage.POWER_UP_INSTALLATION_DATE);
-  }
-
-  setPowerUpInstallationDate(
-    t: Trello.PowerUp.AnonymousHostHandlers,
-    installationDate: string,
-  ): PromiseLike<void> {
-    return super.write(
-      t,
-      BoardStorage.POWER_UP_INSTALLATION_DATE,
-      installationDate,
-    );
   }
 
   async getOrganisationIdHash(
@@ -110,6 +85,17 @@ class BoardStorage extends Storage {
       BoardStorage.POWER_UP_INSTALLATION_DATE,
     );
     return !!installationDate;
+  }
+
+  setPowerUpInstallationDate(
+    t: Trello.PowerUp.AnonymousHostHandlers,
+    installationDate: string,
+  ): PromiseLike<void> {
+    return super.write(
+      t,
+      BoardStorage.POWER_UP_INSTALLATION_DATE,
+      installationDate,
+    );
   }
 }
 
