@@ -23,7 +23,4 @@ export class LeanCoffeeBase {
     this.cardStorage = new CardStorage();
     this.memberStorage = new MemberStorage();
   }
-
-  isRunningInProduction = (): boolean =>
-    (process.env.NODE_ENV as Environment) === "production";
 }

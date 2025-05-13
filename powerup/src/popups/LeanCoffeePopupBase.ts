@@ -1,4 +1,5 @@
 import { Trello } from "../types/TrelloPowerUp";
+import { isRunningInProduction } from "../utils/Errors";
 
 export interface LeanCoffeePopupBaseParams {
   w: Window;
@@ -10,13 +11,10 @@ export class LeanCoffeePopupBase {
 
   constructor({ w }: LeanCoffeePopupBaseParams) {
     this.t = w.TrelloPowerUp.iframe({
-      helpfulStacks: !this.isRunningInProduction(),
+      helpfulStacks: !isRunningInProduction(),
     });
     this.w = w;
-  }
 
-  isRunningInProduction = (): boolean =>
-    (process.env.NODE_ENV as Environment) === "production";
 
   toggleFields(cssSelector: string, key: string): void {
     const elements: NodeListOf<HTMLElement> =

@@ -13,9 +13,10 @@ class LeanCoffeeSettings extends LeanCoffeeBase {
       helpfulStacks: !this.isRunningInProduction(),
     });
   }
+import { isRunningInProduction } from "./utils/Errors";
 
   init(): void {
-    if (!this.isRunningInProduction()) {
+    if (!isRunningInProduction()) {
       (
         this.w.document.querySelector(".dev-only") as HTMLElement
       ).style.display = "block";
@@ -35,7 +36,7 @@ class LeanCoffeeSettings extends LeanCoffeeBase {
 
   showData = async (evt: Event): Promise<void> => {
     evt.preventDefault();
-    if (this.isRunningInProduction()) {
+    if (isRunningInProduction()) {
       return;
     }
 
@@ -44,7 +45,7 @@ class LeanCoffeeSettings extends LeanCoffeeBase {
 
   wipeData = async (evt: Event): Promise<void> => {
     evt.preventDefault();
-    if (this.isRunningInProduction()) {
+    if (isRunningInProduction()) {
       return;
     }
 
