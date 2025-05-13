@@ -4,26 +4,23 @@
     window.LeanerCoffeeAnalyticsHostname = params.get("hostname");
 
     const sanitiseUrl = (urlString) => {
-      const url = new URL(urlString);
-      return (
-        url.protocol +
-        url.hostname +
-        (url.port ? `:${url.port}` : "") +
-        url.pathname
-      );
+        const url = new URL(urlString);
+        return (
+            url.protocol +
+            url.hostname +
+            (url.port ? `:${url.port}` : "") +
+            url.pathname
+        );
     };
 
     window.LeanerCoffeeAnalyticsBeforeSend = (event, payload) => {
-      const url = sanitiseUrl(payload.url);
-      return {
-        ...payload,
-        ...{
-          referrer: window.LeanerCoffeeAnalyticsReferrer,
-
-          hostname: window.LeanerCoffeeAnalyticsHostname,
-        },
-        url,
-      };
+        const url = sanitiseUrl(payload.url);
+        return {
+            ...payload,
+            referrer: window.LeanerCoffeeAnalyticsReferrer,
+            hostname: window.LeanerCoffeeAnalyticsHostname,
+            url,
+        };
     };
 
     window.umami && window.umami.track();
