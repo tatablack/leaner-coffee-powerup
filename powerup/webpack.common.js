@@ -22,9 +22,8 @@ dotenvx.config({
 
 const isProduction = process.env.NODE_ENV === "production";
 const getVersion = () => {
-  const currentVersion = parseSemVer(process.env.VERSION);
-  console.log("Current version:", currentVersion);
-  return `v${currentVersion.major}.${currentVersion.minor}.${currentVersion.patch + 1}${currentVersion.pre ? `-${currentVersion.pre[0].replace("-", ".")}` : ""}${currentVersion.build.length ? `+${currentVersion.build.join(".")}` : ""}`;
+  const { build, major, minor, patch, pre } = parseSemVer(process.env.VERSION);
+  return `v${major}.${minor + 1}.${patch}${pre ? `-${pre[0].replace("-", ".")}` : ""}${build.length ? `+${build.join(".")}` : ""}`;
 };
 
 export const BUILDTIME_VERSION = isProduction
