@@ -27,7 +27,9 @@ const getVersion = () => {
   return `v${currentVersion.major}.${currentVersion.minor}.${currentVersion.patch + 1}${currentVersion.pre ? `-${currentVersion.pre[0].replace("-", ".")}` : ""}${currentVersion.build.length ? `+${currentVersion.build.join(".")}` : ""}`;
 };
 
-const BUILDTIME_VERSION = isProduction ? PACKAGE_JSON.version : getVersion();
+export const BUILDTIME_VERSION = isProduction
+  ? PACKAGE_JSON.version
+  : getVersion();
 
 const Config = {
   [process.env.NODE_ENV]: {

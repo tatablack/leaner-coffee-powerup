@@ -1,8 +1,9 @@
+import { sentryWebpackPlugin } from "@sentry/webpack-plugin";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import TerserPlugin from "terser-webpack-plugin";
 import { merge } from "webpack-merge";
 
-import common from "./webpack.common.js";
+import common, { BUILDTIME_VERSION } from "./webpack.common.js";
 
 const prod = merge(common, {
   devtool: "source-map",
@@ -10,6 +11,16 @@ const prod = merge(common, {
   plugins: [
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: ["**/*", "!CNAME"],
+    }),
+    sentryWebpackPlugin({
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      debug: true,
+      sourcemaps: {
+        release: { name: BUILDTIME_VERSION },
+        inject: false,
+      },
     }),
   ],
 

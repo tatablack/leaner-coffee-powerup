@@ -34,6 +34,7 @@
     "@html-eslint/eslint-plugin": "^0.40.0",
     "@html-eslint/parser": "^0.40.0",
     "@sentry/browser": "^9.18.0",
+    "@sentry/webpack-plugin": "^3.4.0",
     "@types/format-duration": "^1.0.3",
     "@types/node": "^22.15.3",
     "@types/umami-browser": "^2.13.0",
