@@ -1,12 +1,14 @@
 import { parseSemVer } from "semver-parser";
 
 import Analytics from "./Analytics";
-import { getTagsForReporting } from "./Errors";
+import { ErrorReporterInjector, getTagsForReporting } from "./Errors";
 import { I18nConfig } from "./I18nConfig";
+import { bindAll } from "./Scope";
 import BoardStorage from "../storage/BoardStorage";
 import MemberStorage from "../storage/MemberStorage";
 import { Trello } from "../types/TrelloPowerUp";
 
+@ErrorReporterInjector
 class VersionChecker {
   boardStorage: BoardStorage;
   memberStorage: MemberStorage;
@@ -14,11 +16,10 @@ class VersionChecker {
   constructor(boardStorage: BoardStorage, memberStorage: MemberStorage) {
     this.boardStorage = boardStorage;
     this.memberStorage = memberStorage;
+    bindAll(this);
   }
 
-  isThereANewMinorOrMajor = async (
-    t: Trello.PowerUp.IFrame,
-  ): Promise<boolean> => {
+  async isThereANewMinorOrMajor(t: Trello.PowerUp.IFrame): Promise<boolean> {
     const storedVersionRaw = await this.memberStorage.read(
       t,
       MemberStorage.POWER_UP_VERSION,
@@ -36,9 +37,9 @@ class VersionChecker {
       newVersion.minor > storedVersion.minor;
 
     return !storedVersion || isNewer;
-  };
+  }
 
-  showMenu = async (t: Trello.PowerUp.IFrame): Promise<void> => {
+  async showMenu(t: Trello.PowerUp.IFrame): Promise<void> {
     const storedVersion = await this.memberStorage.read(
       t,
       MemberStorage.POWER_UP_VERSION,
@@ -59,15 +60,15 @@ class VersionChecker {
       callback: this.storeNewVersion,
       height: 65,
     });
-  };
+  }
 
-  storeNewVersion = async (t: Trello.PowerUp.IFrame): Promise<void> => {
+  async storeNewVersion(t: Trello.PowerUp.IFrame): Promise<void> {
     await this.memberStorage.write(
       t,
       MemberStorage.POWER_UP_VERSION,
       __BUILDTIME_VERSION__,
     );
-  };
+  }
 }
 
 export default VersionChecker;

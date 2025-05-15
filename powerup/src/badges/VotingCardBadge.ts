@@ -1,8 +1,11 @@
 import BoardStorage from "../storage/BoardStorage";
 import CardStorage from "../storage/CardStorage";
 import { Trello } from "../types/TrelloPowerUp";
+import { ErrorReporterInjector } from "../utils/Errors";
+import { bindAll } from "../utils/Scope";
 import Voting from "../utils/Voting";
 
+@ErrorReporterInjector
 class VotingCardBadge {
   w: Window;
   baseUrl: string;
@@ -23,6 +26,7 @@ class VotingCardBadge {
     this.boardStorage = boardStorage;
     this.cardStorage = cardStorage;
     this.render = this.render.bind(this);
+    bindAll(this);
   }
 
   getVoters = async (t: Trello.PowerUp.IFrame): Promise<{ text: string }[]> => {

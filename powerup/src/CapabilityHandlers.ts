@@ -2,112 +2,128 @@ import LeanCoffeePowerUp from "./LeanCoffeePowerUp";
 import CardStorage from "./storage/CardStorage";
 import { Trello } from "./types/TrelloPowerUp";
 import Analytics from "./utils/Analytics";
+import { ErrorReporterInjector } from "./utils/Errors";
 import { I18nConfig } from "./utils/I18nConfig";
+import { bindAll } from "./utils/Scope";
 
-export const CapabilityHandlers = (
-  powerUp: LeanCoffeePowerUp,
-): Trello.PowerUp.CapabilityHandlers => ({
-  "board-buttons": async (
+@ErrorReporterInjector
+class CapabilityHandlers {
+  powerUp: LeanCoffeePowerUp;
+
+  constructor(powerUp: LeanCoffeePowerUp) {
+    this.powerUp = powerUp;
+    bindAll(this);
+  }
+
+  async boardButtonsHandler(
     t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.BoardButtonCallback[]> => {
+  ): Promise<Trello.PowerUp.BoardButtonCallback[]> {
     // We don't want to show the board button for the release notes
     // if there is a new patch version: only for minor and major updates.
-    if (!(await powerUp.versionChecker.isThereANewMinorOrMajor(t))) {
+    if (!(await this.powerUp.versionChecker.isThereANewMinorOrMajor(t))) {
       return [];
     }
 
     return [
       {
         icon: {
-          dark: `${powerUp.baseUrl}/assets/moka_white.svg`,
-          light: `${powerUp.baseUrl}/assets/moka.svg`,
+          dark: `${this.powerUp.baseUrl}/assets/moka_white.svg`,
+          light: `${this.powerUp.baseUrl}/assets/moka.svg`,
         },
         text: t.localizeKey("boardButtonLabel"),
-        callback: powerUp.versionChecker.showMenu,
+        callback: this.powerUp.versionChecker.showMenu,
       },
     ];
-  },
+  }
 
-  "card-back-section": async (
+  async cardBackSection(
     t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.CardBackSection> => {
+  ): Promise<Trello.PowerUp.CardBackSection> {
     const discussionStatus =
-      await powerUp.discussion.cardStorage.getDiscussionStatus(t);
+      await this.powerUp.discussion.cardStorage.getDiscussionStatus(t);
     if (discussionStatus === undefined) {
       return null;
     }
 
     return {
       title: t.localizeKey("discussion"),
-      icon: `${powerUp.baseUrl}/assets/powerup/timer.svg`,
+      icon: `${this.powerUp.baseUrl}/assets/powerup/timer.svg`,
       content: {
         type: "iframe",
         url: t.signUrl(
-          `${powerUp.baseUrl}/discussion-ui.html?${await Analytics.getOverrides(powerUp.boardStorage, t)}`,
+          `${this.powerUp.baseUrl}/discussion-ui.html?${await Analytics.getOverrides(this.powerUp.boardStorage, t)}`,
         ),
       },
     };
-  },
+  }
 
-  "card-badges": async (
+  async cardBadges(
     t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.CardBadge[]> => {
+  ): Promise<Trello.PowerUp.CardBadge[]> {
     const badges = [
-      await powerUp.elapsedCardBadge.render(t),
-      await powerUp.votingCardBadge.render(t),
+      await this.powerUp.elapsedCardBadge.render(t),
+      await this.powerUp.votingCardBadge.render(t),
     ];
 
     return badges.filter((badge) => badge);
-  },
+  }
 
-  "card-buttons": async (
+  async cardButtons(
     t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.CardButton[]> => [
-    {
-      icon: `${powerUp.baseUrl}/assets/powerup/timer.svg`,
-      text: await powerUp.getButtonLabel(t),
-      callback: powerUp.handleDiscussion,
-    },
-    {
-      icon: `${powerUp.baseUrl}/assets/powerup/heart.svg`,
-      text: t.localizeKey("vote", {
-        symbol: (await powerUp.voting.hasCurrentMemberVoted(t)) ? "☑" : "☐",
-      }),
-      callback: powerUp.handleVoting,
-    },
-  ],
+  ): Promise<Trello.PowerUp.CardButton[]> {
+    return [
+      {
+        icon: `${this.powerUp.baseUrl}/assets/powerup/timer.svg`,
+        text: await this.powerUp.getButtonLabel(t),
+        callback: this.powerUp.handleDiscussion,
+      },
+      {
+        icon: `${this.powerUp.baseUrl}/assets/powerup/heart.svg`,
+        text: t.localizeKey("vote", {
+          symbol: (await this.powerUp.voting.hasCurrentMemberVoted(t))
+            ? "☑"
+            : "☐",
+        }),
+        callback: this.powerUp.handleVoting,
+      },
+    ];
+  }
 
-  "card-detail-badges": async (
+  async cardDetailBadges(
     t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.CardDetailBadge[]> => {
+  ): Promise<Trello.PowerUp.CardDetailBadge[]> {
     const badges = [
-      await powerUp.elapsedCardDetailBadge.render(t),
-      await powerUp.votingCardDetailBadge.render(t),
+      await this.powerUp.elapsedCardDetailBadge.render(t),
+      await this.powerUp.votingCardDetailBadge.render(t),
     ];
 
     return badges.filter((badge) => badge);
-  },
-
-  "list-actions": (
+  }
+  async listActions(
     t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.ListAction[]> =>
-    Promise.resolve([
+  ): Promise<Trello.PowerUp.ListAction[]> {
+    return Promise.resolve([
       {
         text: t.localizeKey("clearVotesFromList"),
         callback: async (t2): Promise<void> => {
           const result = await t2.list("cards");
           result.cards.forEach(({ id }) => {
-            powerUp.cardStorage.deleteMultiple(t2, [CardStorage.VOTES], id);
+            this.powerUp.cardStorage.deleteMultiple(
+              t2,
+              [CardStorage.VOTES],
+              id,
+            );
           });
           await Analytics.event(window, "listVotesCleared");
         },
       },
-    ]),
+    ]);
+  }
 
-  "list-sorters": (
+  async listSorters(
     t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.ListSorter[]> =>
-    Promise.resolve([
+  ): Promise<Trello.PowerUp.ListSorter[]> {
+    return Promise.resolve([
       {
         text: t.localizeKey("sortByVote"),
         callback: async (t2, opts): Promise<{ sortedIds: string[] }> => {
@@ -116,10 +132,8 @@ export const CapabilityHandlers = (
               async (
                 card,
               ): Promise<{ leanCoffeeVotes: number; id: string }> => {
-                const leanCoffeeVotes = await powerUp.voting.countVotesByCard(
-                  t2,
-                  card.id,
-                );
+                const leanCoffeeVotes =
+                  await this.powerUp.voting.countVotesByCard(t2, card.id);
                 return { leanCoffeeVotes, id: card.id };
               },
             ),
@@ -142,42 +156,59 @@ export const CapabilityHandlers = (
           };
         },
       },
-    ]),
+    ]);
+  }
 
-  "on-enable": async (t: Trello.PowerUp.IFrame): Promise<void> => {
+  async onEnable(t: Trello.PowerUp.IFrame): Promise<void> {
     // There can be a race condition between the power-up starting
     // and the on-enable event being triggered.
     await navigator.locks.request(
       "powerup_init",
       { ifAvailable: true },
       async (lock) => {
-        const isInitialised = await powerUp.boardStorage.getInitialised(t);
+        const isInitialised = await this.powerUp.boardStorage.getInitialised(t);
         // if the lock is null, it means LeanCoffeePowerup::start is taking care of initialisation
         if (lock === null || isInitialised) {
           return;
         }
 
         if (!isInitialised) {
-          await powerUp.handlePowerupEnabled(t);
+          await this.powerUp.handlePowerupEnabled(t);
         }
       },
     );
 
     await Analytics.event(window, "enabled");
-  },
-
-  "on-disable": async (): Promise<void> => {
+  }
+  async onDisable(): Promise<void> {
     await Analytics.event(window, "disabled");
-  },
+  }
 
-  "show-settings": async (t: Trello.PowerUp.IFrame): Promise<void> => {
+  async showSettings(t: Trello.PowerUp.IFrame): Promise<void> {
     return t.popup({
       title: `Leaner Coffee ${__BUILDTIME_VERSION__}`,
-      url: `${powerUp.baseUrl}/settings.html?${await Analytics.getOverrides(powerUp.boardStorage, t)}`,
+      url: `${this.powerUp.baseUrl}/settings.html?${await Analytics.getOverrides(this.powerUp.boardStorage, t)}`,
       height: 184,
       args: {
         localization: I18nConfig,
       },
     });
-  },
-});
+  }
+
+  getAll(): Trello.PowerUp.CapabilityHandlers {
+    return {
+      "board-buttons": this.boardButtonsHandler,
+      "card-back-section": this.cardBackSection,
+      "card-badges": this.cardBadges,
+      "card-buttons": this.cardButtons,
+      "card-detail-badges": this.cardDetailBadges,
+      "list-actions": this.listActions,
+      "list-sorters": this.listSorters,
+      "on-enable": this.onEnable,
+      "on-disable": this.onDisable,
+      "show-settings": this.showSettings,
+    };
+  }
+}
+
+export default CapabilityHandlers;

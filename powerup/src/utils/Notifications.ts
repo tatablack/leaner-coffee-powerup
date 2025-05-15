@@ -1,7 +1,11 @@
+import { ErrorReporterInjector } from "./Errors";
+import { bindAll } from "./Scope";
+
 export type NotificationType = {
   [key in "audio" | "text"]: string;
 };
 
+@ErrorReporterInjector
 class Notifications {
   w: Window;
   baseUrl: string;
@@ -10,6 +14,7 @@ class Notifications {
   constructor(window: Window, baseUrl: string) {
     this.w = window;
     this.baseUrl = baseUrl;
+    bindAll(this);
   }
 
   async load(url: string): Promise<AudioBufferSourceNode> {

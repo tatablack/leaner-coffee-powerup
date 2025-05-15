@@ -1,9 +1,12 @@
 import Analytics from "./Analytics";
+import { ErrorReporterInjector } from "./Errors";
 import Notifications, { NotificationType } from "./Notifications";
+import { bindAll } from "./Scope";
 import BoardStorage from "../storage/BoardStorage";
 import CardStorage from "../storage/CardStorage";
 import { Trello } from "../types/TrelloPowerUp";
 
+@ErrorReporterInjector
 class Discussion {
   w: Window;
   p: Trello.PowerUp.Plugin;
@@ -20,6 +23,7 @@ class Discussion {
     this.maxDiscussionDuration = maxDiscussionDuration;
     this.boardStorage = new BoardStorage();
     this.cardStorage = new CardStorage();
+    bindAll(this);
   }
 
   init = (p: Trello.PowerUp.Plugin): void => {
@@ -144,28 +148,20 @@ class Discussion {
     const cardId = await this.boardStorage.getDiscussionCardId(t);
     clearInterval(intervalId);
 
-    try {
-      await this.cardStorage.saveDiscussionStatus(t, "ENDED", cardId);
-      await this.saveElapsed(t);
-      await this.cardStorage.deleteMultiple(
-        t,
-        [CardStorage.DISCUSSION_THUMBS],
-        cardId,
-      );
-      await this.boardStorage.deleteMultiple(t, [
-        BoardStorage.DISCUSSION_STATUS,
-        BoardStorage.DISCUSSION_CARD_ID,
-        BoardStorage.DISCUSSION_STARTED_AT,
-        BoardStorage.DISCUSSION_PREVIOUS_ELAPSED,
-        BoardStorage.DISCUSSION_INTERVAL_ID,
-      ]);
-    } catch (err) {
-      throw new Error(
-        err instanceof Error && err.message
-          ? err.message
-          : "Error while ending a discussion",
-      );
-    }
+    await this.cardStorage.saveDiscussionStatus(t, "ENDED", cardId);
+    await this.saveElapsed(t);
+    await this.cardStorage.deleteMultiple(
+      t,
+      [CardStorage.DISCUSSION_THUMBS],
+      cardId,
+    );
+    await this.boardStorage.deleteMultiple(t, [
+      BoardStorage.DISCUSSION_STATUS,
+      BoardStorage.DISCUSSION_CARD_ID,
+      BoardStorage.DISCUSSION_STARTED_AT,
+      BoardStorage.DISCUSSION_PREVIOUS_ELAPSED,
+      BoardStorage.DISCUSSION_INTERVAL_ID,
+    ]);
   };
 
   reset = async (t: Trello.PowerUp.IFrame): Promise<void> => {

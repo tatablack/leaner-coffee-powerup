@@ -1,5 +1,8 @@
 import { Trello } from "../types/TrelloPowerUp";
+import { ErrorReporterInjector } from "../utils/Errors";
+import { bindAll } from "../utils/Scope";
 
+@ErrorReporterInjector
 class Storage {
   scope: Trello.PowerUp.Scope;
   visibility: Trello.PowerUp.Visibility;
@@ -9,6 +12,7 @@ class Storage {
     visibility: Trello.PowerUp.Visibility = "private",
   ) {
     Object.assign(this, { scope, visibility });
+    bindAll(this);
   }
 
   read(

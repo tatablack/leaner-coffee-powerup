@@ -1,16 +1,18 @@
+import { ErrorReporterInjector } from "./Errors";
+import { bindAll } from "./Scope";
 import CardStorage from "../storage/CardStorage";
 import { Trello } from "../types/TrelloPowerUp";
 
+@ErrorReporterInjector
 class Voting {
   cardStorage: CardStorage;
 
   constructor() {
     this.cardStorage = new CardStorage();
+    bindAll(this);
   }
 
-  hasCurrentMemberVoted = async (
-    t: Trello.PowerUp.IFrame,
-  ): Promise<boolean> => {
+  async hasCurrentMemberVoted(t: Trello.PowerUp.IFrame): Promise<boolean> {
     const votes = await this.cardStorage.read(t, CardStorage.VOTES);
     if (!votes) {
       return false;
@@ -18,15 +20,16 @@ class Voting {
 
     const currentMember = t.getContext().member;
     return !!votes[currentMember];
-  };
+  }
 
-  getVotes = async (t: Trello.PowerUp.IFrame): Promise<Votes> =>
-    this.cardStorage.read(t, CardStorage.VOTES);
+  async getVotes(t: Trello.PowerUp.IFrame): Promise<Votes> {
+    return await this.cardStorage.read(t, CardStorage.VOTES);
+  }
 
-  countVotesByCard = async (
+  async countVotesByCard(
     t: Trello.PowerUp.IFrame,
     cardId: string,
-  ): Promise<number> => {
+  ): Promise<number> {
     const votes = await this.cardStorage.read(t, CardStorage.VOTES, cardId);
 
     if (!votes) {
@@ -34,16 +37,16 @@ class Voting {
     }
 
     return Object.keys(votes).filter((key) => votes[key]).length;
-  };
+  }
 
-  getMaxVotes = async (t: Trello.PowerUp.IFrame): Promise<number> => {
+  async getMaxVotes(t: Trello.PowerUp.IFrame): Promise<number> {
     const currentList = await t.list("cards");
 
     // https://www.talcottridge.com/multi-voting-math-or-n3
     return Math.ceil(currentList.cards.length / 3);
-  };
+  }
 
-  canCurrentMemberVote = async (t: Trello.PowerUp.IFrame): Promise<boolean> => {
+  async canCurrentMemberVote(t: Trello.PowerUp.IFrame): Promise<boolean> {
     if (await this.hasCurrentMemberVoted(t)) {
       return true;
     }
@@ -54,12 +57,12 @@ class Voting {
     const maxVotes = await this.getMaxVotes(t);
 
     return currentMemberVotes < maxVotes;
-  };
+  }
 
-  countVotesByMember = async (
+  async countVotesByMember(
     t: Trello.PowerUp.IFrame,
     cardIds: string[],
-  ): Promise<number> => {
+  ): Promise<number> {
     const listVotes: number[] = await Promise.all(
       cardIds.map(async (cardId): Promise<number> => {
         const votes = await this.cardStorage.read(t, CardStorage.VOTES, cardId);
@@ -73,7 +76,7 @@ class Voting {
     );
 
     return listVotes.reduce((total, vote): number => total + vote, 0);
-  };
+  }
 }
 
 export default Voting;

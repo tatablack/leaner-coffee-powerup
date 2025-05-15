@@ -22,23 +22,23 @@ class LeanCoffeeSettings extends LeanCoffeeIFrame {
     });
   }
 
-  showData = async (evt: Event): Promise<void> => {
+  async showData(evt: Event): Promise<void> {
     evt.preventDefault();
     if (isRunningInProduction()) {
       return;
     }
 
     await Debug.showData(this.t);
-  };
+  }
 
-  wipeData = async (evt: Event): Promise<void> => {
+  async wipeData(evt: Event): Promise<void> {
     evt.preventDefault();
     if (isRunningInProduction()) {
       return;
     }
 
     await Debug.wipeData(this.t, this.cardStorage, this.boardStorage);
-  };
+  }
 }
 
 export default LeanCoffeeSettings;

@@ -2,13 +2,17 @@ import formatDuration from "format-duration";
 
 import { Trello } from "../types/TrelloPowerUp";
 import Discussion from "../utils/Discussion";
+import { ErrorReporterInjector } from "../utils/Errors";
+import { bindAll } from "../utils/Scope";
 
-class ElapsedCardBadge implements ElapsedCardBadge {
+@ErrorReporterInjector
+class ElapsedCardBadge {
   discussion: Discussion;
 
   constructor(discussion: Discussion) {
     this.discussion = discussion;
     this.render = this.render.bind(this);
+    bindAll(this);
   }
 
   getText = async (

@@ -1,12 +1,14 @@
 import BoardStorage from "../storage/BoardStorage";
 import { Trello } from "../types/TrelloPowerUp";
-import { isRunningInProduction } from "../utils/Errors";
+import { ErrorReporterInjector, isRunningInProduction } from "../utils/Errors";
+import { bindAll } from "../utils/Scope";
 
 export interface LeanCoffeePopupBaseParams {
   w: Window;
 }
 
-export class LeanCoffeePopupBase {
+@ErrorReporterInjector
+class LeanCoffeePopupBase {
   w: Window;
   t: Trello.PowerUp.IFrame;
   boardStorage: BoardStorage;
@@ -17,6 +19,7 @@ export class LeanCoffeePopupBase {
       helpfulStacks: !isRunningInProduction(),
     });
     this.w = w;
+    bindAll(this);
 
     Promise.all([
       this.boardStorage.getOrganisationIdHash(this.t),
@@ -52,3 +55,5 @@ export class LeanCoffeePopupBase {
       .then(callback);
   }
 }
+
+export default LeanCoffeePopupBase;

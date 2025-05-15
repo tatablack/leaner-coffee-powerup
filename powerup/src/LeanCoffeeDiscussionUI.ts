@@ -61,7 +61,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
     });
   }
 
-  monitorDiscussion = async (): Promise<void> => {
+  async monitorDiscussion(): Promise<void> {
     const discussionStatus = await this.cardStorage.getDiscussionStatus(this.t);
     const isOngoingOrPausedForThisCard = ["ONGOING", "PAUSED"].includes(
       discussionStatus,
@@ -116,9 +116,9 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
     }
 
     this.previousStatus = discussionStatus;
-  };
+  }
 
-  updateElapsed = async (status: DiscussionStatus): Promise<void> => {
+  async updateElapsed(status: DiscussionStatus): Promise<void> {
     if (status === "ONGOING") {
       const startedAt = await this.boardStorage.getDiscussionStartedAt(this.t);
       const previousElapsed =
@@ -136,9 +136,9 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
       this.badgeElapsed.classList.remove("ongoing");
       this.badgeElapsed.textContent = `${this.t.localizeKey("discussionElapsed")} → ${formatDuration(elapsed)}`;
     }
-  };
+  }
 
-  updateThumbs = async (): Promise<void> => {
+  async updateThumbs(): Promise<void> {
     const savedThumbs =
       (await this.cardStorage.getDiscussionThumbs(this.t)) || {};
     const currentMember = this.t.getContext().member;
@@ -160,9 +160,9 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
         thumbsBadge.classList.remove("own");
       }
     });
-  };
+  }
 
-  handleThumbs = async (thumb: Thumb): Promise<void> => {
+  async handleThumbs(thumb: Thumb): Promise<void> {
     const thumbs = (await this.cardStorage.getDiscussionThumbs(this.t)) || {};
     const currentMember = this.t.getContext().member;
 
@@ -181,11 +181,11 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
     }
 
     return this.cardStorage.saveDiscussionThumbs(this.t, thumbs);
-  };
+  }
 
-  toggleBadges = (visible: boolean): void => {
+  toggleBadges(visible: boolean): void {
     this.badges.style.display = visible ? "grid" : "none";
-  };
+  }
 
   toggleVoting = (visible: boolean): void => {
     this.voting.forEach((element) => {
@@ -193,15 +193,15 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
     });
   };
 
-  updateStatusHeader = (status: DiscussionStatus): void => {
+  updateStatusHeader(status: DiscussionStatus): void {
     if (status === "PAUSED") {
       this.toggleFields(".badge-header-text", "discussionUiWhatNext");
     } else {
       this.toggleFields(".badge-header-text", "discussionUiStatus");
     }
-  };
+  }
 
-  toggleFields = (cssSelector: string, key: string): void => {
+  toggleFields(cssSelector: string, key: string): void {
     const elements = this.w.document.querySelectorAll(
       cssSelector,
     ) as NodeListOf<HTMLElement>;
@@ -211,7 +211,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
 
       message.style.display = shouldBeDisplayed ? "block" : "none";
     });
-  };
+  }
 }
 
 export default LeanCoffeeDiscussionUI;
