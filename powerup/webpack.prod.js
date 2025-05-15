@@ -18,6 +18,7 @@ const prod = merge(common, {
       authToken: process.env.SENTRY_AUTH_TOKEN,
       debug: true,
       release: { name: BUILDTIME_VERSION, inject: false },
+      disable: process.env.SENTRY_SOURCEMAPS_DISABLED === "true",
     }),
   ],
 
