@@ -42,6 +42,7 @@ const Config = {
 const TEMPLATE_PARAMETERS = {
   SENTRY_LOADER: process.env.SENTRY_LOADER,
   UMAMI_LOADER: process.env.UMAMI_LOADER,
+  POWERUP_LOADER: process.env.POWERUP_LOADER,
   ANALYTICS_TAG: `${process.env.NODE_ENV}_${BUILDTIME_VERSION}`.substring(
     0,
     50,
