@@ -55,9 +55,18 @@
 
         <%~ include('inline/sentry_init', { BUILDTIME_VERSION, ENVIRONMENT }) %>
         <script src="<%= it.SENTRY_LOADER %>" crossorigin="anonymous"></script>
-        <script src="https://p.trellocdn.com/power-up.min.js"></script>
+        <script src="<%= it.POWERUP_LOADER %>" crossorigin="anonymous"></script>
         <script>
-            const t = window.TrelloPowerUp.iframe();
+            const t = window.TrelloPowerUp.iframe({ helpfulStacks: <% if (it.ENVIRONMENT === "development") { %>true,<% } else { %>false<% } %> });
+
+            if (window.Sentry) {
+                window.Sentry.onLoad(async () => {
+                    window.Sentry.setTags({
+                        organisationIdHash: t.arg("organisationIdHash"),
+                        boardIdHash: t.arg("boardIdHash"),
+                    });
+                });
+            }
 
             document.getElementById('dismiss').addEventListener('click', () => {
               window.umami && window.umami.track("updateAcknowledged");

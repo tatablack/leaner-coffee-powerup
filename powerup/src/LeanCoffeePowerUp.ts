@@ -1,4 +1,4 @@
-import { CapabilityHandlers } from "./CapabilityHandlers";
+import CapabilityHandlers from "./CapabilityHandlers";
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from "./LeanCoffeeBase";
 import ElapsedCardBadge from "./badges/ElapsedCardBadge";
 import ElapsedCardDetailBadge from "./badges/ElapsedCardDetailBadge";
@@ -8,6 +8,11 @@ import BoardStorage from "./storage/BoardStorage";
 import { Trello } from "./types/TrelloPowerUp";
 import Analytics from "./utils/Analytics";
 import Discussion from "./utils/Discussion";
+import {
+  ErrorReporterInjector,
+  getTagsForReporting,
+  isRunningInProduction,
+} from "./utils/Errors";
 import { digestMessage } from "./utils/Hashing";
 import { I18nConfig } from "./utils/I18nConfig";
 import VersionChecker from "./utils/VersionChecker";
@@ -23,6 +28,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   votingCardBadge: VotingCardBadge;
   votingCardDetailBadge: VotingCardDetailBadge;
   versionChecker: VersionChecker;
+  capabilityHandlers: CapabilityHandlers;
 
   constructor({ w, config }: LeanCoffeeBaseParams) {
     super({ w, config });
@@ -55,13 +61,14 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       this.boardStorage,
       this.cardStorage,
     );
+    this.capabilityHandlers = new CapabilityHandlers(this);
   }
 
-  handleVoting = async (t: Trello.PowerUp.IFrame): Promise<void> => {
+  async handleVoting(t: Trello.PowerUp.IFrame): Promise<void> {
     if (!(await this.voting.canCurrentMemberVote(t))) {
       return t.popup({
         title: "Leaner Coffee",
-        url: `${this.baseUrl}/too_many_votes.html?${await Analytics.getOverrides(this.boardStorage, t)}`,
+        url: `${this.baseUrl}/too_many_votes.html?${await Analytics.getOverrides(this.boardStorage, t)}&${await getTagsForReporting(this.boardStorage, t)}`,
         args: {
           maxVotes: await this.voting.getMaxVotes(t),
           localization: I18nConfig,
@@ -94,9 +101,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
 
     await this.cardStorage.saveVotes(t, votes);
     await Analytics.event(this.w, "voted", { outcome: outcome });
-  };
+  }
 
-  stopAndStart = async (t: Trello.PowerUp.IFrame): Promise<void> => {
+  async stopAndStart(t: Trello.PowerUp.IFrame): Promise<void> {
     await Analytics.event(this.w, "discussionStatusOverridden");
 
     await this.discussion.end(t);
@@ -108,9 +115,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     await Analytics.event(this.w, "discussionStatusChanged", {
       newStatus: "started",
     });
-  };
+  }
 
-  handleDiscussion = async (t: Trello.PowerUp.IFrame): Promise<void> => {
+  async handleDiscussion(t: Trello.PowerUp.IFrame): Promise<void> {
     if (await this.discussion.isOngoingOrPausedForAnotherCard(t)) {
       const boardStatus = await this.boardStorage.getDiscussionStatus(t);
       const cardId = await this.boardStorage.getDiscussionCardId(t);
@@ -265,9 +272,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       title: "Leaner Coffee",
       items,
     });
-  };
+  }
 
-  getButtonLabel = async (t: Trello.PowerUp.IFrame): Promise<string> => {
+  async getButtonLabel(t: Trello.PowerUp.IFrame): Promise<string> {
     let label = await this.discussion.cardStorage.getDiscussionButtonLabel(t);
 
     if (label) {
@@ -279,9 +286,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     label = label || t.localizeKey("discussion");
 
     return label;
-  };
+  }
 
-  handlePowerupEnabled = async (t: Trello.PowerUp.AnonymousHostHandlers) => {
+  async handlePowerupEnabled(t: Trello.PowerUp.AnonymousHostHandlers) {
     const organisation = await t.organization("id");
     const board = await t.board("id");
     const organisationIdHash = await digestMessage(organisation.id);
@@ -292,12 +299,12 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       [BoardStorage.ORGANISATION_HASH]: organisationIdHash,
       [BoardStorage.BOARD_HASH]: boardIdHash,
     });
-  };
+  }
 
   async start(): Promise<void> {
-    const trelloPlugin = this.t.initialize(CapabilityHandlers(this), {
+    const trelloPlugin = this.t.initialize(this.capabilityHandlers.getAll(), {
       localization: I18nConfig,
-      helpfulStacks: !this.isRunningInProduction(),
+      helpfulStacks: !isRunningInProduction(),
     }) as Trello.PowerUp.Plugin;
 
     this.discussion.init(trelloPlugin);
@@ -323,11 +330,20 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       await this.boardStorage.getOrganisationIdHash(trelloPlugin);
     const boardIdHash = await this.boardStorage.getBoardIdHash(trelloPlugin);
 
+    if (window.Sentry) {
+      window.Sentry.onLoad(async () => {
+        window.Sentry.setTags({
+          organisationIdHash: organisationIdHash,
+          boardIdHash: boardIdHash,
+        });
+      });
+    }
+
     this.w.LeanerCoffeeAnalyticsReferrer = "https://" + organisationIdHash;
     this.w.LeanerCoffeeAnalyticsHostname = boardIdHash;
     this.w.LeanerCoffeeAnalyticsBeforeSend = Analytics.beforeSend;
 
-    setTimeout(async () => {
+    window.setTimeout(async () => {
       await Analytics.pageview(this.w);
     }, 0);
   }

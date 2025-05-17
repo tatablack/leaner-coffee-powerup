@@ -1,22 +1,40 @@
+import BoardStorage from "../storage/BoardStorage";
 import { Trello } from "../types/TrelloPowerUp";
+import { ErrorReporterInjector, isRunningInProduction } from "../utils/Errors";
+import { bindAll } from "../utils/Scope";
 
 export interface LeanCoffeePopupBaseParams {
   w: Window;
 }
 
-export class LeanCoffeePopupBase {
+@ErrorReporterInjector
+class LeanCoffeePopupBase {
   w: Window;
   t: Trello.PowerUp.IFrame;
+  boardStorage: BoardStorage;
 
   constructor({ w }: LeanCoffeePopupBaseParams) {
+    this.boardStorage = new BoardStorage();
     this.t = w.TrelloPowerUp.iframe({
-      helpfulStacks: !this.isRunningInProduction(),
+      helpfulStacks: !isRunningInProduction(),
     });
     this.w = w;
-  }
+    bindAll(this);
 
-  isRunningInProduction = (): boolean =>
-    (process.env.NODE_ENV as Environment) === "production";
+    Promise.all([
+      this.boardStorage.getOrganisationIdHash(this.t),
+      this.boardStorage.getBoardIdHash(this.t),
+    ]).then(([organisationIdHash, boardIdHash]) => {
+      if (this.w.Sentry) {
+        this.w.Sentry.onLoad(async () => {
+          this.w.Sentry.setTags({
+            organisationIdHash: organisationIdHash,
+            boardIdHash: boardIdHash,
+          });
+        });
+      }
+    });
+  }
 
   toggleFields(cssSelector: string, key: string): void {
     const elements: NodeListOf<HTMLElement> =
@@ -37,3 +55,5 @@ export class LeanCoffeePopupBase {
       .then(callback);
   }
 }
+
+export default LeanCoffeePopupBase;

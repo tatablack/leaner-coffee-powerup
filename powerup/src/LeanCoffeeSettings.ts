@@ -1,21 +1,10 @@
-import { LeanCoffeeBase, LeanCoffeeBaseParams } from "./LeanCoffeeBase";
-import { Trello } from "./types/TrelloPowerUp";
+import { LeanCoffeeIFrame } from "./LeanCoffeeIFrame";
 import Debug from "./utils/Debug";
-import { I18nConfig } from "./utils/I18nConfig";
+import { isRunningInProduction } from "./utils/Errors";
 
-class LeanCoffeeSettings extends LeanCoffeeBase {
-  t: Trello.PowerUp.IFrame;
-
-  constructor({ w, config }: LeanCoffeeBaseParams) {
-    super({ w, config });
-    this.t = w.TrelloPowerUp.iframe({
-      localization: I18nConfig,
-      helpfulStacks: !this.isRunningInProduction(),
-    });
-  }
-
+class LeanCoffeeSettings extends LeanCoffeeIFrame {
   init(): void {
-    if (!this.isRunningInProduction()) {
+    if (!isRunningInProduction()) {
       (
         this.w.document.querySelector(".dev-only") as HTMLElement
       ).style.display = "block";
@@ -33,23 +22,23 @@ class LeanCoffeeSettings extends LeanCoffeeBase {
     });
   }
 
-  showData = async (evt: Event): Promise<void> => {
+  async showData(evt: Event): Promise<void> {
     evt.preventDefault();
-    if (this.isRunningInProduction()) {
+    if (isRunningInProduction()) {
       return;
     }
 
     await Debug.showData(this.t);
-  };
+  }
 
-  wipeData = async (evt: Event): Promise<void> => {
+  async wipeData(evt: Event): Promise<void> {
     evt.preventDefault();
-    if (this.isRunningInProduction()) {
+    if (isRunningInProduction()) {
       return;
     }
 
     await Debug.wipeData(this.t, this.cardStorage, this.boardStorage);
-  };
+  }
 }
 
 export default LeanCoffeeSettings;

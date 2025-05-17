@@ -1,6 +1,7 @@
 import VotingCardBadge from "./VotingCardBadge";
 import { Trello } from "../types/TrelloPowerUp";
 import Analytics from "../utils/Analytics";
+import { getTagsForReporting } from "../utils/Errors";
 import { I18nConfig } from "../utils/I18nConfig";
 
 class VotingCardDetailBadge extends VotingCardBadge {
@@ -22,7 +23,7 @@ class VotingCardDetailBadge extends VotingCardBadge {
 
     await t.popup({
       title: t.localizeKey("voters"),
-      url: `./voters.html?${await Analytics.getOverrides(this.boardStorage, t)}`,
+      url: `./voters.html?${await Analytics.getOverrides(this.boardStorage, t)}&${await getTagsForReporting(this.boardStorage, t)}`,
       args: {
         items,
         localization: I18nConfig,

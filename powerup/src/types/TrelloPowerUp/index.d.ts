@@ -1,7 +1,5 @@
 // Type definitions for the Trello PowerUp Client v1.20.9
 // Definitions by: Angelo Tata https://github.com/tatablack/
-import type { umami } from "@types/umami-browser";
-
 export namespace Trello {
   interface PowerUp {
     version: string;
@@ -659,12 +657,5 @@ declare global {
   interface Window {
     TrelloPowerUp: Trello.PowerUp;
     locale: string;
-    umami: umami.umami;
-    LeanerCoffeeAnalyticsBeforeSend: (
-      event: string,
-      payload: umami.CustomPayload,
-    ) => umami.CustomPayload;
-    LeanerCoffeeAnalyticsReferrer: string;
-    LeanerCoffeeAnalyticsHostname: string;
   }
 }

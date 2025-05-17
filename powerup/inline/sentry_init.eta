@@ -1,11 +1,11 @@
 <script>
     window.sentryOnLoad = function () {
-        // We need to sanitise the release name to avoid issues with Sentry. See:
+        // We need to sanitise the release name to avoid issues. See:
         // https://github.com/getsentry/relay/blob/3df33b87bbbf71d65a74e285e3a43853da5ea1d9/relay-event-schema/src/protocol/event.rs#L321-L327
         Sentry.init({
-        sendDefaultPii: false,
-        release: "<%= it.BUILDTIME_VERSION %>".replaceAll(/[^a-zA-Z0-9_.-]/g, "-"),
-        environment: "<%= it.ENVIRONMENT %>",
-      });
+            sendDefaultPii: false,
+            release: "<%= it.BUILDTIME_VERSION %>".replaceAll(/[^a-zA-Z0-9_.-]/g, "-"),
+            environment: "<%= it.ENVIRONMENT %>",
+        });
     };
 </script>

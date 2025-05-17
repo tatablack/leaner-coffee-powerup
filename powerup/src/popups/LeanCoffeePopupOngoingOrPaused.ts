@@ -1,4 +1,4 @@
-import { LeanCoffeePopupBase } from "./LeanCoffeePopupBase";
+import LeanCoffeePopupBase from "./LeanCoffeePopupBase";
 
 export class LeanCoffeePopupOngoingOrPaused extends LeanCoffeePopupBase {
   currentCardBeingDiscussed: string;
@@ -31,12 +31,12 @@ export class LeanCoffeePopupOngoingOrPaused extends LeanCoffeePopupBase {
     });
   }
 
-  onLocalised = async (): Promise<void> => {
+  async onLocalised(): Promise<void> {
     this.toggleFields(
       ".message",
       this.isRunning ? "ongoingRunning" : "ongoingOnHold",
     );
     this.t.localizeNode(document.body);
     await this.t.sizeTo("body");
-  };
+  }
 }
