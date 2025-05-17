@@ -1,0 +1,92 @@
+# There is no continuous delivery for this project.
+# In order to decide when to cut a new release, PR labels are looked at.
+# Any PR with the "release" label will trigger the workflow below,
+# which will bump the version number of the project based on another
+# label, one of major|minor|patch.
+#
+# Then the workflow will run a production build and commit the output,
+# tag the commit, and push it straight to main.
+
+name: production-build
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    if: ${{ (github.event.pull_request.merged == true) && (contains(github.event.pull_request.labels.*.name, 'release')) }}
+    runs-on: ubuntu-latest
+    name: Bump version and create a new production build
+    steps:
+      - name: Generate a token # Which will be valid only for this repo
+        id: generate_token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: "${{ secrets.RELEASER_APP_ID }}"
+          private-key: "${{ secrets.RELEASER_APP_KEY }}"
+          owner: ${{ github.repository_owner }}
+          repositories: |
+            test-gha
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: "${{ steps.generate_token.outputs.token }}"
+          # Make sure the value of GITHUB_TOKEN will not be persisted in repo's config
+          persist-credentials: false
+
+      - name: Get GitHub App User ID
+        id: get-user-id
+        run: echo "user-id=$(gh api "/users/${{ steps.generate_token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+
+      - name: Configure git user
+        run: |
+          git config --global user.name '${{ steps.generate_token.outputs.app-slug }}[bot]'
+          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.generate_token.outputs.app-slug }}[bot]@users.noreply.github.com'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: package.json
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: package.json
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "store_path=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.store_path }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Bump version
+        run: |
+          node --version
+          pnpm --version
+          # We pull the type of version increase from the PR labels
+          operation=$(echo '${{toJSON(github.event.pull_request.labels.*.name)}}' | jq '.[] | select(. as $item | ["major", "minor", "patch"] | contains([$item]))')
+          echo "Creating a new ${operation} version"
+          cd powerup
+          new_version=$(npm version ${operation//\"/})
+          new_version_short=$(cat package.json | jq ".version")
+          git commit -m ${new_version_short//\"/}
+          git tag -a ${new_version} -m "${new_version}"
+          git push --tags https://x-access-token:${{ steps.generate_token.outputs.token }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}

@@ -13,8 +13,6 @@ const getTagsForReporting = async (
 const isRunningInProduction = (): boolean =>
   (process.env.NODE_ENV as Environment) === "production";
 
-const isPromise = (obj: any) => !!obj && typeof obj.then === "function";
-
 const ErrorReporter = (
   target: any,
   methodName: string,

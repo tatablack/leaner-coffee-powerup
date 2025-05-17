@@ -8,11 +8,7 @@ import BoardStorage from "./storage/BoardStorage";
 import { Trello } from "./types/TrelloPowerUp";
 import Analytics from "./utils/Analytics";
 import Discussion from "./utils/Discussion";
-import {
-  ErrorReporterInjector,
-  getTagsForReporting,
-  isRunningInProduction,
-} from "./utils/Errors";
+import { getTagsForReporting, isRunningInProduction } from "./utils/Errors";
 import { digestMessage } from "./utils/Hashing";
 import { I18nConfig } from "./utils/I18nConfig";
 import VersionChecker from "./utils/VersionChecker";
