@@ -31,7 +31,7 @@ jobs:
           private-key: "${{ secrets.RELEASER_APP_KEY }}"
           owner: ${{ github.repository_owner }}
           repositories: |
-            test-gha
+            leaner-coffee-powerup
 
       - name: Checkout repo
         uses: actions/checkout@v4
