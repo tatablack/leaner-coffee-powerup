@@ -84,12 +84,12 @@ jobs:
           echo "Node.js: $(node --version)"
           echo "Pnpm: $(pnpm --version)"
           # We pull the type of version increase from the PR labels
-          operation=$(echo '${{toJSON(github.event.pull_request.labels.*.name)}}' | jq '.[] | select(. as $item | ["major", "minor", "patch"] | contains([$item]))')
-          echo "Creating a new ${operation//\"/} version"
+          bump_type=$(echo '${{toJSON(github.event.pull_request.labels.*.name)}}' | jq '.[] | select(. as $item | ["major", "minor", "patch"] | contains([$item]))' | tr -d '"')
+          echo "Creating a new ${bump_type} version"
           cd powerup
-          npm version --no-git-tag-version ${operation//\"/}
-          new_version=$(cat package.json | jq ".version")
+          npm version --no-git-tag-version ${bump_type}
+          new_version=$(cat package.json | jq ".version" | tr -d '"')
           git add ..
-          git commit -m "${new_version}"
-          git tag -a v${new_version} -m "v${new_version}"
+          git commit -m ${new_version}
+          git tag -a v${new_version} -m v${new_version}
           git push --tags https://x-access-token:${{ steps.generate_token.outputs.token }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
