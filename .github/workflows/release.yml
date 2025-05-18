@@ -80,6 +80,7 @@ jobs:
       - name: Bump version
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_LOADER: ${{ secrets.SENTRY_LOADER }}
         run: |
           echo "Node.js: $(node --version)"
           echo "Pnpm: $(pnpm --version)"
