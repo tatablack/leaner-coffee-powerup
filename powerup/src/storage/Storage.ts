@@ -15,47 +15,116 @@ class Storage {
     bindAll(this);
   }
 
-  read(
-    t: Trello.PowerUp.AnonymousHostHandlers,
+  canWrite(t: Trello.PowerUp.HostHandlers): boolean {
+    return this.scope === "member" || t.memberCanWriteToModel(this.scope);
+  }
+
+  async isObserver(t: Trello.PowerUp.AnonymousHostHandlers) {
+    const board = await t.board("memberships");
+    const currentMember = await t.member("id");
+    const myMembership = board.memberships.find(
+      (m) => m.idMember === currentMember.id,
+    );
+    return myMembership && myMembership.memberType === "observer";
+  }
+
+  read<T>(
+    t: Trello.PowerUp.HostHandlers | Trello.PowerUp.AnonymousHostHandlers,
     key: string,
     cardId?: string,
-  ): PromiseLike<any> {
+  ): PromiseLike<T> {
     return t.get(cardId ?? this.scope, this.visibility, key);
   }
 
-  write(
-    t: Trello.PowerUp.AnonymousHostHandlers,
+  async write(
+    t: Trello.PowerUp.HostHandlers | Trello.PowerUp.AnonymousHostHandlers,
     key: string,
     value: any,
     cardId?: string,
-  ): PromiseLike<void> {
-    return t.set(cardId ?? this.scope, this.visibility, key, value);
+  ): Promise<void> {
+    if (!("memberCanWriteToModel" in t) || this.canWrite(t)) {
+      await t.set(cardId ?? this.scope, this.visibility, key, value);
+    } else {
+      window.Sentry.captureException(new Error("Error while editing scope"), {
+        contexts: {
+          WriteOperation: {
+            scope: this.scope,
+            visibility: this.visibility,
+            key: key,
+            hasCardId: !!cardId,
+            isObserver: await this.isObserver(t),
+          },
+        },
+      });
+    }
   }
 
-  writeMultiple(
-    t: Trello.PowerUp.AnonymousHostHandlers,
+  async writeMultiple(
+    t: Trello.PowerUp.HostHandlers | Trello.PowerUp.AnonymousHostHandlers,
     entries: {
       [key: string]: any;
     },
     cardId?: string,
-  ): PromiseLike<void> {
-    return t.set(cardId ?? this.scope, this.visibility, entries);
+  ): Promise<void> {
+    if (!("memberCanWriteToModel" in t) || this.canWrite(t)) {
+      await t.set(cardId ?? this.scope, this.visibility, entries);
+    } else {
+      window.Sentry.captureException(new Error("Error while editing scope"), {
+        contexts: {
+          WriteOperation: {
+            scope: this.scope,
+            visibility: this.visibility,
+            key: entries,
+            hasCardId: !!cardId,
+            isObserver: await this.isObserver(t),
+          },
+        },
+      });
+    }
   }
 
-  delete(
-    t: Trello.PowerUp.AnonymousHostHandlers,
+  async delete(
+    t: Trello.PowerUp.HostHandlers | Trello.PowerUp.AnonymousHostHandlers,
     key: string,
     cardId?: string,
-  ): PromiseLike<void> {
-    return t.remove(cardId ?? this.scope, this.visibility, key);
+  ): Promise<void> {
+    if (!("memberCanWriteToModel" in t) || this.canWrite(t)) {
+      return t.remove(cardId ?? this.scope, this.visibility, key);
+    } else {
+      window.Sentry.captureException(new Error("Error while editing scope"), {
+        contexts: {
+          DeleteOperation: {
+            scope: this.scope,
+            visibility: this.visibility,
+            key: key,
+            hasCardId: !!cardId,
+            isObserver: await this.isObserver(t),
+          },
+        },
+      });
+    }
   }
 
-  deleteMultiple(
-    t: Trello.PowerUp.AnonymousHostHandlers,
+  async deleteMultiple(
+    t: Trello.PowerUp.HostHandlers | Trello.PowerUp.AnonymousHostHandlers,
     entries: string[],
     cardId?: string,
-  ): PromiseLike<void> {
-    return t.remove(cardId ?? this.scope, this.visibility, entries);
+  ): Promise<void> {
+    if (!("memberCanWriteToModel" in t) || this.canWrite(t)) {
+      return t.remove(cardId ?? this.scope, this.visibility, entries);
+    } else {
+      window.Sentry.captureException(new Error("Error while editing scope"), {
+        contexts: {
+          DeleteOperation: {
+            scope: this.scope,
+            visibility: this.visibility,
+            key: entries,
+            hasCardId: !!cardId,
+            isObserver: await this.isObserver(t),
+          },
+        },
+      });
+    }
   }
 }
 
