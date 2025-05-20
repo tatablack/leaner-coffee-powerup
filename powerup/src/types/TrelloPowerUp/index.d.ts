@@ -1,4 +1,4 @@
-// Type definitions for the Trello PowerUp Client v1.20.9
+// Type definitions for the Trello PowerUp Client v1.25.0
 // Definitions by: Angelo Tata https://github.com/tatablack/
 export namespace Trello {
   interface PowerUp {
@@ -10,7 +10,7 @@ export namespace Trello {
     initialize(
       handlers: PowerUp.CapabilityHandlers,
       options?: PowerUp.PluginOptions,
-    ): PowerUp.Plugin | PowerUp.IFrame;
+    ): PowerUp.Plugin;
     restApiError(): any;
     util: PowerUp.Util;
   }
@@ -518,6 +518,17 @@ export namespace Trello {
       version: string;
     }
 
+    interface ConfettiOptions {
+      clientX: number;
+      clientY: number;
+      target: EventTarget;
+    }
+
+    interface JWTOptions {
+      card?: Trello.PowerUp.Card;
+      state?: string;
+    }
+
     interface HostHandlers extends AnonymousHostHandlers {
       getContext(): Context;
       isMemberSignedIn(): boolean;
@@ -573,10 +584,14 @@ export namespace Trello {
         fullscreen?: boolean;
         title?: string;
       }): PromiseLike<void>;
+      /** @deprecated Use `closePopup` instead. */
+      hide(): PromiseLike<void>;
       closePopup(): PromiseLike<void>;
       back(): PromiseLike<void>;
+      /** @deprecated Use `closeOverlay` instead. */
       hideOverlay(): PromiseLike<void>;
       closeOverlay(options?: { inset?: unknown }): PromiseLike<void>;
+      /** @deprecated Use `closeBoardBar` instead. */
       hideBoardBar(): PromiseLike<void>;
       closeBoardBar(): PromiseLike<void>;
       closeModal(): PromiseLike<void>;
@@ -602,6 +617,21 @@ export namespace Trello {
           targetOrigin: string;
         },
       ): PromiseLike<void>;
+      confetti(
+        arg: ConfettiOptions,
+      ): ReturnType<
+        typeof Trello.PowerUp.AnonymousHostHandlers.requestWithContext
+      >;
+      jwt(
+        options: JWTOptions,
+      ): ReturnType<
+        typeof Trello.PowerUp.AnonymousHostHandlers.requestWithContext
+      >;
+      getColorToken(path: string, fallback?: string): string;
+      getComputedColorToken(path: string): string;
+      subscribeToThemeChanges(
+        onThemeLoaded: (theme: { [key: string]: string }) => void,
+      ): () => void;
     }
 
     interface IFrameOptions extends LocalizerOptions {
@@ -625,6 +655,35 @@ export namespace Trello {
       initSentry(): void;
     }
 
+    interface PostMessageIO {
+      PluginDisabled: Error;
+      InvalidContext: Error;
+      NotHandled: Error;
+      UnsupportedCommand: Error;
+
+      bufferSize?: number;
+      handlers: CapabilityHandlers;
+      helpfulStacks?: boolean;
+      hostHandlers: HostHandlers;
+      local: window;
+      noisy?: boolean;
+      Promise: Promise<any>;
+      remote: window;
+      secret: string;
+      Sentry: any;
+      strict?: boolean;
+      targetOrigin: string;
+
+      listen(): void;
+      stop(): void;
+      raw(): void;
+      emptyQueue(): void;
+      request(): void;
+      respond(): void;
+      randomId(): void;
+      errorWithStack(): void;
+    }
+
     interface PluginOptions extends LocalizerOptions {
       Sentry?: {
         configureScope(
@@ -645,10 +704,12 @@ export namespace Trello {
 
     interface Plugin extends AnonymousHostHandlers {
       options: PluginOptions;
-      connect(): any; // return an instance of PostMessageIO
-      request(command: string, options: any): PromiseLike<any>; //  // return PostMessageIO.request, whatever that is
-      init(): any; // return an instance of PostMessageIO
-      NotHandled(): any; // return PostMessageIO.NotHandled, whatever that is
+      connect(): Promise<PostMessageIO>;
+      initApi(): ReturnType<typeof Trello.PowerUp.Plugin.connect>; // return an instance of PostMessageIO
+      request(command: string, options: any): Promise<any>;
+      init(): ReturnType<typeof Trello.PowerUp.Plugin.initApi>; // return an instance of PostMessageIO
+      NotHandled: typeof PostMessageIO.NotHandled;
+      io: PostMessageIO;
     }
   }
 }
