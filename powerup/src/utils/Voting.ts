@@ -13,7 +13,7 @@ class Voting {
   }
 
   async hasCurrentMemberVoted(t: Trello.PowerUp.IFrame): Promise<boolean> {
-    const votes = await this.cardStorage.read(t, CardStorage.VOTES);
+    const votes = await this.cardStorage.read<Votes>(t, CardStorage.VOTES);
     if (!votes) {
       return false;
     }
@@ -23,14 +23,18 @@ class Voting {
   }
 
   async getVotes(t: Trello.PowerUp.IFrame): Promise<Votes> {
-    return await this.cardStorage.read(t, CardStorage.VOTES);
+    return await this.cardStorage.read<Votes>(t, CardStorage.VOTES);
   }
 
   async countVotesByCard(
     t: Trello.PowerUp.IFrame,
     cardId: string,
   ): Promise<number> {
-    const votes = await this.cardStorage.read(t, CardStorage.VOTES, cardId);
+    const votes = await this.cardStorage.read<Votes>(
+      t,
+      CardStorage.VOTES,
+      cardId,
+    );
 
     if (!votes) {
       return 0;
@@ -65,7 +69,11 @@ class Voting {
   ): Promise<number> {
     const listVotes: number[] = await Promise.all(
       cardIds.map(async (cardId): Promise<number> => {
-        const votes = await this.cardStorage.read(t, CardStorage.VOTES, cardId);
+        const votes = await this.cardStorage.read<Votes>(
+          t,
+          CardStorage.VOTES,
+          cardId,
+        );
         if (!votes) {
           return 0;
         }

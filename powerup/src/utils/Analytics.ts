@@ -48,10 +48,16 @@ const event = async (
 
 const getOverrides = async (
   boardStorage: BoardStorage,
-  t: Trello.PowerUp.AnonymousHostHandlers,
+  t: Trello.PowerUp.HostHandlers,
 ): Promise<string> => {
-  const organisationIdHash = await boardStorage.getOrganisationIdHash(t);
-  const boardIdHash = await boardStorage.getBoardIdHash(t);
+  const organisationIdHash = await boardStorage.read<string>(
+    t,
+    BoardStorage.ORGANISATION_HASH,
+  );
+  const boardIdHash = await boardStorage.read<string>(
+    t,
+    BoardStorage.BOARD_HASH,
+  );
   const referrer = encodeURIComponent("https://" + organisationIdHash);
   return `referrer=${referrer}&hostname=${boardIdHash}`;
 };

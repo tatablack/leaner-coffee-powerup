@@ -2,6 +2,8 @@ import formatDuration from "format-duration";
 
 import { LeanCoffeeBaseParams } from "./LeanCoffeeBase";
 import { LeanCoffeeIFrame } from "./LeanCoffeeIFrame";
+import BoardStorage from "./storage/BoardStorage";
+import CardStorage from "./storage/CardStorage";
 import Analytics from "./utils/Analytics";
 
 enum ThumbDirection {
@@ -62,7 +64,10 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
   }
 
   async monitorDiscussion(): Promise<void> {
-    const discussionStatus = await this.cardStorage.getDiscussionStatus(this.t);
+    const discussionStatus = await this.cardStorage.read<DiscussionStatus>(
+      this.t,
+      CardStorage.DISCUSSION_STATUS,
+    );
     const isOngoingOrPausedForThisCard = ["ONGOING", "PAUSED"].includes(
       discussionStatus,
     );
@@ -120,9 +125,15 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
 
   async updateElapsed(status: DiscussionStatus): Promise<void> {
     if (status === "ONGOING") {
-      const startedAt = await this.boardStorage.getDiscussionStartedAt(this.t);
+      const startedAt = await this.boardStorage.read<number>(
+        this.t,
+        BoardStorage.DISCUSSION_STARTED_AT,
+      );
       const previousElapsed =
-        (await this.boardStorage.getDiscussionPreviousElapsed(this.t)) || 0;
+        (await this.boardStorage.read<number>(
+          this.t,
+          BoardStorage.DISCUSSION_PREVIOUS_ELAPSED,
+        )) || 0;
       const elapsed = startedAt ? Date.now() - startedAt : 0;
       const formattedTotalElapsed = formatDuration(elapsed + previousElapsed);
 
@@ -130,7 +141,10 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
       this.badgeElapsed.classList.remove("paused");
       this.badgeElapsed.textContent = `${this.t.localizeKey("discussionOngoing")} → ${formattedTotalElapsed}`;
     } else {
-      const elapsed = await this.cardStorage.getDiscussionElapsed(this.t);
+      const elapsed = await this.cardStorage.read<number>(
+        this.t,
+        CardStorage.DISCUSSION_ELAPSED,
+      );
 
       this.badgeElapsed.classList.add(status.toLowerCase());
       this.badgeElapsed.classList.remove("ongoing");
@@ -140,7 +154,10 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
 
   async updateThumbs(): Promise<void> {
     const savedThumbs =
-      (await this.cardStorage.getDiscussionThumbs(this.t)) || {};
+      (await this.cardStorage.read<Thumbs>(
+        this.t,
+        CardStorage.DISCUSSION_THUMBS,
+      )) || {};
     const currentMember = this.t.getContext().member;
     const currentMemberThumb = savedThumbs[currentMember];
 
@@ -163,7 +180,11 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
   }
 
   async handleThumbs(thumb: Thumb): Promise<void> {
-    const thumbs = (await this.cardStorage.getDiscussionThumbs(this.t)) || {};
+    const thumbs =
+      (await this.cardStorage.read<Thumbs>(
+        this.t,
+        CardStorage.DISCUSSION_THUMBS,
+      )) || {};
     const currentMember = this.t.getContext().member;
 
     if (thumbs[currentMember] === thumb) {
@@ -180,7 +201,11 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
       });
     }
 
-    return this.cardStorage.saveDiscussionThumbs(this.t, thumbs);
+    return this.cardStorage.write(
+      this.t,
+      CardStorage.DISCUSSION_THUMBS,
+      thumbs,
+    );
   }
 
   toggleBadges(visible: boolean): void {

@@ -20,7 +20,7 @@ class VersionChecker {
   }
 
   async isThereANewMinorOrMajor(t: Trello.PowerUp.IFrame): Promise<boolean> {
-    const storedVersionRaw = await this.memberStorage.read(
+    const storedVersionRaw = await this.memberStorage.read<string>(
       t,
       MemberStorage.POWER_UP_VERSION,
     );
@@ -40,7 +40,7 @@ class VersionChecker {
   }
 
   async showMenu(t: Trello.PowerUp.IFrame): Promise<void> {
-    const storedVersion = await this.memberStorage.read(
+    const storedVersion = await this.memberStorage.read<string>(
       t,
       MemberStorage.POWER_UP_VERSION,
     );

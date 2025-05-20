@@ -22,8 +22,8 @@ class LeanCoffeePopupBase {
     bindAll(this);
 
     Promise.all([
-      this.boardStorage.getOrganisationIdHash(this.t),
-      this.boardStorage.getBoardIdHash(this.t),
+      this.boardStorage.read<string>(this.t, BoardStorage.BOARD_HASH),
+      this.boardStorage.read<string>(this.t, BoardStorage.ORGANISATION_HASH),
     ]).then(([organisationIdHash, boardIdHash]) => {
       if (this.w.Sentry) {
         this.w.Sentry.onLoad(async () => {

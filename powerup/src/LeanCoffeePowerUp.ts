@@ -5,6 +5,7 @@ import ElapsedCardDetailBadge from "./badges/ElapsedCardDetailBadge";
 import VotingCardBadge from "./badges/VotingCardBadge";
 import VotingCardDetailBadge from "./badges/VotingCardDetailBadge";
 import BoardStorage from "./storage/BoardStorage";
+import CardStorage from "./storage/CardStorage";
 import { Trello } from "./types/TrelloPowerUp";
 import Analytics from "./utils/Analytics";
 import Discussion from "./utils/Discussion";
@@ -95,7 +96,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       outcome = "added";
     }
 
-    await this.cardStorage.saveVotes(t, votes);
+    await this.cardStorage.write(t, CardStorage.VOTES, votes);
     await Analytics.event(this.w, "voted", { outcome: outcome });
   }
 
@@ -115,8 +116,14 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
 
   async handleDiscussion(t: Trello.PowerUp.IFrame): Promise<void> {
     if (await this.discussion.isOngoingOrPausedForAnotherCard(t)) {
-      const boardStatus = await this.boardStorage.getDiscussionStatus(t);
-      const cardId = await this.boardStorage.getDiscussionCardId(t);
+      const boardStatus = await this.boardStorage.read<DiscussionStatus>(
+        t,
+        BoardStorage.DISCUSSION_STATUS,
+      );
+      const cardId = await this.boardStorage.read<string>(
+        t,
+        BoardStorage.DISCUSSION_CARD_ID,
+      );
 
       // https://github.com/tatablack/leaner-coffee-powerup/issues/12
       if (await this.discussion.hasNotBeenArchived(t, cardId)) {
@@ -167,8 +174,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
               });
               await this.discussion.pause(t2);
               await t2.closePopup();
-              await this.discussion.cardStorage.saveDiscussionButtonLabel(
+              await this.discussion.cardStorage.write(
                 t2,
+                CardStorage.DISCUSSION_BUTTON_LABEL,
                 t2.localizeKey("pausingTimer", { symbol: "❙ ❙" }), // MEDIUM VERTICAL BAR + NARROW NO-BREAK SPACE
               );
             },
@@ -181,8 +189,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
               });
               await this.discussion.end(t2);
               await t2.closePopup();
-              await this.discussion.cardStorage.saveDiscussionButtonLabel(
+              await this.discussion.cardStorage.write(
                 t2,
+                CardStorage.DISCUSSION_BUTTON_LABEL,
                 t2.localizeKey("endingDiscussion", { symbol: "■" }), // BLACK SQUARE
               );
             },
@@ -200,8 +209,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
               });
               await this.discussion.start(t2);
               await t2.closePopup();
-              await this.discussion.cardStorage.saveDiscussionButtonLabel(
+              await this.discussion.cardStorage.write(
                 t2,
+                CardStorage.DISCUSSION_BUTTON_LABEL,
                 t2.localizeKey("resumingDiscussion", { symbol: "▶" }), // BLACK RIGHT-POINTING TRIANGLE
               );
             },
@@ -214,8 +224,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
               });
               await this.discussion.end(t2);
               await t2.closePopup();
-              await this.discussion.cardStorage.saveDiscussionButtonLabel(
+              await this.discussion.cardStorage.write(
                 t2,
+                CardStorage.DISCUSSION_BUTTON_LABEL,
                 t2.localizeKey("endingDiscussion", { symbol: "■" }), // BLACK SQUARE
               );
             },
@@ -233,8 +244,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
               });
               await this.discussion.start(t2);
               await t2.closePopup();
-              await this.discussion.cardStorage.saveDiscussionButtonLabel(
+              await this.discussion.cardStorage.write(
                 t2,
+                CardStorage.DISCUSSION_BUTTON_LABEL,
                 t2.localizeKey("startingTimer", { symbol: "▶" }), // BLACK RIGHT-POINTING TRIANGLE
               );
             },
@@ -250,8 +262,9 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
               });
               await this.discussion.reset(t2);
               await t2.closePopup();
-              await this.discussion.cardStorage.saveDiscussionButtonLabel(
+              await this.discussion.cardStorage.write(
                 t2,
+                CardStorage.DISCUSSION_BUTTON_LABEL,
                 t2.localizeKey("resettingDiscussion", { symbol: "↺" }), // ANTICLOCKWISE OPEN CIRCLE ARROW
               );
             },
@@ -271,11 +284,18 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   }
 
   async getButtonLabel(t: Trello.PowerUp.IFrame): Promise<string> {
-    let label = await this.discussion.cardStorage.getDiscussionButtonLabel(t);
+    let label = await this.discussion.cardStorage.read<string>(
+      t,
+      CardStorage.DISCUSSION_BUTTON_LABEL,
+    );
 
     if (label) {
       setTimeout(() => {
-        this.discussion.cardStorage.saveDiscussionButtonLabel(t);
+        this.discussion.cardStorage.write(
+          t,
+          CardStorage.DISCUSSION_BUTTON_LABEL,
+          null,
+        );
       }, 2000);
     }
 
@@ -301,7 +321,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     const trelloPlugin = this.t.initialize(this.capabilityHandlers.getAll(), {
       localization: I18nConfig,
       helpfulStacks: !isRunningInProduction(),
-    }) as Trello.PowerUp.Plugin;
+    });
 
     this.discussion.init(trelloPlugin);
 
@@ -316,15 +336,25 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
           return;
         }
 
-        if (!(await this.boardStorage.getInitialised(trelloPlugin))) {
+        if (
+          !(await this.boardStorage.read<string>(
+            trelloPlugin,
+            BoardStorage.POWER_UP_INSTALLATION_DATE,
+          ))
+        ) {
           await this.handlePowerupEnabled(trelloPlugin);
         }
       },
     );
 
-    const organisationIdHash =
-      await this.boardStorage.getOrganisationIdHash(trelloPlugin);
-    const boardIdHash = await this.boardStorage.getBoardIdHash(trelloPlugin);
+    const organisationIdHash = await this.boardStorage.read<string>(
+      trelloPlugin,
+      BoardStorage.ORGANISATION_HASH,
+    );
+    const boardIdHash = await this.boardStorage.read<string>(
+      trelloPlugin,
+      BoardStorage.BOARD_HASH,
+    );
 
     if (window.Sentry) {
       window.Sentry.onLoad(async () => {

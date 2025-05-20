@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import dotenvx from "@dotenvx/dotenvx";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import HtmlBundlerPlugin from "html-bundler-webpack-plugin";
-import yaml from "js-yaml";
+import { JSON_SCHEMA, load as yaml_load } from "js-yaml";
 import { parseSemVer } from "semver-parser";
 import webpack from "webpack";
 
@@ -158,8 +158,8 @@ const common = {
           transform: (content) =>
             Buffer.from(
               JSON.stringify(
-                yaml.load(content.toString("utf8"), {
-                  schema: yaml.JSON_SCHEMA,
+                yaml_load(content.toString("utf8"), {
+                  schema: JSON_SCHEMA,
                 }),
               ),
               "utf8",

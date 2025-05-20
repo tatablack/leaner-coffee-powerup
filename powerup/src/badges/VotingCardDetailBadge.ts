@@ -1,4 +1,5 @@
 import VotingCardBadge from "./VotingCardBadge";
+import CardStorage from "../storage/CardStorage";
 import { Trello } from "../types/TrelloPowerUp";
 import Analytics from "../utils/Analytics";
 import { getTagsForReporting } from "../utils/Errors";
@@ -8,7 +9,7 @@ class VotingCardDetailBadge extends VotingCardBadge {
   clearVoters = async (t: Trello.PowerUp.IFrame) => {
     const totalVoters = await this.getVoters(t);
 
-    await this.cardStorage.deleteVotes(t);
+    await this.cardStorage.delete(t, CardStorage.VOTES);
     await Analytics.event(this.w, "votesCleared", {
       total: totalVoters.length,
     });
