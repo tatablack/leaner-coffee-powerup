@@ -22,7 +22,7 @@
     "eslint-import-resolver-next": "^0.5.0",
     "eslint-plugin-import-x": "^4.11.0",
     "eslint-plugin-n": "^17.17.0",
-    "globals": "^16.0.0",
+    "globals": "^16.1.0",
     "prettier": "catalog:"
   },
   "packageManager": "pnpm@10.10.0+sha256.fa0f513aa8191764d2b6b432420788c270f07b4f999099b65bb2010eec702a30",
