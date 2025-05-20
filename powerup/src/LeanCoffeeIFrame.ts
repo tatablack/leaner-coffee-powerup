@@ -1,4 +1,5 @@
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from "./LeanCoffeeBase";
+import BoardStorage from "./storage/BoardStorage";
 import { Trello } from "./types/TrelloPowerUp";
 import { isRunningInProduction } from "./utils/Errors";
 import { I18nConfig } from "./utils/I18nConfig";
@@ -15,8 +16,8 @@ export class LeanCoffeeIFrame extends LeanCoffeeBase {
     });
 
     Promise.all([
-      this.boardStorage.getOrganisationIdHash(this.t),
-      this.boardStorage.getBoardIdHash(this.t),
+      this.boardStorage.read<string>(this.t, BoardStorage.ORGANISATION_HASH),
+      this.boardStorage.read<string>(this.t, BoardStorage.BOARD_HASH),
     ]).then(([organisationIdHash, boardIdHash]) => {
       if (this.w.Sentry) {
         this.w.Sentry.onLoad(async () => {

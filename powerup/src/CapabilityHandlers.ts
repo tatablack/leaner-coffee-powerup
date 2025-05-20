@@ -1,4 +1,5 @@
 import LeanCoffeePowerUp from "./LeanCoffeePowerUp";
+import BoardStorage from "./storage/BoardStorage";
 import CardStorage from "./storage/CardStorage";
 import { Trello } from "./types/TrelloPowerUp";
 import Analytics from "./utils/Analytics";
@@ -40,7 +41,10 @@ class CapabilityHandlers {
     t: Trello.PowerUp.IFrame,
   ): Promise<Trello.PowerUp.CardBackSection> {
     const discussionStatus =
-      await this.powerUp.discussion.cardStorage.getDiscussionStatus(t);
+      await this.powerUp.discussion.cardStorage.read<DiscussionStatus>(
+        t,
+        CardStorage.DISCUSSION_STATUS,
+      );
     if (discussionStatus === undefined) {
       return null;
     }
@@ -166,7 +170,10 @@ class CapabilityHandlers {
       "powerup_init",
       { ifAvailable: true },
       async (lock) => {
-        const isInitialised = await this.powerUp.boardStorage.getInitialised(t);
+        const isInitialised = !!(await this.powerUp.boardStorage.read<string>(
+          t,
+          BoardStorage.POWER_UP_INSTALLATION_DATE,
+        ));
         // if the lock is null, it means LeanCoffeePowerup::start is taking care of initialisation
         if (lock === null || isInitialised) {
           return;
