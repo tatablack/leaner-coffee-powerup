@@ -20,7 +20,7 @@
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-import-resolver-next": "^0.5.0",
-    "eslint-plugin-import-x": "^4.11.0",
+    "eslint-plugin-import-x": "^4.12.2",
     "eslint-plugin-n": "^17.17.0",
     "globals": "^16.0.0",
     "prettier": "catalog:"
