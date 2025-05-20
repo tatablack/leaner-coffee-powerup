@@ -26,7 +26,7 @@
     "semver-parser": "^4.1.8"
   },
   "devDependencies": {
-    "@dotenvx/dotenvx": "^1.42.2",
+    "@dotenvx/dotenvx": "^1.44.1",
     "@eslint/js": "catalog:",
     "@eslint/json": "^0.12.0",
     "@eslint/markdown": "^6.4.0",
