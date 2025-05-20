@@ -3,6 +3,7 @@ import BoardStorage from "./storage/BoardStorage";
 import CardStorage from "./storage/CardStorage";
 import { Trello } from "./types/TrelloPowerUp";
 import Analytics from "./utils/Analytics";
+import classifyDuration from "./utils/Duration";
 import { ErrorReporterInjector } from "./utils/Errors";
 import { I18nConfig } from "./utils/I18nConfig";
 import { bindAll } from "./utils/Scope";
@@ -187,8 +188,15 @@ class CapabilityHandlers {
 
     await Analytics.event(window, "enabled");
   }
-  async onDisable(): Promise<void> {
-    await Analytics.event(window, "disabled");
+  async onDisable(t: Trello.PowerUp.IFrame): Promise<void> {
+    const installationDate = await this.powerUp.boardStorage.read<string>(
+      t,
+      BoardStorage.POWER_UP_INSTALLATION_DATE,
+    );
+
+    await Analytics.event(window, "disabled", {
+      installedFor: classifyDuration(Date.now() - Date.parse(installationDate)),
+    });
   }
 
   async showSettings(t: Trello.PowerUp.IFrame): Promise<void> {
