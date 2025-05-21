@@ -42,6 +42,14 @@ class Storage {
     value: any,
     cardId?: string,
   ): Promise<void> {
+    if (!("memberCanWriteToModel" in t)) {
+      window.Sentry.addBreadcrumb({
+        category: "database",
+        message: `Unknown permissions when trying to save "${key}" to the "${this.scope}" ${this.visibility} scope"`,
+        level: "warning",
+      });
+    }
+
     if (!("memberCanWriteToModel" in t) || this.canWrite(t)) {
       await t.set(cardId ?? this.scope, this.visibility, key, value);
     } else {
@@ -66,6 +74,14 @@ class Storage {
     },
     cardId?: string,
   ): Promise<void> {
+    if (!("memberCanWriteToModel" in t)) {
+      window.Sentry.addBreadcrumb({
+        category: "database",
+        message: `Unknown permissions when trying to save "${Object.keys(entries).join(", ")}" to the "${this.scope}" ${this.visibility} scope`,
+        level: "warning",
+      });
+    }
+
     if (!("memberCanWriteToModel" in t) || this.canWrite(t)) {
       await t.set(cardId ?? this.scope, this.visibility, entries);
     } else {
@@ -74,7 +90,7 @@ class Storage {
           WriteOperation: {
             scope: this.scope,
             visibility: this.visibility,
-            key: entries,
+            key: Object.keys(entries),
             hasCardId: !!cardId,
             isObserver: await this.isObserver(t),
           },
@@ -88,6 +104,14 @@ class Storage {
     key: string,
     cardId?: string,
   ): Promise<void> {
+    if (!("memberCanWriteToModel" in t)) {
+      window.Sentry.addBreadcrumb({
+        category: "database",
+        message: `Unknown permissions when trying to save "${key}" to the "${this.scope}" ${this.visibility} scope"`,
+        level: "warning",
+      });
+    }
+
     if (!("memberCanWriteToModel" in t) || this.canWrite(t)) {
       return t.remove(cardId ?? this.scope, this.visibility, key);
     } else {
@@ -110,6 +134,14 @@ class Storage {
     entries: string[],
     cardId?: string,
   ): Promise<void> {
+    if (!("memberCanWriteToModel" in t)) {
+      window.Sentry.addBreadcrumb({
+        category: "database",
+        message: `Unknown permissions when trying to save "${Object.keys(entries).join(", ")}" to the "${this.scope}" ${this.visibility} scope`,
+        level: "warning",
+      });
+    }
+
     if (!("memberCanWriteToModel" in t) || this.canWrite(t)) {
       return t.remove(cardId ?? this.scope, this.visibility, entries);
     } else {
@@ -118,7 +150,7 @@ class Storage {
           DeleteOperation: {
             scope: this.scope,
             visibility: this.visibility,
-            key: entries,
+            key: Object.keys(entries),
             hasCardId: !!cardId,
             isObserver: await this.isObserver(t),
           },
