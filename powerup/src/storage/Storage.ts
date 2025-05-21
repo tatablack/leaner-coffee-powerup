@@ -74,7 +74,7 @@ class Storage {
           WriteOperation: {
             scope: this.scope,
             visibility: this.visibility,
-            key: entries,
+            key: Object.keys(entries),
             hasCardId: !!cardId,
             isObserver: await this.isObserver(t),
           },
@@ -118,7 +118,7 @@ class Storage {
           DeleteOperation: {
             scope: this.scope,
             visibility: this.visibility,
-            key: entries,
+            key: Object.keys(entries),
             hasCardId: !!cardId,
             isObserver: await this.isObserver(t),
           },
