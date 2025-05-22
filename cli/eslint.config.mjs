@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import stylistic from "@stylistic/eslint-plugin";
 import { defineConfig } from "eslint/config";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import { createNextImportResolver } from "eslint-import-resolver-next";
@@ -8,19 +9,27 @@ import globals from "globals";
 
 export default defineConfig({
   files: ["L10nImages/**/*.{js,mjs,cjs}", "*.mjs"],
+
   extends: [
     js.configs.recommended,
     eslintPluginImportX.flatConfigs.recommended,
     nodePlugin.configs["flat/recommended-module"],
     eslintConfigPrettier,
   ],
+
+  plugins: {
+    "@stylistic": stylistic,
+  },
+
   languageOptions: {
     globals: globals.node,
     sourceType: "module",
   },
+
   settings: {
     "import-x/resolver-next": [createNextImportResolver({})],
   },
+
   rules: {
     "n/no-process-exit": "off",
     "n/prefer-node-protocol": ["error"],
@@ -48,6 +57,17 @@ export default defineConfig({
         alphabetize: { order: "asc" },
         sortTypesGroup: true,
         "newlines-between": "always",
+      },
+    ],
+    "@stylistic/max-len": [
+      "error",
+      {
+        code: 120,
+        ignoreUrls: true,
+        ignoreStrings: false,
+        ignoreTemplateLiterals: true,
+        ignoreRegExpLiterals: true,
+        ignoreComments: false,
       },
     ],
   },
