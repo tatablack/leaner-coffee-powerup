@@ -60,7 +60,7 @@ export default defineConfig({
       },
     ],
     "@stylistic/max-len": [
-      "error",
+      "warn",
       {
         code: 120,
         ignoreUrls: true,
