@@ -28,8 +28,7 @@ class Notifications {
   }
 
   async play(type: NotificationType): Promise<void> {
-    this.audioContext =
-      this.audioContext || new (AudioContext || this.w.webkitAudioContext)();
+    this.audioContext = this.audioContext || new (AudioContext || this.w.webkitAudioContext)();
     const audio = await this.load(`${this.baseUrl}/${type.audio}`);
     audio.start();
   }

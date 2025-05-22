@@ -31,26 +31,16 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     super({ w, config });
     this.t = w.TrelloPowerUp;
 
-    const { hostname, port, defaultDuration } =
-      this.config[process.env.NODE_ENV as Environment];
+    const { hostname, port, defaultDuration } = this.config[process.env.NODE_ENV as Environment];
     this.baseUrl = `${hostname}${port ? `:${port}` : ""}`;
 
     this.discussion = new Discussion(this.w, this.baseUrl, defaultDuration);
     this.voting = new Voting();
-    this.versionChecker = new VersionChecker(
-      this.boardStorage,
-      this.memberStorage,
-    );
+    this.versionChecker = new VersionChecker(this.boardStorage, this.memberStorage);
 
     this.elapsedCardBadge = new ElapsedCardBadge(this.discussion);
     this.elapsedCardDetailBadge = new ElapsedCardDetailBadge(this.discussion);
-    this.votingCardBadge = new VotingCardBadge(
-      this.w,
-      this.baseUrl,
-      this.voting,
-      this.boardStorage,
-      this.cardStorage,
-    );
+    this.votingCardBadge = new VotingCardBadge(this.w, this.baseUrl, this.voting, this.boardStorage, this.cardStorage);
     this.votingCardDetailBadge = new VotingCardDetailBadge(
       this.w,
       this.baseUrl,
@@ -75,12 +65,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     }
 
     const votes = (await this.voting.getVotes(t)) || {};
-    const currentMember = await t.member(
-      "id",
-      "username",
-      "fullName",
-      "avatar",
-    );
+    const currentMember = await t.member("id", "username", "fullName", "avatar");
 
     let outcome: string;
 
@@ -116,14 +101,8 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
 
   async handleDiscussion(t: Trello.PowerUp.IFrame): Promise<void> {
     if (await this.discussion.isOngoingOrPausedForAnotherCard(t)) {
-      const boardStatus = await this.boardStorage.read<DiscussionStatus>(
-        t,
-        BoardStorage.DISCUSSION_STATUS,
-      );
-      const cardId = await this.boardStorage.read<string>(
-        t,
-        BoardStorage.DISCUSSION_CARD_ID,
-      );
+      const boardStatus = await this.boardStorage.read<DiscussionStatus>(t, BoardStorage.DISCUSSION_STATUS);
+      const cardId = await this.boardStorage.read<string>(t, BoardStorage.DISCUSSION_CARD_ID);
 
       // https://github.com/tatablack/leaner-coffee-powerup/issues/12
       if (await this.discussion.hasNotBeenArchived(t, cardId)) {
@@ -143,9 +122,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
         });
       }
 
-      console.warn(
-        `Card with id ${cardId} not found in current board, most likely archived. Cleaning up.`,
-      );
+      console.warn(`Card with id ${cardId} not found in current board, most likely archived. Cleaning up.`);
 
       await Analytics.event(this.w, "discussionMenuOpened", {
         status: "ongoing other",
@@ -284,18 +261,11 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   }
 
   async getButtonLabel(t: Trello.PowerUp.IFrame): Promise<string> {
-    let label = await this.discussion.cardStorage.read<string>(
-      t,
-      CardStorage.DISCUSSION_BUTTON_LABEL,
-    );
+    let label = await this.discussion.cardStorage.read<string>(t, CardStorage.DISCUSSION_BUTTON_LABEL);
 
     if (label) {
       setTimeout(() => {
-        this.discussion.cardStorage.write(
-          t,
-          CardStorage.DISCUSSION_BUTTON_LABEL,
-          null,
-        );
+        this.discussion.cardStorage.write(t, CardStorage.DISCUSSION_BUTTON_LABEL, null);
       }, 2000);
     }
 
@@ -327,34 +297,19 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
 
     // There can be a race condition between the power-up starting
     // and the on-enable event being triggered.
-    await navigator.locks.request(
-      "powerup_init",
-      { ifAvailable: true },
-      async (lock) => {
-        // if the lock is null, it means the on-enable handler is taking care of initialisation
-        if (lock === null) {
-          return;
-        }
+    await navigator.locks.request("powerup_init", { ifAvailable: true }, async (lock) => {
+      // if the lock is null, it means the on-enable handler is taking care of initialisation
+      if (lock === null) {
+        return;
+      }
 
-        if (
-          !(await this.boardStorage.read<string>(
-            trelloPlugin,
-            BoardStorage.POWER_UP_INSTALLATION_DATE,
-          ))
-        ) {
-          await this.handlePowerupEnabled(trelloPlugin);
-        }
-      },
-    );
+      if (!(await this.boardStorage.read<string>(trelloPlugin, BoardStorage.POWER_UP_INSTALLATION_DATE))) {
+        await this.handlePowerupEnabled(trelloPlugin);
+      }
+    });
 
-    const organisationIdHash = await this.boardStorage.read<string>(
-      trelloPlugin,
-      BoardStorage.ORGANISATION_HASH,
-    );
-    const boardIdHash = await this.boardStorage.read<string>(
-      trelloPlugin,
-      BoardStorage.BOARD_HASH,
-    );
+    const organisationIdHash = await this.boardStorage.read<string>(trelloPlugin, BoardStorage.ORGANISATION_HASH);
+    const boardIdHash = await this.boardStorage.read<string>(trelloPlugin, BoardStorage.BOARD_HASH);
 
     if (window.Sentry) {
       window.Sentry.onLoad(async () => {

@@ -17,9 +17,7 @@ class CapabilityHandlers {
     bindAll(this);
   }
 
-  async boardButtonsHandler(
-    t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.BoardButtonCallback[]> {
+  async boardButtonsHandler(t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.BoardButtonCallback[]> {
     // We don't want to show the board button for the release notes
     // if there is a new patch version: only for minor and major updates.
     if (!(await this.powerUp.versionChecker.isThereANewMinorOrMajor(t))) {
@@ -38,14 +36,11 @@ class CapabilityHandlers {
     ];
   }
 
-  async cardBackSection(
-    t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.CardBackSection> {
-    const discussionStatus =
-      await this.powerUp.discussion.cardStorage.read<DiscussionStatus>(
-        t,
-        CardStorage.DISCUSSION_STATUS,
-      );
+  async cardBackSection(t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBackSection> {
+    const discussionStatus = await this.powerUp.discussion.cardStorage.read<DiscussionStatus>(
+      t,
+      CardStorage.DISCUSSION_STATUS,
+    );
     if (discussionStatus === undefined) {
       return null;
     }
@@ -62,20 +57,13 @@ class CapabilityHandlers {
     };
   }
 
-  async cardBadges(
-    t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.CardBadge[]> {
-    const badges = [
-      await this.powerUp.elapsedCardBadge.render(t),
-      await this.powerUp.votingCardBadge.render(t),
-    ];
+  async cardBadges(t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBadge[]> {
+    const badges = [await this.powerUp.elapsedCardBadge.render(t), await this.powerUp.votingCardBadge.render(t)];
 
     return badges.filter((badge) => badge);
   }
 
-  async cardButtons(
-    t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.CardButton[]> {
+  async cardButtons(t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardButton[]> {
     return [
       {
         icon: `${this.powerUp.baseUrl}/assets/powerup/timer.svg`,
@@ -85,18 +73,14 @@ class CapabilityHandlers {
       {
         icon: `${this.powerUp.baseUrl}/assets/powerup/heart.svg`,
         text: t.localizeKey("vote", {
-          symbol: (await this.powerUp.voting.hasCurrentMemberVoted(t))
-            ? "☑"
-            : "☐",
+          symbol: (await this.powerUp.voting.hasCurrentMemberVoted(t)) ? "☑" : "☐",
         }),
         callback: this.powerUp.handleVoting,
       },
     ];
   }
 
-  async cardDetailBadges(
-    t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.CardDetailBadge[]> {
+  async cardDetailBadges(t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardDetailBadge[]> {
     const badges = [
       await this.powerUp.elapsedCardDetailBadge.render(t),
       await this.powerUp.votingCardDetailBadge.render(t),
@@ -104,20 +88,14 @@ class CapabilityHandlers {
 
     return badges.filter((badge) => badge);
   }
-  async listActions(
-    t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.ListAction[]> {
+  async listActions(t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.ListAction[]> {
     return Promise.resolve([
       {
         text: t.localizeKey("clearVotesFromList"),
         callback: async (t2): Promise<void> => {
           const result = await t2.list("cards");
           result.cards.forEach(({ id }) => {
-            this.powerUp.cardStorage.deleteMultiple(
-              t2,
-              [CardStorage.VOTES],
-              id,
-            );
+            this.powerUp.cardStorage.deleteMultiple(t2, [CardStorage.VOTES], id);
           });
           await Analytics.event(window, "listVotesCleared");
         },
@@ -125,23 +103,16 @@ class CapabilityHandlers {
     ]);
   }
 
-  async listSorters(
-    t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.ListSorter[]> {
+  async listSorters(t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.ListSorter[]> {
     return Promise.resolve([
       {
         text: t.localizeKey("sortByVote"),
         callback: async (t2, opts): Promise<{ sortedIds: string[] }> => {
           const votingData = await Promise.all(
-            opts.cards.map(
-              async (
-                card,
-              ): Promise<{ leanCoffeeVotes: number; id: string }> => {
-                const leanCoffeeVotes =
-                  await this.powerUp.voting.countVotesByCard(t2, card.id);
-                return { leanCoffeeVotes, id: card.id };
-              },
-            ),
+            opts.cards.map(async (card): Promise<{ leanCoffeeVotes: number; id: string }> => {
+              const leanCoffeeVotes = await this.powerUp.voting.countVotesByCard(t2, card.id);
+              return { leanCoffeeVotes, id: card.id };
+            }),
           );
 
           const sortedCards = votingData.sort((cardA, cardB) => {
@@ -167,32 +138,25 @@ class CapabilityHandlers {
   async onEnable(t: Trello.PowerUp.IFrame): Promise<void> {
     // There can be a race condition between the power-up starting
     // and the on-enable event being triggered.
-    await navigator.locks.request(
-      "powerup_init",
-      { ifAvailable: true },
-      async (lock) => {
-        const isInitialised = !!(await this.powerUp.boardStorage.read<string>(
-          t,
-          BoardStorage.POWER_UP_INSTALLATION_DATE,
-        ));
-        // if the lock is null, it means LeanCoffeePowerup::start is taking care of initialisation
-        if (lock === null || isInitialised) {
-          return;
-        }
+    await navigator.locks.request("powerup_init", { ifAvailable: true }, async (lock) => {
+      const isInitialised = !!(await this.powerUp.boardStorage.read<string>(
+        t,
+        BoardStorage.POWER_UP_INSTALLATION_DATE,
+      ));
+      // if the lock is null, it means LeanCoffeePowerup::start is taking care of initialisation
+      if (lock === null || isInitialised) {
+        return;
+      }
 
-        if (!isInitialised) {
-          await this.powerUp.handlePowerupEnabled(t);
-        }
-      },
-    );
+      if (!isInitialised) {
+        await this.powerUp.handlePowerupEnabled(t);
+      }
+    });
 
     await Analytics.event(window, "enabled");
   }
   async onDisable(t: Trello.PowerUp.IFrame): Promise<void> {
-    const installationDate = await this.powerUp.boardStorage.read<string>(
-      t,
-      BoardStorage.POWER_UP_INSTALLATION_DATE,
-    );
+    const installationDate = await this.powerUp.boardStorage.read<string>(t, BoardStorage.POWER_UP_INSTALLATION_DATE);
 
     await Analytics.event(window, "disabled", {
       installedFor: classifyDuration(Date.now() - Date.parse(installationDate)),

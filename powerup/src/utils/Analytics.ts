@@ -5,12 +5,7 @@ import CustomPayload = umami.CustomPayload;
 
 const sanitiseUrl = (urlString: string): string => {
   const url = new URL(urlString);
-  return (
-    url.protocol +
-    url.hostname +
-    (url.port ? `:${url.port}` : "") +
-    url.pathname
-  );
+  return url.protocol + url.hostname + (url.port ? `:${url.port}` : "") + url.pathname;
 };
 
 const beforeSend = (event: string, payload: CustomPayload): CustomPayload => {
@@ -34,11 +29,7 @@ const pageview = async (window: Window, eventData: umami.EventData = {}) => {
   }
 };
 
-const event = async (
-  window: Window,
-  eventName: string,
-  eventData?: umami.EventData,
-) => {
+const event = async (window: Window, eventName: string, eventData?: umami.EventData) => {
   if (window.umami) {
     await window.umami.track(eventName, eventData);
   } else {
@@ -46,18 +37,9 @@ const event = async (
   }
 };
 
-const getOverrides = async (
-  boardStorage: BoardStorage,
-  t: Trello.PowerUp.HostHandlers,
-): Promise<string> => {
-  const organisationIdHash = await boardStorage.read<string>(
-    t,
-    BoardStorage.ORGANISATION_HASH,
-  );
-  const boardIdHash = await boardStorage.read<string>(
-    t,
-    BoardStorage.BOARD_HASH,
-  );
+const getOverrides = async (boardStorage: BoardStorage, t: Trello.PowerUp.HostHandlers): Promise<string> => {
+  const organisationIdHash = await boardStorage.read<string>(t, BoardStorage.ORGANISATION_HASH);
+  const boardIdHash = await boardStorage.read<string>(t, BoardStorage.BOARD_HASH);
   const referrer = encodeURIComponent("https://" + organisationIdHash);
   return `referrer=${referrer}&hostname=${boardIdHash}`;
 };

@@ -7,10 +7,7 @@ class Storage {
   scope: Trello.PowerUp.Scope;
   visibility: Trello.PowerUp.Visibility;
 
-  constructor(
-    scope: Trello.PowerUp.Scope = "member",
-    visibility: Trello.PowerUp.Visibility = "private",
-  ) {
+  constructor(scope: Trello.PowerUp.Scope = "member", visibility: Trello.PowerUp.Visibility = "private") {
     Object.assign(this, { scope, visibility });
     bindAll(this);
   }
@@ -19,14 +16,10 @@ class Storage {
     return this.scope === "member" || t.memberCanWriteToModel(this.scope);
   }
 
-  static async getMemberType(
-    t: Trello.PowerUp.AnonymousHostHandlers,
-  ): Promise<string> {
+  static async getMemberType(t: Trello.PowerUp.AnonymousHostHandlers): Promise<string> {
     const board = await t.board("memberships");
     const currentMember = await t.member("id");
-    const myMembership = board.memberships.find(
-      (m) => m.idMember === currentMember.id,
-    );
+    const myMembership = board.memberships.find((m) => m.idMember === currentMember.id);
     return myMembership ? myMembership.memberType : "unknown";
   }
 

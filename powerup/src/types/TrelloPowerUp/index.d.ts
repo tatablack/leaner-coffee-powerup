@@ -7,10 +7,7 @@ export namespace Trello {
     CallbackCache: Callback.Cache;
     PostMessageIO: any; // PostMessageIO
     iframe(options?: PowerUp.IFrameOptions): PowerUp.IFrame;
-    initialize(
-      handlers: PowerUp.CapabilityHandlers,
-      options?: PowerUp.PluginOptions,
-    ): PowerUp.Plugin;
+    initialize(handlers: PowerUp.CapabilityHandlers, options?: PowerUp.PluginOptions): PowerUp.Plugin;
     restApiError(): any;
     util: PowerUp.Util;
   }
@@ -30,11 +27,7 @@ export namespace Trello {
     }
 
     interface Cache {
-      callback(
-        t: PowerUp.IFrame,
-        options: CacheOptions,
-        serializeResult: SerializeResult,
-      ): PromiseLike<any>;
+      callback(t: PowerUp.IFrame, options: CacheOptions, serializeResult: SerializeResult): PromiseLike<any>;
       serialize(fx: (t: PowerUp.IFrame, args: any) => any): SerializeOutput;
       reset(): void;
     }
@@ -215,13 +208,7 @@ export namespace Trello {
     type ListFields = keyof List;
     type MemberFields = keyof Member;
 
-    type Condition =
-      | "admin"
-      | "always"
-      | "edit"
-      | "readonly"
-      | "signedIn"
-      | "signedOut";
+    type Condition = "admin" | "always" | "edit" | "readonly" | "signedIn" | "signedOut";
 
     interface BoardButtonBase {
       icon: {
@@ -305,17 +292,11 @@ export namespace Trello {
         },
       ) => PromiseLike<(AttachmentSection | LazyAttachmentSection)[]>;
       "attachment-thumbnail"?: () => void;
-      "board-buttons"?: (
-        t: PowerUp.IFrame,
-      ) => PromiseLike<(BoardButtonUrl | BoardButtonCallback)[]>;
+      "board-buttons"?: (t: PowerUp.IFrame) => PromiseLike<(BoardButtonUrl | BoardButtonCallback)[]>;
       "card-back-section"?: (t: PowerUp.IFrame) => PromiseLike<CardBackSection>;
-      "card-badges"?: (
-        t: PowerUp.IFrame,
-      ) => PromiseLike<(CardBadgeDynamic | CardBadge)[]>;
+      "card-badges"?: (t: PowerUp.IFrame) => PromiseLike<(CardBadgeDynamic | CardBadge)[]>;
       "card-buttons"?: (t: PowerUp.IFrame) => PromiseLike<CardButton[]>;
-      "card-detail-badges"?: (
-        t: PowerUp.IFrame,
-      ) => PromiseLike<(CardDetailBadgeDynamic | CardDetailBadge)[]>;
+      "card-detail-badges"?: (t: PowerUp.IFrame) => PromiseLike<(CardDetailBadgeDynamic | CardDetailBadge)[]>;
       "card-from-url"?: () => void;
       "format-url"?: () => void;
       "list-actions"?: (t: PowerUp.IFrame) => PromiseLike<ListAction[]>;
@@ -445,10 +426,7 @@ export namespace Trello {
         sha256Digest(): any;
       };
 
-      initLocalizer(
-        locale: string,
-        options: LocalizerOptions,
-      ): PromiseLike<void>;
+      initLocalizer(locale: string, options: LocalizerOptions): PromiseLike<void>;
       makeErrorEnum(): Error;
       relativeUrl(url: string): string;
     }
@@ -456,18 +434,8 @@ export namespace Trello {
     interface AnonymousHostHandlers {
       requestWithContext(command: string, options: any): PromiseLike<any>;
       getAll(): PromiseLike<any>;
-      get(
-        scope: Scope | string,
-        visibility: Visibility,
-        key?: string,
-        defaultValue?: any,
-      ): PromiseLike<any>;
-      set(
-        scope: Scope | string,
-        visibility: Visibility,
-        key: string,
-        defaultValue?: any,
-      ): PromiseLike<void>;
+      get(scope: Scope | string, visibility: Visibility, key?: string, defaultValue?: any): PromiseLike<any>;
+      set(scope: Scope | string, visibility: Visibility, key: string, defaultValue?: any): PromiseLike<void>;
       set(
         scope: Scope | string,
         visibility: Visibility,
@@ -475,16 +443,8 @@ export namespace Trello {
           [key: string]: any;
         },
       ): PromiseLike<void>;
-      remove(
-        scope: Scope | string,
-        visibility: Visibility,
-        key: string,
-      ): PromiseLike<void>;
-      remove(
-        scope: Scope | string,
-        visibility: Visibility,
-        entries: string[],
-      ): PromiseLike<void>;
+      remove(scope: Scope | string, visibility: Visibility, key: string): PromiseLike<void>;
+      remove(scope: Scope | string, visibility: Visibility, entries: string[]): PromiseLike<void>;
       safe(html: string): string;
       localizeKey(
         key: string,
@@ -498,9 +458,7 @@ export namespace Trello {
       cards(...fields: ["all"] | CardFields[]): PromiseLike<Card[]>;
       lists(...fields: ["all"] | ListFields[]): PromiseLike<List[]>;
       member(...fields: ["all"] | MemberFields[]): PromiseLike<Member>;
-      organization(
-        ...fields: ["all"] | OrganizationFields[]
-      ): PromiseLike<Organization>;
+      organization(...fields: ["all"] | OrganizationFields[]): PromiseLike<Organization>;
     }
 
     interface Context {
@@ -538,11 +496,7 @@ export namespace Trello {
       navigate(options: { url: string }): any;
       showCard(idCard: string): PromiseLike<void>;
       hideCard(): PromiseLike<void>;
-      alert(options: {
-        message: string;
-        duration?: number;
-        display?: AlertDisplay;
-      }): PromiseLike<void>;
+      alert(options: { message: string; duration?: number; display?: AlertDisplay }): PromiseLike<void>;
       hideAlert(): PromiseLike<void>;
       popup(
         options:
@@ -553,11 +507,7 @@ export namespace Trello {
           | PopupConfirmOptions
           | PopupConfirmWithCancelOptions,
       ): PromiseLike<void>;
-      overlay(options: {
-        url: string;
-        args: { [key: string]: any };
-        inset: unknown;
-      }): PromiseLike<void>;
+      overlay(options: { url: string; args: { [key: string]: any }; inset: unknown }): PromiseLike<void>;
       boardBar(options: {
         url: string;
         args?: { [key: string]: any };
@@ -617,21 +567,11 @@ export namespace Trello {
           targetOrigin: string;
         },
       ): PromiseLike<void>;
-      confetti(
-        arg: ConfettiOptions,
-      ): ReturnType<
-        typeof Trello.PowerUp.AnonymousHostHandlers.requestWithContext
-      >;
-      jwt(
-        options: JWTOptions,
-      ): ReturnType<
-        typeof Trello.PowerUp.AnonymousHostHandlers.requestWithContext
-      >;
+      confetti(arg: ConfettiOptions): ReturnType<typeof Trello.PowerUp.AnonymousHostHandlers.requestWithContext>;
+      jwt(options: JWTOptions): ReturnType<typeof Trello.PowerUp.AnonymousHostHandlers.requestWithContext>;
       getColorToken(path: string, fallback?: string): string;
       getComputedColorToken(path: string): string;
-      subscribeToThemeChanges(
-        onThemeLoaded: (theme: { [key: string]: string }) => void,
-      ): () => void;
+      subscribeToThemeChanges(onThemeLoaded: (theme: { [key: string]: string }) => void): () => void;
     }
 
     interface IFrameOptions extends LocalizerOptions {

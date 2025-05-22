@@ -33,12 +33,8 @@ class VotingCardDetailBadge extends VotingCardBadge {
     });
   };
 
-  render = async (
-    t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.CardDetailBadge> => {
-    const commonData = (await super.render(
-      t,
-    )) as Trello.PowerUp.CardDetailBadge;
+  render = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardDetailBadge> => {
+    const commonData = (await super.render(t)) as Trello.PowerUp.CardDetailBadge;
 
     if (commonData) {
       commonData.title = t.localizeKey("voters");

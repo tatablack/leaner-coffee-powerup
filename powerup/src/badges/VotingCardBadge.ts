@@ -13,13 +13,7 @@ class VotingCardBadge {
   boardStorage: BoardStorage;
   cardStorage: CardStorage;
 
-  constructor(
-    w: Window,
-    baseUrl: string,
-    voting: Voting,
-    boardStorage: BoardStorage,
-    cardStorage: CardStorage,
-  ) {
+  constructor(w: Window, baseUrl: string, voting: Voting, boardStorage: BoardStorage, cardStorage: CardStorage) {
     this.w = w;
     this.baseUrl = baseUrl;
     this.voting = voting;
@@ -32,19 +26,16 @@ class VotingCardBadge {
   getVoters = async (t: Trello.PowerUp.IFrame): Promise<{ text: string }[]> => {
     const votes: Votes = (await this.voting.getVotes(t)) || {};
 
-    return Object.values(votes).reduce(
-      (knownVoters: { text: string; avatar: string }[], vote) => {
-        if (vote.username) {
-          knownVoters.push({
-            text: `${vote.fullName} (${vote.username})`,
-            avatar: vote.avatar,
-          });
-        }
+    return Object.values(votes).reduce((knownVoters: { text: string; avatar: string }[], vote) => {
+      if (vote.username) {
+        knownVoters.push({
+          text: `${vote.fullName} (${vote.username})`,
+          avatar: vote.avatar,
+        });
+      }
 
-        return knownVoters;
-      },
-      [],
-    );
+      return knownVoters;
+    }, []);
   };
 
   // Unable to use class properties here because in subclasses
