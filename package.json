@@ -8,7 +8,7 @@
   "keywords": [],
   "author": "Angelo Tata <angelo.tata@gmail.com>",
   "license": "Apache-2.0",
-  "packageManager": "pnpm@10.10.0+sha256.fa0f513aa8191764d2b6b432420788c270f07b4f999099b65bb2010eec702a30",
+  "packageManager": "pnpm@10.11.0+sha256.a69e9cb077da419d47d18f1dd52e207245b29cac6e076acedbeb8be3b1a67bd7",
   "engines": {
     "node": "^20.11.0"
   }
