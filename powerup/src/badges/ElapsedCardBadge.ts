@@ -15,14 +15,9 @@ class ElapsedCardBadge {
     bindAll(this);
   }
 
-  getText = async (
-    t: Trello.PowerUp.IFrame,
-    elapsed: number,
-  ): Promise<string> => formatDuration(elapsed);
+  getText = async (t: Trello.PowerUp.IFrame, elapsed: number): Promise<string> => formatDuration(elapsed);
 
-  getColor = async (
-    t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.Colors> => {
+  getColor = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.Colors> => {
     const isOngoing = await this.discussion.isOngoingFor(t);
 
     if (isOngoing) {

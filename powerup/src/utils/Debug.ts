@@ -22,17 +22,12 @@ class Debug {
     const cardsData = await Promise.all(cardsDataPromise);
     cardsData.forEach((card) => {
       console.groupCollapsed("Card data");
-      // console.log(card);
       console.log(JSON.stringify(card, null, 2));
       console.groupEnd();
     });
   }
 
-  static async wipeData(
-    t: Trello.PowerUp.IFrame,
-    cardStorage: CardStorage,
-    boardStorage: BoardStorage,
-  ): Promise<void> {
+  static async wipeData(t: Trello.PowerUp.IFrame, cardStorage: CardStorage, boardStorage: BoardStorage): Promise<void> {
     await boardStorage.deleteMultiple(t, [
       BoardStorage.DISCUSSION_STATUS,
       BoardStorage.DISCUSSION_CARD_ID,

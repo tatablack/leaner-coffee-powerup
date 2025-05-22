@@ -5,15 +5,9 @@ import { isRunningInProduction } from "./utils/Errors";
 class LeanCoffeeSettings extends LeanCoffeeIFrame {
   init(): void {
     if (!isRunningInProduction()) {
-      (
-        this.w.document.querySelector(".dev-only") as HTMLElement
-      ).style.display = "block";
-      this.w.document
-        .getElementById("showData")
-        .addEventListener("click", this.showData.bind(this));
-      this.w.document
-        .getElementById("wipeData")
-        .addEventListener("click", this.wipeData.bind(this));
+      (this.w.document.querySelector(".dev-only") as HTMLElement).style.display = "block";
+      this.w.document.getElementById("showData").addEventListener("click", this.showData.bind(this));
+      this.w.document.getElementById("wipeData").addEventListener("click", this.wipeData.bind(this));
     }
 
     this.t.render(() => {

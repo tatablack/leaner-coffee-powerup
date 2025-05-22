@@ -4,14 +4,8 @@ import Storage from "../storage/Storage";
 import { Trello } from "../types/TrelloPowerUp";
 
 class ElapsedCardDetailBadge extends ElapsedCardBadge {
-  render = async (
-    t: Trello.PowerUp.IFrame,
-  ): Promise<Trello.PowerUp.CardDetailBadge> => {
-    const discussionStatus =
-      await this.discussion.cardStorage.read<DiscussionStatus>(
-        t,
-        CardStorage.DISCUSSION_STATUS,
-      );
+  render = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardDetailBadge> => {
+    const discussionStatus = await this.discussion.cardStorage.read<DiscussionStatus>(t, CardStorage.DISCUSSION_STATUS);
     if (discussionStatus !== "ENDED") {
       return null;
     }
@@ -23,15 +17,11 @@ class ElapsedCardDetailBadge extends ElapsedCardBadge {
         contexts: {
           CardDetailBadge: {
             discussionStatus,
-            discussionElapsed: await this.discussion.cardStorage.read<number>(
+            discussionElapsed: await this.discussion.cardStorage.read<number>(t, CardStorage.DISCUSSION_ELAPSED),
+            discussionButtonLabel: await this.discussion.cardStorage.read<string>(
               t,
-              CardStorage.DISCUSSION_ELAPSED,
+              CardStorage.DISCUSSION_BUTTON_LABEL,
             ),
-            discussionButtonLabel:
-              await this.discussion.cardStorage.read<string>(
-                t,
-                CardStorage.DISCUSSION_BUTTON_LABEL,
-              ),
             memberType: await Storage.getMemberType(t),
           },
         },

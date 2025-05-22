@@ -37,8 +37,7 @@ class LeanCoffeePopupBase {
   }
 
   toggleFields(cssSelector: string, key: string): void {
-    const elements: NodeListOf<HTMLElement> =
-      this.w.document.querySelectorAll(cssSelector);
+    const elements: NodeListOf<HTMLElement> = this.w.document.querySelectorAll(cssSelector);
 
     elements.forEach((message: HTMLElement) => {
       const shouldBeDisplayed = message.dataset.i18nId === key;

@@ -3,6 +3,7 @@ import json from "@eslint/json";
 import markdown from "@eslint/markdown";
 import htmlmarkup from "@html-eslint/eslint-plugin";
 import * as htmlParser from "@html-eslint/parser";
+import stylistic from "@stylistic/eslint-plugin";
 import * as tsParser from "@typescript-eslint/parser";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript";
@@ -80,6 +81,9 @@ export default tseslint.config(
       ...tseslint.configs.recommended,
       eslintConfigPrettier,
     ],
+    plugins: {
+      "@stylistic": stylistic,
+    },
     languageOptions: {
       ecmaVersion: "latest",
       globals: globals.browser,
@@ -100,6 +104,17 @@ export default tseslint.config(
       "import-x/no-nodejs-modules": "warn",
       "import-x/newline-after-import": ["error", { count: 1 }],
       "import-x/order": ["error", importOrderConfig],
+      "@stylistic/max-len": [
+        "warn",
+        {
+          code: 120,
+          ignoreUrls: true,
+          ignoreStrings: false,
+          ignoreTemplateLiterals: true,
+          ignoreRegExpLiterals: true,
+          ignoreComments: false,
+        },
+      ],
     },
   },
   // Configuration files (Webpack, ESLint, etc.)

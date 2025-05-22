@@ -22,8 +22,7 @@ export class LeanCoffeePopupOngoingOrPaused extends LeanCoffeePopupBase {
   }
 
   prepareLocalisation(): void {
-    const messageElements: NodeListOf<HTMLElement> =
-      this.w.document.querySelectorAll(".message");
+    const messageElements: NodeListOf<HTMLElement> = this.w.document.querySelectorAll(".message");
     messageElements.forEach((elem: HTMLElement) => {
       elem.dataset.i18nArgs = JSON.stringify({
         card: this.currentCardBeingDiscussed,
@@ -32,10 +31,7 @@ export class LeanCoffeePopupOngoingOrPaused extends LeanCoffeePopupBase {
   }
 
   async onLocalised(): Promise<void> {
-    this.toggleFields(
-      ".message",
-      this.isRunning ? "ongoingRunning" : "ongoingOnHold",
-    );
+    this.toggleFields(".message", this.isRunning ? "ongoingRunning" : "ongoingOnHold");
     this.t.localizeNode(document.body);
     await this.t.sizeTo("body");
   }

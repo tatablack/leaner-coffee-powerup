@@ -20,10 +20,7 @@ class VersionChecker {
   }
 
   async isThereANewMinorOrMajor(t: Trello.PowerUp.IFrame): Promise<boolean> {
-    const storedVersionRaw = await this.memberStorage.read<string>(
-      t,
-      MemberStorage.POWER_UP_VERSION,
-    );
+    const storedVersionRaw = await this.memberStorage.read<string>(t, MemberStorage.POWER_UP_VERSION);
 
     if (!storedVersionRaw) {
       return true;
@@ -32,18 +29,13 @@ class VersionChecker {
     const storedVersion = parseSemVer(storedVersionRaw);
     const newVersion = parseSemVer(__BUILDTIME_VERSION__);
 
-    const isNewer =
-      newVersion.major > storedVersion.major ||
-      newVersion.minor > storedVersion.minor;
+    const isNewer = newVersion.major > storedVersion.major || newVersion.minor > storedVersion.minor;
 
     return !storedVersion || isNewer;
   }
 
   async showMenu(t: Trello.PowerUp.IFrame): Promise<void> {
-    const storedVersion = await this.memberStorage.read<string>(
-      t,
-      MemberStorage.POWER_UP_VERSION,
-    );
+    const storedVersion = await this.memberStorage.read<string>(t, MemberStorage.POWER_UP_VERSION);
     const title = storedVersion
       ? t.localizeKey("boardButtonPopupTitle", {
           oldVersion: storedVersion,
@@ -63,11 +55,7 @@ class VersionChecker {
   }
 
   async storeNewVersion(t: Trello.PowerUp.IFrame): Promise<void> {
-    await this.memberStorage.write(
-      t,
-      MemberStorage.POWER_UP_VERSION,
-      __BUILDTIME_VERSION__,
-    );
+    await this.memberStorage.write(t, MemberStorage.POWER_UP_VERSION, __BUILDTIME_VERSION__);
   }
 }
 

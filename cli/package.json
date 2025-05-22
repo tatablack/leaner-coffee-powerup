@@ -16,6 +16,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@eslint/js": "catalog:",
+    "@stylistic/eslint-plugin": "^4.2.0",
     "@types/node": "^22.15.21",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",

@@ -28,31 +28,17 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
 
     this.badges = this.w.document.querySelector(".badges");
     this.badgeElapsed = this.w.document.querySelector(".badge-elapsed");
-    this.badgeHeaderStatus = this.w.document.querySelector(
-      '[data-i18n-id="discussionUiStatus"]',
-    );
-    this.badgeHeaderWhatNext = this.w.document.querySelector(
-      '[data-i18n-id="discussionUiWhatNext"]',
-    );
-    this.messageNone = this.w.document.querySelector(
-      '[data-i18n-id="discussionUiMessageNone"]',
-    );
-    this.messageEnded = this.w.document.querySelector(
-      '[data-i18n-id="discussionUiMessageEnded"]',
-    );
+    this.badgeHeaderStatus = this.w.document.querySelector('[data-i18n-id="discussionUiStatus"]');
+    this.badgeHeaderWhatNext = this.w.document.querySelector('[data-i18n-id="discussionUiWhatNext"]');
+    this.messageNone = this.w.document.querySelector('[data-i18n-id="discussionUiMessageNone"]');
+    this.messageEnded = this.w.document.querySelector('[data-i18n-id="discussionUiMessageEnded"]');
     this.voting = this.w.document.querySelectorAll(".voting");
   }
 
   init(): void {
-    this.w.document
-      .querySelector(".voting-up")
-      .addEventListener("click", () => this.handleThumbs("UP"));
-    this.w.document
-      .querySelector(".voting-middle")
-      .addEventListener("click", () => this.handleThumbs("MIDDLE"));
-    this.w.document
-      .querySelector(".voting-down")
-      .addEventListener("click", () => this.handleThumbs("DOWN"));
+    this.w.document.querySelector(".voting-up").addEventListener("click", () => this.handleThumbs("UP"));
+    this.w.document.querySelector(".voting-middle").addEventListener("click", () => this.handleThumbs("MIDDLE"));
+    this.w.document.querySelector(".voting-down").addEventListener("click", () => this.handleThumbs("DOWN"));
 
     this.t.render(() => {
       this.t.localizeNode(document.body);
@@ -64,19 +50,10 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
   }
 
   async monitorDiscussion(): Promise<void> {
-    const discussionStatus = await this.cardStorage.read<DiscussionStatus>(
-      this.t,
-      CardStorage.DISCUSSION_STATUS,
-    );
-    const isOngoingOrPausedForThisCard = ["ONGOING", "PAUSED"].includes(
-      discussionStatus,
-    );
+    const discussionStatus = await this.cardStorage.read<DiscussionStatus>(this.t, CardStorage.DISCUSSION_STATUS);
+    const isOngoingOrPausedForThisCard = ["ONGOING", "PAUSED"].includes(discussionStatus);
 
-    if (
-      !!discussionStatus &&
-      this.previousStatus === discussionStatus &&
-      !isOngoingOrPausedForThisCard
-    ) {
+    if (!!discussionStatus && this.previousStatus === discussionStatus && !isOngoingOrPausedForThisCard) {
       return;
     }
 
@@ -125,15 +102,9 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
 
   async updateElapsed(status: DiscussionStatus): Promise<void> {
     if (status === "ONGOING") {
-      const startedAt = await this.boardStorage.read<number>(
-        this.t,
-        BoardStorage.DISCUSSION_STARTED_AT,
-      );
+      const startedAt = await this.boardStorage.read<number>(this.t, BoardStorage.DISCUSSION_STARTED_AT);
       const previousElapsed =
-        (await this.boardStorage.read<number>(
-          this.t,
-          BoardStorage.DISCUSSION_PREVIOUS_ELAPSED,
-        )) || 0;
+        (await this.boardStorage.read<number>(this.t, BoardStorage.DISCUSSION_PREVIOUS_ELAPSED)) || 0;
       const elapsed = startedAt ? Date.now() - startedAt : 0;
       const formattedTotalElapsed = formatDuration(elapsed + previousElapsed);
 
@@ -141,10 +112,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
       this.badgeElapsed.classList.remove("paused");
       this.badgeElapsed.textContent = `${this.t.localizeKey("discussionOngoing")} → ${formattedTotalElapsed}`;
     } else {
-      const elapsed = await this.cardStorage.read<number>(
-        this.t,
-        CardStorage.DISCUSSION_ELAPSED,
-      );
+      const elapsed = await this.cardStorage.read<number>(this.t, CardStorage.DISCUSSION_ELAPSED);
 
       this.badgeElapsed.classList.add(status.toLowerCase());
       this.badgeElapsed.classList.remove("ongoing");
@@ -153,11 +121,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
   }
 
   async updateThumbs(): Promise<void> {
-    const savedThumbs =
-      (await this.cardStorage.read<Thumbs>(
-        this.t,
-        CardStorage.DISCUSSION_THUMBS,
-      )) || {};
+    const savedThumbs = (await this.cardStorage.read<Thumbs>(this.t, CardStorage.DISCUSSION_THUMBS)) || {};
     const currentMember = this.t.getContext().member;
     const currentMemberThumb = savedThumbs[currentMember];
 
@@ -166,9 +130,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
         (memberId) => savedThumbs[memberId] === thumbType,
       ).length;
 
-      const thumbsBadge = this.w.document.querySelector(
-        `.voting-${thumbType.toLowerCase()}`,
-      ) as HTMLElement;
+      const thumbsBadge = this.w.document.querySelector(`.voting-${thumbType.toLowerCase()}`) as HTMLElement;
       thumbsBadge.innerText = countByThumbType.toString();
 
       if (thumbType === currentMemberThumb) {
@@ -180,11 +142,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
   }
 
   async handleThumbs(thumb: Thumb): Promise<void> {
-    const thumbs =
-      (await this.cardStorage.read<Thumbs>(
-        this.t,
-        CardStorage.DISCUSSION_THUMBS,
-      )) || {};
+    const thumbs = (await this.cardStorage.read<Thumbs>(this.t, CardStorage.DISCUSSION_THUMBS)) || {};
     const currentMember = this.t.getContext().member;
 
     if (thumbs[currentMember] === thumb) {
@@ -201,11 +159,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
       });
     }
 
-    return this.cardStorage.write(
-      this.t,
-      CardStorage.DISCUSSION_THUMBS,
-      thumbs,
-    );
+    return this.cardStorage.write(this.t, CardStorage.DISCUSSION_THUMBS, thumbs);
   }
 
   toggleBadges(visible: boolean): void {
@@ -227,9 +181,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
   }
 
   toggleFields(cssSelector: string, key: string): void {
-    const elements = this.w.document.querySelectorAll(
-      cssSelector,
-    ) as NodeListOf<HTMLElement>;
+    const elements = this.w.document.querySelectorAll(cssSelector) as NodeListOf<HTMLElement>;
 
     elements.forEach((message) => {
       const shouldBeDisplayed = message.dataset.i18nId === key;
