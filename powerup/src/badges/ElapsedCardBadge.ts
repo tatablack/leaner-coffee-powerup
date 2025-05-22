@@ -37,7 +37,7 @@ class ElapsedCardBadge {
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super#accessing_super_in_class_field_declaration
   async render(t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBadge> {
     const elapsed = await this.discussion.getElapsed(t);
-    if (!elapsed) {
+    if (!Number.isFinite(elapsed)) {
       return null;
     }
 
