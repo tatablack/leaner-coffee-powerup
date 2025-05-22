@@ -19,13 +19,15 @@ class Storage {
     return this.scope === "member" || t.memberCanWriteToModel(this.scope);
   }
 
-  async isObserver(t: Trello.PowerUp.AnonymousHostHandlers) {
+  static async getMemberType(
+    t: Trello.PowerUp.AnonymousHostHandlers,
+  ): Promise<string> {
     const board = await t.board("memberships");
     const currentMember = await t.member("id");
     const myMembership = board.memberships.find(
       (m) => m.idMember === currentMember.id,
     );
-    return myMembership && myMembership.memberType === "observer";
+    return myMembership ? myMembership.memberType : "unknown";
   }
 
   read<T>(
@@ -60,7 +62,7 @@ class Storage {
             visibility: this.visibility,
             key: key,
             hasCardId: !!cardId,
-            isObserver: await this.isObserver(t),
+            memberType: await Storage.getMemberType(t),
           },
         },
       });
@@ -92,7 +94,7 @@ class Storage {
             visibility: this.visibility,
             key: Object.keys(entries),
             hasCardId: !!cardId,
-            isObserver: await this.isObserver(t),
+            memberType: await Storage.getMemberType(t),
           },
         },
       });
@@ -122,7 +124,7 @@ class Storage {
             visibility: this.visibility,
             key: key,
             hasCardId: !!cardId,
-            isObserver: await this.isObserver(t),
+            memberType: await Storage.getMemberType(t),
           },
         },
       });
@@ -152,7 +154,7 @@ class Storage {
             visibility: this.visibility,
             key: Object.keys(entries),
             hasCardId: !!cardId,
-            isObserver: await this.isObserver(t),
+            memberType: await Storage.getMemberType(t),
           },
         },
       });
