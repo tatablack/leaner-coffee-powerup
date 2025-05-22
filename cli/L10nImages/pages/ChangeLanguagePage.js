@@ -12,9 +12,7 @@ class ChangeLanguagePage extends Page {
     await this.browser.pause(500);
     await this.browser.waitUntil(
       async () => {
-        const languageDropdown = await this.browser.$(
-          this.selectors.languageDropdown,
-        );
+        const languageDropdown = await this.browser.$(this.selectors.languageDropdown);
         return (await languageDropdown.getText()) !== undefined;
       },
       5000,
@@ -23,16 +21,12 @@ class ChangeLanguagePage extends Page {
   }
 
   async open() {
-    this.browser.url(
-      "https://id.atlassian.com/manage-profile/account-preferences/",
-    );
+    this.browser.url("https://id.atlassian.com/manage-profile/account-preferences/");
     await this.isAvailable();
   }
 
   async getCurrentLanguage() {
-    const languageDropdown = await this.browser.$(
-      this.selectors.languageDropdown,
-    );
+    const languageDropdown = await this.browser.$(this.selectors.languageDropdown);
     return languageDropdown.getText();
   }
 
@@ -41,22 +35,15 @@ class ChangeLanguagePage extends Page {
     const currentLanguage = this.getCurrentLanguage();
 
     if (currentLanguage === languageName) {
-      this.logger.info(
-        `└ Aborted - the current language is already ${languageName}\n`,
-      );
+      this.logger.info(`└ Aborted - the current language is already ${languageName}\n`);
       return;
     }
 
-    const languageDropdown = await this.browser.$(
-      this.selectors.languageDropdown,
-    );
+    const languageDropdown = await this.browser.$(this.selectors.languageDropdown);
     await languageDropdown.click();
 
     const languageDropdownMenuItem = await this.browser.$(
-      this.selectors.languageDropdownMenuItems.replace(
-        "{languageName}",
-        languageName,
-      ),
+      this.selectors.languageDropdownMenuItems.replace("{languageName}", languageName),
     );
     await languageDropdownMenuItem.click();
     this.logger.info(`└ Done - switched to ${languageName}\n`);

@@ -10,10 +10,7 @@ const getLogger = (level = "info") =>
         format: "YYYY-MM-DD HH:mm:ss",
       }),
       colorize({ message: true }),
-      printf(
-        (info) =>
-          `${info.timestamp} [${info.label ? info.label : "--"}] ${info.message}`,
-      ),
+      printf((info) => `${info.timestamp} [${info.label ? info.label : "--"}] ${info.message}`),
     ),
     transports: [new transports.Console()],
   });

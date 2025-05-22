@@ -20,10 +20,7 @@ let currentLanguage;
 
 const { argv } = yargs()
   .scriptName("\n🌟 build-screenshots 🌟")
-  .usage(
-    "$0 [args]",
-    "Create screenshots for a target locale, or all supported ones (default)",
-  )
+  .usage("$0 [args]", "Create screenshots for a target locale, or all supported ones (default)")
   .option("locale", {
     alias: "l",
     demandOption: true,
@@ -34,8 +31,7 @@ const { argv } = yargs()
   .option("local", {
     default: false,
     type: "boolean",
-    describe:
-      "Whether to use a locally installed browser, or a remote one through BrowserStack",
+    describe: "Whether to use a locally installed browser, or a remote one through BrowserStack",
   })
   .check((parsedArgv) => {
     if (!process.env.TRELLO_USERNAME || !process.env.TRELLO_PASSWORD) {
@@ -46,10 +42,7 @@ const { argv } = yargs()
 
     // Only languages already declared in ./utils/SupportedLanguages.js are valid
     const supportedLanguageKeys = Object.keys(SupportedLanguages);
-    if (
-      parsedArgv.locale["0"] !== "all" &&
-      !parsedArgv.locale.every((lang) => supportedLanguageKeys.includes(lang))
-    ) {
+    if (parsedArgv.locale["0"] !== "all" && !parsedArgv.locale.every((lang) => supportedLanguageKeys.includes(lang))) {
       throw new Error(
         "All target locales must be already supported.\n" +
           `You provided "${parsedArgv.locale}"` +
@@ -58,9 +51,7 @@ const { argv } = yargs()
     }
 
     if (parsedArgv.local && !process.env.FIREFOX_BINARY) {
-      throw new Error(
-        "The FIREFOX_BINARY environment variable must be set to the path of the Firefox executable",
-      );
+      throw new Error("The FIREFOX_BINARY environment variable must be set to the path of the Firefox executable");
     }
 
     return true;
@@ -74,9 +65,7 @@ const { argv } = yargs()
   const browser = await browserHandler.open();
 
   if (!browser) {
-    logger.error(
-      "Unable to instantiate a Browser. See above error for details.",
-    );
+    logger.error("Unable to instantiate a Browser. See above error for details.");
     process.exit(1);
   }
 
@@ -84,19 +73,14 @@ const { argv } = yargs()
 
   const loginPage = new LoginPage(browser);
   await loginPage.open();
-  await loginPage.login(
-    process.env.TRELLO_USERNAME,
-    process.env.TRELLO_PASSWORD,
-  );
+  await loginPage.login(process.env.TRELLO_USERNAME, process.env.TRELLO_PASSWORD);
 
   // Detect the initial language
   const changeLanguagePage = new ChangeLanguagePage(browser);
   await changeLanguagePage.open();
   const initialLanguage = await changeLanguagePage.getCurrentLanguage();
 
-  for (const [languageCode, languageName] of Object.entries(
-    SupportedLanguages,
-  )) {
+  for (const [languageCode, languageName] of Object.entries(SupportedLanguages)) {
     if (argv.locale[0] === "all" || argv.locale.includes(languageCode)) {
       currentLanguage = languageCode;
 
@@ -119,10 +103,7 @@ const { argv } = yargs()
       try {
         await browserHandler.close();
       } catch (e) {
-        logger.error({
-          label: currentLanguage,
-          message: "Unable to delete session 🤔",
-        });
+        logger.error({ label: currentLanguage, message: "Unable to delete session 🤔" });
         logger.error({ label: currentLanguage, message: e });
       }
     }

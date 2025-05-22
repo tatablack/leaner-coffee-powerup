@@ -53,10 +53,7 @@ class Browser {
     };
 
     // https://w3c.github.io/webdriver/#capabilities
-    this.options = merge(
-      commonOptions,
-      this.isLocal ? localOptions : remoteOptions,
-    );
+    this.options = merge(commonOptions, this.isLocal ? localOptions : remoteOptions);
 
     if (!this.isLocal) {
       this.setupTunnel();
@@ -81,9 +78,7 @@ class Browser {
 
       while (!this.tunnel.isRunning()) {
         if (attempts === 60) {
-          throw new Error(
-            "Unable to establish a BrowserStack tunnel after 60 seconds",
-          );
+          throw new Error("Unable to establish a BrowserStack tunnel after 60 seconds");
         }
 
         await sleep(1000);

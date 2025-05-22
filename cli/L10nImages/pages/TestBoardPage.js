@@ -25,9 +25,7 @@ class TestBoardPage extends Page {
     await this.browser.pause(500);
     await this.browser.waitUntil(
       async () => {
-        const text = await (
-          await this.browser.$(this.selectors.cardBadgeVote)
-        ).getText();
+        const text = await (await this.browser.$(this.selectors.cardBadgeVote)).getText();
         return text.length > "Life, the Universe and Everything".length;
       },
       20000,
@@ -81,9 +79,7 @@ class TestBoardPage extends Page {
   }
 
   async clickOn(selector) {
-    this.logger.debug(
-      `├─ Waiting for ${this.selectors[selector]} to be found...`,
-    );
+    this.logger.debug(`├─ Waiting for ${this.selectors[selector]} to be found...`);
     const element = await this.browser.$(this.selectors[selector]);
     this.logger.debug("├─ element found...");
     await element.waitForDisplayed();
@@ -98,16 +94,12 @@ class TestBoardPage extends Page {
       message: `├ Saving screenshot for ${elementName}`,
     });
     const element = await this.browser.$(this.selectors[elementName]);
-    this.logger.debug(
-      `├─ waiting for ${this.selectors[elementName]} to be displayed...`,
-    );
+    this.logger.debug(`├─ waiting for ${this.selectors[elementName]} to be displayed...`);
     await element.waitForDisplayed();
     this.logger.debug("├─ element found...");
 
     await this.browser.pause(3000);
-    await element.saveScreenshot(
-      `./assets/listings/${languageCode}/${snakeCase(elementName)}.png`,
-    );
+    await element.saveScreenshot(`./assets/listings/${languageCode}/${snakeCase(elementName)}.png`);
     this.logger.debug("├─ ...done.");
   }
 }
