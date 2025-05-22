@@ -4,10 +4,10 @@ packages:
 
 catalog:
   typescript: 5.8.3
-  eslint: 9.26.0
-  '@eslint/js': 9.26.0
-  eslint-config-prettier: ^10.1.2
-  typescript-eslint: 8.31.1
+  eslint: 9.27.0
+  '@eslint/js': 9.27.0
+  eslint-config-prettier: ^10.1.5
+  typescript-eslint: 8.32.1
   prettier: ^3.5.3
 
 onlyBuiltDependencies:
