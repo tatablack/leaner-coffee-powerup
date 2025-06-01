@@ -1,5 +1,5 @@
 import BoardStorage from "../storage/BoardStorage";
-import { Trello } from "../types/TrelloPowerUp";
+import Trello from "../types/trellopowerup/index";
 import { ErrorReporterInjector, isRunningInProduction } from "../utils/Errors";
 import { bindAll } from "../utils/Scope";
 

@@ -1,6 +1,6 @@
 import formatDuration from "format-duration";
 
-import { Trello } from "../types/TrelloPowerUp";
+import Trello from "../types/trellopowerup/index";
 import Discussion from "../utils/Discussion";
 import { ErrorReporterInjector } from "../utils/Errors";
 import { bindAll } from "../utils/Scope";
@@ -15,22 +15,22 @@ class ElapsedCardBadge {
     bindAll(this);
   }
 
-  getText = async (t: Trello.PowerUp.IFrame, elapsed: number): Promise<string> => formatDuration(elapsed);
+  getText = async (t: Trello.PowerUp.CallbackHandler, elapsed: number): Promise<string> => formatDuration(elapsed);
 
-  getColor = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.Colors> => {
+  getColor = async (t: Trello.PowerUp.CallbackHandler): Promise<Trello.Theming.ColorName> => {
     const isOngoing = await this.discussion.isOngoingFor(t);
 
     if (isOngoing) {
       return "orange";
     }
 
-    return (await this.discussion.isPausedFor(t)) ? "yellow" : "light-gray";
+    return (await this.discussion.isPausedFor(t)) ? "yellow" : "gray";
   };
 
   // Unable to use class properties here because in subclasses
   // I need to user `super`, and it wouldn't be possible. See:
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super#accessing_super_in_class_field_declaration
-  async render(t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardBadge> {
+  async render(t: Trello.PowerUp.CallbackHandler): Promise<Trello.PowerUp.CardBadge> {
     const elapsed = await this.discussion.getElapsed(t);
     if (!Number.isFinite(elapsed)) {
       return null;

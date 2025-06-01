@@ -1,5 +1,5 @@
 import BoardStorage from "../storage/BoardStorage";
-import { Trello } from "../types/TrelloPowerUp";
+import Trello from "../types/trellopowerup/index";
 
 import CustomPayload = umami.CustomPayload;
 
@@ -37,7 +37,7 @@ const event = async (window: Window, eventName: string, eventData?: umami.EventD
   }
 };
 
-const getOverrides = async (boardStorage: BoardStorage, t: Trello.PowerUp.HostHandlers): Promise<string> => {
+const getOverrides = async (boardStorage: BoardStorage, t: Trello.PowerUp.CallbackHandler): Promise<string> => {
   const organisationIdHash = await boardStorage.read<string>(t, BoardStorage.ORGANISATION_HASH);
   const boardIdHash = await boardStorage.read<string>(t, BoardStorage.BOARD_HASH);
   const referrer = encodeURIComponent("https://" + organisationIdHash);

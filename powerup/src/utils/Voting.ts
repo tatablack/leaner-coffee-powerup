@@ -1,7 +1,7 @@
 import { ErrorReporterInjector } from "./Errors";
 import { bindAll } from "./Scope";
 import CardStorage from "../storage/CardStorage";
-import { Trello } from "../types/TrelloPowerUp";
+import Trello from "../types/trellopowerup/index";
 
 @ErrorReporterInjector
 class Voting {
@@ -12,7 +12,7 @@ class Voting {
     bindAll(this);
   }
 
-  async hasCurrentMemberVoted(t: Trello.PowerUp.IFrame): Promise<boolean> {
+  async hasCurrentMemberVoted(t: Trello.PowerUp.CallbackHandler): Promise<boolean> {
     const votes = await this.cardStorage.read<Votes>(t, CardStorage.VOTES);
     if (!votes) {
       return false;
@@ -22,11 +22,11 @@ class Voting {
     return !!votes[currentMember];
   }
 
-  async getVotes(t: Trello.PowerUp.IFrame): Promise<Votes> {
+  async getVotes(t: Trello.PowerUp.CallbackHandler): Promise<Votes> {
     return await this.cardStorage.read<Votes>(t, CardStorage.VOTES);
   }
 
-  async countVotesByCard(t: Trello.PowerUp.IFrame, cardId: string): Promise<number> {
+  async countVotesByCard(t: Trello.PowerUp.CallbackHandler, cardId: string): Promise<number> {
     const votes = await this.cardStorage.read<Votes>(t, CardStorage.VOTES, cardId);
 
     if (!votes) {
@@ -36,14 +36,14 @@ class Voting {
     return Object.keys(votes).filter((key) => votes[key]).length;
   }
 
-  async getMaxVotes(t: Trello.PowerUp.IFrame): Promise<number> {
+  async getMaxVotes(t: Trello.PowerUp.CallbackHandler): Promise<number> {
     const currentList = await t.list("cards");
 
     // https://www.talcottridge.com/multi-voting-math-or-n3
     return Math.ceil(currentList.cards.length / 3);
   }
 
-  async canCurrentMemberVote(t: Trello.PowerUp.IFrame): Promise<boolean> {
+  async canCurrentMemberVote(t: Trello.PowerUp.CallbackHandler): Promise<boolean> {
     if (await this.hasCurrentMemberVoted(t)) {
       return true;
     }
@@ -56,7 +56,7 @@ class Voting {
     return currentMemberVotes < maxVotes;
   }
 
-  async countVotesByMember(t: Trello.PowerUp.IFrame, cardIds: string[]): Promise<number> {
+  async countVotesByMember(t: Trello.PowerUp.CallbackHandler, cardIds: string[]): Promise<number> {
     const listVotes: number[] = await Promise.all(
       cardIds.map(async (cardId): Promise<number> => {
         const votes = await this.cardStorage.read<Votes>(t, CardStorage.VOTES, cardId);

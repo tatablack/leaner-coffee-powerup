@@ -1,12 +1,12 @@
 import VotingCardBadge from "./VotingCardBadge";
 import CardStorage from "../storage/CardStorage";
-import { Trello } from "../types/TrelloPowerUp";
+import Trello from "../types/trellopowerup/index";
 import Analytics from "../utils/Analytics";
 import { getTagsForReporting } from "../utils/Errors";
 import { I18nConfig } from "../utils/I18nConfig";
 
 class VotingCardDetailBadge extends VotingCardBadge {
-  clearVoters = async (t: Trello.PowerUp.IFrame) => {
+  clearVoters = async (t: Trello.PowerUp.CallbackHandler) => {
     const totalVoters = await this.getVoters(t);
 
     await this.cardStorage.delete(t, CardStorage.VOTES);
@@ -15,7 +15,7 @@ class VotingCardDetailBadge extends VotingCardBadge {
     });
   };
 
-  showVoters = async (t: Trello.PowerUp.IFrame): Promise<void> => {
+  showVoters = async (t: Trello.PowerUp.CallbackHandler): Promise<void> => {
     const items = await this.getVoters(t);
 
     if (!items.length) {
@@ -33,7 +33,7 @@ class VotingCardDetailBadge extends VotingCardBadge {
     });
   };
 
-  render = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardDetailBadge> => {
+  render = async (t: Trello.PowerUp.CallbackHandler): Promise<Trello.PowerUp.CardDetailBadge> => {
     const commonData = (await super.render(t)) as Trello.PowerUp.CardDetailBadge;
 
     if (commonData) {

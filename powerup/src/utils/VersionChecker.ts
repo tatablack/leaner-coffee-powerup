@@ -6,7 +6,7 @@ import { I18nConfig } from "./I18nConfig";
 import { bindAll } from "./Scope";
 import BoardStorage from "../storage/BoardStorage";
 import MemberStorage from "../storage/MemberStorage";
-import { Trello } from "../types/TrelloPowerUp";
+import Trello from "../types/trellopowerup/index";
 
 @ErrorReporterInjector
 class VersionChecker {
@@ -19,7 +19,7 @@ class VersionChecker {
     bindAll(this);
   }
 
-  async isThereANewMinorOrMajor(t: Trello.PowerUp.IFrame): Promise<boolean> {
+  async isThereANewMinorOrMajor(t: Trello.PowerUp.CallbackHandler): Promise<boolean> {
     const storedVersionRaw = await this.memberStorage.read<string>(t, MemberStorage.POWER_UP_VERSION);
 
     if (!storedVersionRaw) {
@@ -34,7 +34,7 @@ class VersionChecker {
     return !storedVersion || isNewer;
   }
 
-  async showMenu(t: Trello.PowerUp.IFrame): Promise<void> {
+  async showMenu(t: Trello.PowerUp.CallbackHandler): Promise<void> {
     const storedVersion = await this.memberStorage.read<string>(t, MemberStorage.POWER_UP_VERSION);
     const title = storedVersion
       ? t.localizeKey("boardButtonPopupTitle", {
@@ -54,7 +54,7 @@ class VersionChecker {
     });
   }
 
-  async storeNewVersion(t: Trello.PowerUp.IFrame): Promise<void> {
+  async storeNewVersion(t: Trello.PowerUp.CallbackHandler): Promise<void> {
     await this.memberStorage.write(t, MemberStorage.POWER_UP_VERSION, __BUILDTIME_VERSION__);
   }
 }
