@@ -30,7 +30,7 @@
     "@eslint/js": "catalog:",
     "@eslint/json": "^0.12.0",
     "@eslint/markdown": "^6.4.0",
-    "@html-eslint/eslint-plugin": "^0.40.3",
+    "@html-eslint/eslint-plugin": "^0.41.0",
     "@html-eslint/parser": "^0.40.0",
     "@sentry/browser": "^9.22.0",
     "@sentry/webpack-plugin": "^3.5.0",
