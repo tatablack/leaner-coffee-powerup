@@ -17,7 +17,7 @@
   "devDependencies": {
     "@eslint/js": "catalog:",
     "@stylistic/eslint-plugin": "^4.2.0",
-    "@types/node": "^22.15.21",
+    "@types/node": "^22.15.29",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-import-resolver-next": "^0.6.0",
