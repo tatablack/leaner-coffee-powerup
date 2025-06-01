@@ -1,7 +1,7 @@
 import BoardStorage from "../storage/BoardStorage";
-import { Trello } from "../types/TrelloPowerUp";
+import Trello from "../types/trellopowerup/index";
 
-const getTagsForReporting = async (boardStorage: BoardStorage, t: Trello.PowerUp.HostHandlers): Promise<string> => {
+const getTagsForReporting = async (boardStorage: BoardStorage, t: Trello.PowerUp.CallbackHandler): Promise<string> => {
   const organisationIdHash = await boardStorage.read<string>(t, BoardStorage.ORGANISATION_HASH);
   const boardIdHash = await boardStorage.read<string>(t, BoardStorage.BOARD_HASH);
   return `organisationIdHash=${organisationIdHash}&boardIdHash=${boardIdHash}`;

@@ -1,4 +1,4 @@
-import { Trello } from "../types/TrelloPowerUp";
+import Trello from "../types/trellopowerup/index";
 import { ErrorReporterInjector } from "../utils/Errors";
 import { bindAll } from "../utils/Scope";
 
@@ -27,7 +27,7 @@ class Storage {
     t: Trello.PowerUp.HostHandlers | Trello.PowerUp.AnonymousHostHandlers,
     key: string,
     cardId?: string,
-  ): PromiseLike<T> {
+  ): Promise<T> {
     return t.get(cardId ?? this.scope, this.visibility, key);
   }
 

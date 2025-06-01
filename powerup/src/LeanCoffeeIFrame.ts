@@ -1,6 +1,6 @@
 import { LeanCoffeeBase, LeanCoffeeBaseParams } from "./LeanCoffeeBase";
 import BoardStorage from "./storage/BoardStorage";
-import { Trello } from "./types/TrelloPowerUp";
+import Trello from "./types/trellopowerup/index";
 import { isRunningInProduction } from "./utils/Errors";
 import { I18nConfig } from "./utils/I18nConfig";
 

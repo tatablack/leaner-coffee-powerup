@@ -1,10 +1,10 @@
 import ElapsedCardBadge from "./ElapsedCardBadge";
 import CardStorage from "../storage/CardStorage";
 import Storage from "../storage/Storage";
-import { Trello } from "../types/TrelloPowerUp";
+import Trello from "../types/trellopowerup/index";
 
 class ElapsedCardDetailBadge extends ElapsedCardBadge {
-  render = async (t: Trello.PowerUp.IFrame): Promise<Trello.PowerUp.CardDetailBadge> => {
+  render = async (t: Trello.PowerUp.CallbackHandler): Promise<Trello.PowerUp.CardDetailBadge> => {
     const discussionStatus = await this.discussion.cardStorage.read<DiscussionStatus>(t, CardStorage.DISCUSSION_STATUS);
     if (discussionStatus !== "ENDED") {
       return null;

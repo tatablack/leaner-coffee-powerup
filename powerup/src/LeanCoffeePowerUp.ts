@@ -6,7 +6,8 @@ import VotingCardBadge from "./badges/VotingCardBadge";
 import VotingCardDetailBadge from "./badges/VotingCardDetailBadge";
 import BoardStorage from "./storage/BoardStorage";
 import CardStorage from "./storage/CardStorage";
-import { Trello } from "./types/TrelloPowerUp";
+import Trello from "./types/trellopowerup/index";
+import { PopupListItemOptions } from "./types/trellopowerup/lib/hosthandlers";
 import Analytics from "./utils/Analytics";
 import Discussion from "./utils/Discussion";
 import { getTagsForReporting, isRunningInProduction } from "./utils/Errors";
@@ -16,7 +17,7 @@ import VersionChecker from "./utils/VersionChecker";
 import Voting from "./utils/Voting";
 
 class LeanCoffeePowerUp extends LeanCoffeeBase {
-  t: Trello.PowerUp;
+  t: Trello.PowerUp.PowerUp;
   baseUrl: string;
   discussion: Discussion;
   voting: Voting;
@@ -51,7 +52,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     this.capabilityHandlers = new CapabilityHandlers(this);
   }
 
-  async handleVoting(t: Trello.PowerUp.IFrame): Promise<void> {
+  async handleVoting(t: Trello.PowerUp.CallbackHandler): Promise<void> {
     if (!(await this.voting.canCurrentMemberVote(t))) {
       return t.popup({
         title: "Leaner Coffee",
@@ -85,7 +86,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     await Analytics.event(this.w, "voted", { outcome: outcome });
   }
 
-  async stopAndStart(t: Trello.PowerUp.IFrame): Promise<void> {
+  async stopAndStart(t: Trello.PowerUp.CallbackHandler): Promise<void> {
     await Analytics.event(this.w, "discussionStatusOverridden");
 
     await this.discussion.end(t);
@@ -99,7 +100,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     });
   }
 
-  async handleDiscussion(t: Trello.PowerUp.IFrame): Promise<void> {
+  async handleDiscussion(t: Trello.PowerUp.CallbackHandler): Promise<void> {
     if (await this.discussion.isOngoingOrPausedForAnotherCard(t)) {
       const boardStatus = await this.boardStorage.read<DiscussionStatus>(t, BoardStorage.DISCUSSION_STATUS);
       const cardId = await this.boardStorage.read<string>(t, BoardStorage.DISCUSSION_CARD_ID);
@@ -137,7 +138,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
       ]);
     }
 
-    let items: Trello.PowerUp.PopupOptionsItem[] = [];
+    let items: Trello.PowerUp.PopupListItemOptions[] = [];
     let status: string;
 
     switch (true) {
@@ -145,7 +146,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
         items = [
           {
             text: t.localizeKey("pauseTimer", { symbol: "❙ ❙" }), // MEDIUM VERTICAL BAR + NARROW NO-BREAK SPACE
-            callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+            callback: async (t2: Trello.PowerUp.CallbackHandler): Promise<void> => {
               await Analytics.event(this.w, "discussionStatusChanged", {
                 newStatus: "paused",
               });
@@ -160,7 +161,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
           },
           {
             text: t.localizeKey("endDiscussion", { symbol: "■" }), // BLACK SQUARE
-            callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+            callback: async (t2: Trello.PowerUp.CallbackHandler): Promise<void> => {
               await Analytics.event(this.w, "discussionStatusChanged", {
                 newStatus: "stopped",
               });
@@ -180,7 +181,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
         items = [
           {
             text: t.localizeKey("resumeDiscussion", { symbol: "▶" }), // BLACK RIGHT-POINTING TRIANGLE
-            callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+            callback: async (t2: Trello.PowerUp.CallbackHandler): Promise<void> => {
               await Analytics.event(this.w, "discussionStatusChanged", {
                 newStatus: "resumed",
               });
@@ -195,7 +196,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
           },
           {
             text: t.localizeKey("endDiscussion", { symbol: "■" }), // BLACK SQUARE
-            callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+            callback: async (t2: Trello.PowerUp.CallbackHandler): Promise<void> => {
               await Analytics.event(this.w, "discussionStatusChanged", {
                 newStatus: "stopped",
               });
@@ -215,7 +216,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
         items = [
           {
             text: t.localizeKey("startTimer", { symbol: "▶" }), // BLACK RIGHT-POINTING TRIANGLE
-            callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+            callback: async (t2: Trello.PowerUp.CallbackHandler): Promise<void> => {
               await Analytics.event(this.w, "discussionStatusChanged", {
                 newStatus: "started",
               });
@@ -233,7 +234,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
         if (await this.discussion.hasEverBeenDiscussed(t)) {
           items.push({
             text: t.localizeKey("resetDiscussion", { symbol: "↺" }), // ANTICLOCKWISE OPEN CIRCLE ARROW
-            callback: async (t2: Trello.PowerUp.IFrame): Promise<void> => {
+            callback: async (t2: Trello.PowerUp.CallbackHandler): Promise<void> => {
               await Analytics.event(this.w, "discussionStatusChanged", {
                 newStatus: "reset",
               });
@@ -260,7 +261,7 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     });
   }
 
-  async getButtonLabel(t: Trello.PowerUp.IFrame): Promise<string> {
+  async getButtonLabel(t: Trello.PowerUp.CallbackHandler): Promise<string> {
     let label = await this.discussion.cardStorage.read<string>(t, CardStorage.DISCUSSION_BUTTON_LABEL);
 
     if (label) {

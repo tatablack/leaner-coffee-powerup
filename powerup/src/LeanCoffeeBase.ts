@@ -1,14 +1,14 @@
 import BoardStorage from "./storage/BoardStorage";
 import CardStorage from "./storage/CardStorage";
 import MemberStorage from "./storage/MemberStorage";
-import { Trello } from "./types/TrelloPowerUp";
+import Trello from "./types/trellopowerup/index";
 import { ErrorReporterInjector } from "./utils/Errors";
 import { bindAll } from "./utils/Scope";
 
 export interface LeanCoffeeBaseParams {
   w: Window;
   config: Config;
-  t?: Trello.PowerUp | Trello.PowerUp.IFrame;
+  t?: Trello.PowerUp.PowerUp | Trello.PowerUp.IFrame;
 }
 
 @ErrorReporterInjector

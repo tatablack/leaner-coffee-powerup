@@ -15,7 +15,7 @@ class Debug {
 
     const cards = await t.cards("id", "name");
     const cardsDataPromise = cards.map(async (card) => {
-      const cardData = await t.get(card.id, "shared");
+      const cardData = await t.get<any>(card.id, "shared");
       return { name: card.name, ...cardData };
     });
 
