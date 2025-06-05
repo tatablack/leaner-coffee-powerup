@@ -275,6 +275,10 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
   }
 
   async handlePowerupEnabled(t: Trello.PowerUp.CallbackHandler) {
+    if (!t.isMemberSignedIn() || !t.memberCanWriteToModel("board")) {
+      return;
+    }
+
     const [organisationIdHash, boardIdHash] = await calculateHashes(t);
 
     await this.boardStorage.writeMultiple(t, {
