@@ -124,14 +124,12 @@ export interface AnonymousHostHandlers {
   ): string;
   localizeKeys(keys: Array<string | [string, string]>): string[];
   localizeNode(node: Element): void;
-  /* eslint-disable @definitelytyped/no-single-element-tuple-type */
   board(...fields: ["all"] | [BoardField, ...BoardField[]]): Promise<Base.Board>;
   cards(...fields: ["all"] | [CardField, ...CardField[]]): Promise<Base.Card[]>;
   lists(...fields: ["all"] | [ListField, ...ListField[]]): Promise<Base.List[]>;
   member(...fields: ["all"] | [MemberField, ...MemberField[]]): Promise<Base.Member>;
   organization(...fields: ["all"] | [OrganizationField, ...OrganizationField[]]): Promise<Base.Organization>;
   organization(...fields: ["all"] | [OrganizationField, ...OrganizationField[]]): Promise<Base.Organization>;
-  /* eslint-enable @definitelytyped/no-single-element-tuple-type */
 }
 
 export interface HostHandlers extends AnonymousHostHandlers {
@@ -193,10 +191,8 @@ export interface HostHandlers extends AnonymousHostHandlers {
   closeBoardBar(): Promise<void>;
   closeModal(): Promise<void>;
   sizeTo(arg: string | number | Element): Promise<void>;
-  /* eslint-disable @definitelytyped/no-single-element-tuple-type */
   card(...fields: ["all"] | CardField[]): Promise<Base.Card>;
   list(...fields: ["all"] | ListField[]): Promise<Base.List>;
-  /* eslint-enable @definitelytyped/no-single-element-tuple-type */
   attach(data: { name: string; url: string }): Promise<void>;
   requestToken(options: unknown): Promise<string>;
   authorize(

@@ -10,7 +10,7 @@ import Trello from "./types/trellopowerup/index";
 import Analytics from "./utils/Analytics";
 import Discussion from "./utils/Discussion";
 import { getTagsForReporting, isRunningInProduction } from "./utils/Errors";
-import { calculateHashes, digestMessage } from "./utils/Hashing";
+import { calculateHashes } from "./utils/Hashing";
 import { I18nConfig } from "./utils/I18nConfig";
 import VersionChecker from "./utils/VersionChecker";
 import Voting from "./utils/Voting";
