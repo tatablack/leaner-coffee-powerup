@@ -3,7 +3,6 @@ import BoardStorage from "./storage/BoardStorage";
 import CardStorage from "./storage/CardStorage";
 import Trello from "./types/trellopowerup/index";
 import Analytics from "./utils/Analytics";
-import Debug from "./utils/Debug";
 import classifyDuration from "./utils/Duration";
 import { ErrorReporterInjector } from "./utils/Errors";
 import { I18nConfig } from "./utils/I18nConfig";
@@ -12,13 +11,30 @@ import { bindAll } from "./utils/Scope";
 @ErrorReporterInjector
 class CapabilityHandlers {
   powerUp: LeanCoffeePowerUp;
+  boardStorage: BoardStorage;
 
   constructor(powerUp: LeanCoffeePowerUp) {
     this.powerUp = powerUp;
+    this.boardStorage = new BoardStorage();
     bindAll(this);
   }
 
   async boardButtonsHandler(t: Trello.PowerUp.CallbackHandler): Promise<Trello.PowerUp.BoardButtonCallback[]> {
+    // We are hijacking this capability to do some initialisation,
+    // because on-enable is not guaranteed to be triggered on new installations.
+    // See: https://developer.atlassian.com/cloud/trello/power-ups/capabilities/on-enable/#not-guaranteed
+    await navigator.locks.request("powerup_init", { ifAvailable: true }, async (lock) => {
+      // if the lock is null, it means the on-enable handler is taking care of initialisation
+      if (lock === null) {
+        return;
+      }
+
+      // If the power-up is not initialised, we initialise it.
+      if (!(await this.boardStorage.read<string>(t, BoardStorage.POWER_UP_INSTALLATION_DATE))) {
+        await this.powerUp.handlePowerupEnabled(t);
+      }
+    });
+
     // We don't want to show the board button for the release notes
     // if there is a new patch version: only for minor and major updates.
     if (!(await this.powerUp.versionChecker.isThereANewMinorOrMajor(t))) {
@@ -140,16 +156,13 @@ class CapabilityHandlers {
     // There can be a race condition between the power-up starting
     // and the on-enable event being triggered.
     await navigator.locks.request("powerup_init", { ifAvailable: true }, async (lock) => {
-      const isInitialised = !!(await this.powerUp.boardStorage.read<string>(
-        t,
-        BoardStorage.POWER_UP_INSTALLATION_DATE,
-      ));
-      // if the lock is null, it means LeanCoffeePowerup::start is taking care of initialisation
-      if (lock === null || isInitialised) {
+      // if the lock is null, it means the board-buttons handler is taking care of initialisation
+      if (lock === null) {
         return;
       }
 
-      if (!isInitialised) {
+      // If the power-up is not initialised, we initialise it.
+      if (!(await this.boardStorage.read<string>(t, BoardStorage.POWER_UP_INSTALLATION_DATE))) {
         await this.powerUp.handlePowerupEnabled(t);
       }
     });
