@@ -1,6 +1,20 @@
 import Trello from "../types/trellopowerup/index";
+import { Scope, Visibility } from "../types/trellopowerup/lib/hosthandlers";
 import { ErrorReporterInjector } from "../utils/Errors";
 import { bindAll } from "../utils/Scope";
+
+type StorageMethodNames = "set" | "remove";
+
+// Define parameter types for each method overload explicitly
+type StorageMethodParameters<T extends StorageMethodNames> = T extends "set"
+  ?
+      | [scope: Scope | string, visibility: Visibility, key: string, value: unknown]
+      | [scope: Scope | string, visibility: Visibility, entries: { [key: string]: unknown }]
+  : T extends "remove"
+    ?
+        | [scope: Scope | string, visibility: Visibility, key: string]
+        | [scope: Scope | string, visibility: Visibility, entries: string[]]
+    : never;
 
 @ErrorReporterInjector
 class Storage {
@@ -12,10 +26,6 @@ class Storage {
     bindAll(this);
   }
 
-  canWrite(t: Trello.PowerUp.HostHandlers): boolean {
-    return this.scope === "member" || t.memberCanWriteToModel(this.scope);
-  }
-
   static async getMemberType(t: Trello.PowerUp.AnonymousHostHandlers): Promise<string> {
     const board = await t.board("memberships");
     const currentMember = await t.member("id");
@@ -23,135 +33,58 @@ class Storage {
     return myMembership ? myMembership.memberType : "unknown";
   }
 
-  read<T>(
+  async read<T>(
     t: Trello.PowerUp.HostHandlers | Trello.PowerUp.AnonymousHostHandlers,
     key: string,
     cardId?: string,
   ): Promise<T> {
-    return t.get(cardId ?? this.scope, this.visibility, key);
+    return await t.get(cardId ?? this.scope, this.visibility, key);
   }
 
-  async write(
-    t: Trello.PowerUp.HostHandlers | Trello.PowerUp.AnonymousHostHandlers,
-    key: string,
-    value: any,
-    cardId?: string,
+  async execute<T extends StorageMethodNames>(
+    t: Trello.PowerUp.HostHandlers,
+    method: T,
+    ...args: StorageMethodParameters<T>
   ): Promise<void> {
-    if (!("memberCanWriteToModel" in t)) {
-      window.Sentry.addBreadcrumb({
-        category: "database",
-        message: `Unknown permissions when trying to save "${key}" to the "${this.scope}" ${this.visibility} scope"`,
-        level: "warning",
-      });
-    }
+    try {
+      return await (t[method] as any)(...args);
+    } catch (error) {
+      const context = t.getContext();
+      const errorMessage = error instanceof Error ? error.message : error.toString();
 
-    if (!("memberCanWriteToModel" in t) || this.canWrite(t)) {
-      await t.set(cardId ?? this.scope, this.visibility, key, value);
-    } else {
-      window.Sentry.captureException(new Error("Error while editing scope"), {
+      window.Sentry.captureException(new Error("Error while editing scope: " + errorMessage), {
         contexts: {
           WriteOperation: {
             scope: this.scope,
             visibility: this.visibility,
-            key: key,
-            hasCardId: !!cardId,
             memberType: await Storage.getMemberType(t),
+            permissions: context.permissions,
           },
         },
       });
     }
   }
 
+  async write(t: Trello.PowerUp.HostHandlers, key: string, value: any, cardId?: string): Promise<void> {
+    await this.execute<"set">(t, "set", cardId ?? this.scope, this.visibility, key, value);
+  }
+
   async writeMultiple(
-    t: Trello.PowerUp.HostHandlers | Trello.PowerUp.AnonymousHostHandlers,
+    t: Trello.PowerUp.HostHandlers,
     entries: {
       [key: string]: any;
     },
     cardId?: string,
   ): Promise<void> {
-    if (!("memberCanWriteToModel" in t)) {
-      window.Sentry.addBreadcrumb({
-        category: "database",
-        message: `Unknown permissions when trying to save "${Object.keys(entries).join(", ")}" to the "${this.scope}" ${this.visibility} scope`,
-        level: "warning",
-      });
-    }
-
-    if (!("memberCanWriteToModel" in t) || this.canWrite(t)) {
-      await t.set(cardId ?? this.scope, this.visibility, entries);
-    } else {
-      window.Sentry.captureException(new Error("Error while editing scope"), {
-        contexts: {
-          WriteOperation: {
-            scope: this.scope,
-            visibility: this.visibility,
-            key: Object.keys(entries),
-            hasCardId: !!cardId,
-            memberType: await Storage.getMemberType(t),
-          },
-        },
-      });
-    }
+    await this.execute<"set">(t, "set", cardId ?? this.scope, this.visibility, entries);
   }
 
-  async delete(
-    t: Trello.PowerUp.HostHandlers | Trello.PowerUp.AnonymousHostHandlers,
-    key: string,
-    cardId?: string,
-  ): Promise<void> {
-    if (!("memberCanWriteToModel" in t)) {
-      window.Sentry.addBreadcrumb({
-        category: "database",
-        message: `Unknown permissions when trying to save "${key}" to the "${this.scope}" ${this.visibility} scope"`,
-        level: "warning",
-      });
-    }
-
-    if (!("memberCanWriteToModel" in t) || this.canWrite(t)) {
-      return t.remove(cardId ?? this.scope, this.visibility, key);
-    } else {
-      window.Sentry.captureException(new Error("Error while editing scope"), {
-        contexts: {
-          DeleteOperation: {
-            scope: this.scope,
-            visibility: this.visibility,
-            key: key,
-            hasCardId: !!cardId,
-            memberType: await Storage.getMemberType(t),
-          },
-        },
-      });
-    }
+  async delete(t: Trello.PowerUp.HostHandlers, key: string, cardId?: string): Promise<void> {
+    await this.execute<"remove">(t, "remove", cardId ?? this.scope, this.visibility, key);
   }
 
-  async deleteMultiple(
-    t: Trello.PowerUp.HostHandlers | Trello.PowerUp.AnonymousHostHandlers,
-    entries: string[],
-    cardId?: string,
-  ): Promise<void> {
-    if (!("memberCanWriteToModel" in t)) {
-      window.Sentry.addBreadcrumb({
-        category: "database",
-        message: `Unknown permissions when trying to save "${Object.keys(entries).join(", ")}" to the "${this.scope}" ${this.visibility} scope`,
-        level: "warning",
-      });
-    }
-
-    if (!("memberCanWriteToModel" in t) || this.canWrite(t)) {
-      return t.remove(cardId ?? this.scope, this.visibility, entries);
-    } else {
-      window.Sentry.captureException(new Error("Error while editing scope"), {
-        contexts: {
-          DeleteOperation: {
-            scope: this.scope,
-            visibility: this.visibility,
-            key: Object.keys(entries),
-            hasCardId: !!cardId,
-            memberType: await Storage.getMemberType(t),
-          },
-        },
-      });
-    }
+  async deleteMultiple(t: Trello.PowerUp.HostHandlers, entries: string[], cardId?: string): Promise<void> {
+    await this.execute<"remove">(t, "remove", cardId ?? this.scope, this.visibility, entries);
   }
 }
 
