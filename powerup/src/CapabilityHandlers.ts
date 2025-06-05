@@ -111,8 +111,8 @@ class CapabilityHandlers {
         text: t.localizeKey("clearVotesFromList"),
         callback: async (t2): Promise<void> => {
           const result = await t2.list("cards");
-          result.cards.forEach(({ id }) => {
-            this.powerUp.cardStorage.deleteMultiple(t2, [CardStorage.VOTES], id);
+          result.cards.forEach(({ id: cardId }) => {
+            this.powerUp.cardStorage.delete(t2, CardStorage.VOTES, cardId);
           });
           await Analytics.event(window, "listVotesCleared");
         },
