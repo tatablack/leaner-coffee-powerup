@@ -67,3 +67,6 @@ ongoingBottomLine: 'Fare clic qui sotto per terminarla e iniziarne un''altra sul
 maxVotes: 'In base al numero di argomenti in questa lista, il totale dei voti a tua disposizione è {maxVotes}.'
 maxVotesRationale: 'Per le motivazioni, leggi'
 maxVotesLink: 'qui'
+
+# Alerts
+notEnoughPermissions: 'Permessi insufficienti per eseguire l''azione richiesta.'

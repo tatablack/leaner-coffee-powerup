@@ -33,6 +33,10 @@ class Storage {
     return myMembership ? myMembership.memberType : "unknown";
   }
 
+  static notEnoughPrivileges(error: any): boolean {
+    return error instanceof Error && error.message.startsWith("Scope not editable by active member");
+  }
+
   async read<T>(
     t: Trello.PowerUp.HostHandlers | Trello.PowerUp.AnonymousHostHandlers,
     key: string,
@@ -51,6 +55,10 @@ class Storage {
     } catch (error) {
       const context = t.getContext();
       const errorMessage = error instanceof Error ? error.message : error.toString();
+
+      if (Storage.notEnoughPrivileges(error)) {
+        await t.alert({ message: t.localizeKey("notEnoughPermissions") });
+      }
 
       window.Sentry.captureException(new Error("Error while editing scope: " + errorMessage), {
         contexts: {
