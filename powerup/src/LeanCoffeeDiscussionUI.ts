@@ -74,7 +74,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
           this.updateStatusHeader("ONGOING");
         }
 
-        this.updateElapsed("ONGOING");
+        await this.updateElapsed("ONGOING");
         break;
       }
       case "PAUSED": {
@@ -84,7 +84,7 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
           this.toggleVoting(true);
           this.toggleBadges(true);
           this.updateStatusHeader("PAUSED");
-          this.updateElapsed("PAUSED");
+          await this.updateElapsed("PAUSED");
         }
 
         this.updateThumbs();
