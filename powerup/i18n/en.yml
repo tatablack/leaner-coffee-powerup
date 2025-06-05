@@ -68,3 +68,6 @@ ongoingBottomLine: 'Click below to stop it, and start a new one on this card ins
 maxVotes: 'Based on the current number of topics in this list, you can vote for {maxVotes} of them at most.'
 maxVotesRationale: 'For the rationale, see'
 maxVotesLink: 'here'
+
+# Alerts
+notEnoughPermissions: 'You do not have the required permissions to perform this action.'

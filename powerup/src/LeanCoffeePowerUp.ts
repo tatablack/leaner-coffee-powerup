@@ -7,11 +7,10 @@ import VotingCardDetailBadge from "./badges/VotingCardDetailBadge";
 import BoardStorage from "./storage/BoardStorage";
 import CardStorage from "./storage/CardStorage";
 import Trello from "./types/trellopowerup/index";
-import { PopupListItemOptions } from "./types/trellopowerup/lib/hosthandlers";
 import Analytics from "./utils/Analytics";
 import Discussion from "./utils/Discussion";
 import { getTagsForReporting, isRunningInProduction } from "./utils/Errors";
-import { digestMessage } from "./utils/Hashing";
+import { calculateHashes, digestMessage } from "./utils/Hashing";
 import { I18nConfig } from "./utils/I18nConfig";
 import VersionChecker from "./utils/VersionChecker";
 import Voting from "./utils/Voting";
@@ -275,11 +274,8 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
     return label;
   }
 
-  async handlePowerupEnabled(t: Trello.PowerUp.AnonymousHostHandlers) {
-    const organisation = await t.organization("id");
-    const board = await t.board("id");
-    const organisationIdHash = await digestMessage(organisation.id);
-    const boardIdHash = await digestMessage(board.id);
+  async handlePowerupEnabled(t: Trello.PowerUp.CallbackHandler) {
+    const [organisationIdHash, boardIdHash] = await calculateHashes(t);
 
     await this.boardStorage.writeMultiple(t, {
       [BoardStorage.POWER_UP_INSTALLATION_DATE]: new Date().toISOString(),
@@ -296,21 +292,12 @@ class LeanCoffeePowerUp extends LeanCoffeeBase {
 
     this.discussion.init(trelloPlugin);
 
-    // There can be a race condition between the power-up starting
-    // and the on-enable event being triggered.
-    await navigator.locks.request("powerup_init", { ifAvailable: true }, async (lock) => {
-      // if the lock is null, it means the on-enable handler is taking care of initialisation
-      if (lock === null) {
-        return;
-      }
+    let organisationIdHash = await this.boardStorage.read<string>(trelloPlugin, BoardStorage.ORGANISATION_HASH);
+    let boardIdHash = await this.boardStorage.read<string>(trelloPlugin, BoardStorage.BOARD_HASH);
 
-      if (!(await this.boardStorage.read<string>(trelloPlugin, BoardStorage.POWER_UP_INSTALLATION_DATE))) {
-        await this.handlePowerupEnabled(trelloPlugin);
-      }
-    });
-
-    const organisationIdHash = await this.boardStorage.read<string>(trelloPlugin, BoardStorage.ORGANISATION_HASH);
-    const boardIdHash = await this.boardStorage.read<string>(trelloPlugin, BoardStorage.BOARD_HASH);
+    if (!organisationIdHash || !boardIdHash) {
+      [organisationIdHash, boardIdHash] = await calculateHashes(trelloPlugin);
+    }
 
     if (window.Sentry) {
       window.Sentry.onLoad(async () => {

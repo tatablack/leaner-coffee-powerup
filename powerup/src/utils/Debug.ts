@@ -1,6 +1,6 @@
 import BoardStorage from "../storage/BoardStorage";
 import CardStorage from "../storage/CardStorage";
-import { Trello } from "../types/TrelloPowerUp";
+import Trello from "../types/trellopowerup/index";
 
 class Debug {
   static async showData(t: Trello.PowerUp.IFrame): Promise<void> {
@@ -8,6 +8,9 @@ class Debug {
     console.log(JSON.stringify(t.getContext(), null, 2));
     console.groupEnd();
 
+    console.groupCollapsed("Organization");
+    console.log(JSON.stringify(await t.organization("all"), null, 2));
+    console.groupEnd();
     const boardData = await t.getAll();
     console.groupCollapsed("Board data");
     console.log(JSON.stringify(boardData, null, 2));
@@ -16,7 +19,7 @@ class Debug {
     const cards = await t.cards("id", "name");
     const cardsDataPromise = cards.map(async (card) => {
       const cardData = await t.get<any>(card.id, "shared");
-      return { name: card.name, ...cardData };
+      return { id: card.id, name: card.name, ...cardData };
     });
 
     const cardsData = await Promise.all(cardsDataPromise);
