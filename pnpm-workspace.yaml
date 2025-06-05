@@ -1,7 +1,6 @@
 packages:
-  - 'powerup'
-  - 'cli'
-
+  - powerup
+  - cli
 catalog:
   typescript: 5.8.3
   eslint: 9.27.0
@@ -9,8 +8,10 @@ catalog:
   eslint-config-prettier: ^10.1.5
   typescript-eslint: 8.32.1
   prettier: ^3.5.3
-
 onlyBuiltDependencies:
   - edgedriver
   - geckodriver
   - unrs-resolver
+overrides:
+  cli@<1.0.0: '>=1.0.0'
+  tar-fs@>=3.0.0 <3.0.9: '>=3.0.9'
