@@ -145,21 +145,18 @@ class LeanCoffeeDiscussionUI extends LeanCoffeeIFrame {
     const thumbs = (await this.cardStorage.read<Thumbs>(this.t, CardStorage.DISCUSSION_THUMBS)) || {};
     const currentMember = this.t.getContext().member;
 
+    let outcome: string;
+
     if (thumbs[currentMember] === thumb) {
       delete thumbs[currentMember];
-      await Analytics.event(this.w, "keepDiscussingVoted", {
-        outcome: "removed",
-        choice: thumb,
-      });
+      outcome = "removed";
     } else {
       thumbs[currentMember] = thumb;
-      await Analytics.event(this.w, "keepDiscussingVoted", {
-        outcome: "added",
-        choice: thumb,
-      });
+      outcome = "added";
     }
 
-    return this.cardStorage.write(this.t, CardStorage.DISCUSSION_THUMBS, thumbs);
+    await this.cardStorage.write(this.t, CardStorage.DISCUSSION_THUMBS, thumbs);
+    await Analytics.event(this.w, "keepDiscussingVoted", { outcome, choice: thumb });
   }
 
   toggleBadges(visible: boolean): void {
