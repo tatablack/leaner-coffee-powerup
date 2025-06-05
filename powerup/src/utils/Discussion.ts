@@ -131,7 +131,7 @@ class Discussion {
 
     await this.cardStorage.write(t, CardStorage.DISCUSSION_STATUS, "ENDED", cardId);
     await this.saveElapsed(t);
-    await this.cardStorage.deleteMultiple(t, [CardStorage.DISCUSSION_THUMBS], cardId);
+    await this.cardStorage.delete(t, CardStorage.DISCUSSION_THUMBS, cardId);
     await this.boardStorage.deleteMultiple(t, [
       BoardStorage.DISCUSSION_STATUS,
       BoardStorage.DISCUSSION_CARD_ID,
