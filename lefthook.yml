@@ -1,0 +1,4 @@
+pre-commit:
+  commands:
+    check-code:
+      run: pnpm run -r lint
