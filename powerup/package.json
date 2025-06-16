@@ -32,7 +32,7 @@
     "@eslint/markdown": "^6.4.0",
     "@html-eslint/eslint-plugin": "^0.41.0",
     "@html-eslint/parser": "^0.40.0",
-    "@sentry/browser": "^9.22.0",
+    "@sentry/browser": "^9.29.0",
     "@sentry/webpack-plugin": "^3.5.0",
     "@stylistic/eslint-plugin": "^4.4.1",
     "@types/format-duration": "^3.0.0",
