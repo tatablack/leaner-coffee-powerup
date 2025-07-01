@@ -32,7 +32,7 @@
     "date-format": "^4.0.14",
     "deepmerge": "^4.3.1",
     "just-snake-case": "^3.2.0",
-    "webdriverio": "^9.15.0",
+    "webdriverio": "^9.16.2",
     "winston": "^3.17.0",
     "yargs": "^17.7.2"
   }
