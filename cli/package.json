@@ -28,7 +28,7 @@
   },
   "packageManager": "pnpm@10.10.0+sha256.fa0f513aa8191764d2b6b432420788c270f07b4f999099b65bb2010eec702a30",
   "dependencies": {
-    "browserstack-local": "^1.5.6",
+    "browserstack-local": "^1.5.8",
     "date-format": "^4.0.14",
     "deepmerge": "^4.3.1",
     "just-snake-case": "^3.2.0",
