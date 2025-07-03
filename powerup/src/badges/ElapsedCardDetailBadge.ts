@@ -1,7 +1,6 @@
 import ElapsedCardBadge from "./ElapsedCardBadge";
 import CardStorage from "../storage/CardStorage";
 import Storage from "../storage/Storage";
-import Trello from "../types/trellopowerup/index";
 
 class ElapsedCardDetailBadge extends ElapsedCardBadge {
   render = async (t: Trello.PowerUp.CallbackHandler): Promise<Trello.PowerUp.CardDetailBadge> => {

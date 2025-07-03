@@ -1,7 +1,6 @@
 import BoardStorage from "./storage/BoardStorage";
 import CardStorage from "./storage/CardStorage";
 import MemberStorage from "./storage/MemberStorage";
-import Trello from "./types/trellopowerup/index";
 import { ErrorReporterInjector } from "./utils/Errors";
 import { bindAll } from "./utils/Scope";
 

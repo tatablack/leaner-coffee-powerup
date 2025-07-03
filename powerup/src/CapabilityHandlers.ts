@@ -1,7 +1,6 @@
 import LeanCoffeePowerUp from "./LeanCoffeePowerUp";
 import BoardStorage from "./storage/BoardStorage";
 import CardStorage from "./storage/CardStorage";
-import Trello from "./types/trellopowerup/index";
 import Analytics from "./utils/Analytics";
 import classifyDuration from "./utils/Duration";
 import { ErrorReporterInjector } from "./utils/Errors";

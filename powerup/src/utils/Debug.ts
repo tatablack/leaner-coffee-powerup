@@ -1,6 +1,5 @@
 import BoardStorage from "../storage/BoardStorage";
 import CardStorage from "../storage/CardStorage";
-import Trello from "../types/trellopowerup/index";
 
 class Debug {
   static async showData(t: Trello.PowerUp.IFrame): Promise<void> {

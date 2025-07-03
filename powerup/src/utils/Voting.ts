@@ -1,7 +1,6 @@
 import { ErrorReporterInjector } from "./Errors";
 import { bindAll } from "./Scope";
 import CardStorage from "../storage/CardStorage";
-import Trello from "../types/trellopowerup/index";
 
 @ErrorReporterInjector
 class Voting {

@@ -1,6 +1,5 @@
 import VotingCardBadge from "./VotingCardBadge";
 import CardStorage from "../storage/CardStorage";
-import Trello from "../types/trellopowerup/index";
 import Analytics from "../utils/Analytics";
 import { getTagsForReporting } from "../utils/Errors";
 import { I18nConfig } from "../utils/I18nConfig";

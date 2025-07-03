@@ -1,5 +1,3 @@
-import Trello from "../types/trellopowerup/index";
-
 const config: Config = process.env.CONFIG as unknown as Config;
 const { supportedLocales } = config[process.env.NODE_ENV as Environment];
 

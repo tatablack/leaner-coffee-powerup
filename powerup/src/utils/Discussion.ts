@@ -4,7 +4,6 @@ import Notifications, { NotificationType } from "./Notifications";
 import { bindAll } from "./Scope";
 import BoardStorage from "../storage/BoardStorage";
 import CardStorage from "../storage/CardStorage";
-import Trello from "../types/trellopowerup/index";
 
 @ErrorReporterInjector
 class Discussion {

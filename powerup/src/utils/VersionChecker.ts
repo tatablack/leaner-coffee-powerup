@@ -6,7 +6,6 @@ import { I18nConfig } from "./I18nConfig";
 import { bindAll } from "./Scope";
 import BoardStorage from "../storage/BoardStorage";
 import MemberStorage from "../storage/MemberStorage";
-import Trello from "../types/trellopowerup/index";
 
 @ErrorReporterInjector
 class VersionChecker {
