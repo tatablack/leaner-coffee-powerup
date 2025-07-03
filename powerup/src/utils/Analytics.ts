@@ -1,5 +1,4 @@
 import BoardStorage from "../storage/BoardStorage";
-import Trello from "../types/trellopowerup/index";
 
 import CustomPayload = umami.CustomPayload;
 

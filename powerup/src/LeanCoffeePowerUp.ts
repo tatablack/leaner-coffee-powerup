@@ -6,7 +6,6 @@ import VotingCardBadge from "./badges/VotingCardBadge";
 import VotingCardDetailBadge from "./badges/VotingCardDetailBadge";
 import BoardStorage from "./storage/BoardStorage";
 import CardStorage from "./storage/CardStorage";
-import Trello from "./types/trellopowerup/index";
 import Analytics from "./utils/Analytics";
 import Discussion from "./utils/Discussion";
 import { getTagsForReporting, isRunningInProduction } from "./utils/Errors";

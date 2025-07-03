@@ -1,7 +1,7 @@
-import Trello from "../types/trellopowerup/index";
-import { Scope, Visibility } from "../types/trellopowerup/lib/hosthandlers";
 import { ErrorReporterInjector } from "../utils/Errors";
 import { bindAll } from "../utils/Scope";
+
+import type { Scope, Visibility } from "trellopowerup/lib/hosthandlers";
 
 type StorageMethodNames = "set" | "remove";
 

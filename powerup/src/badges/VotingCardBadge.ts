@@ -1,6 +1,5 @@
 import BoardStorage from "../storage/BoardStorage";
 import CardStorage from "../storage/CardStorage";
-import Trello from "../types/trellopowerup/index";
 import { ErrorReporterInjector } from "../utils/Errors";
 import { bindAll } from "../utils/Scope";
 import Voting from "../utils/Voting";

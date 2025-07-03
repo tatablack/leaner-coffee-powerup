@@ -1,6 +1,5 @@
 import formatDuration from "format-duration";
 
-import Trello from "../types/trellopowerup/index";
 import Discussion from "../utils/Discussion";
 import { ErrorReporterInjector } from "../utils/Errors";
 import { bindAll } from "../utils/Scope";
