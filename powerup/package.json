@@ -41,7 +41,7 @@
     "@types/umami-browser": "^2.13.0",
     "@typescript-eslint/parser": "^8.32.1",
     "clean-webpack-plugin": "^4.0.0",
-    "copy-webpack-plugin": "^10.2.4",
+    "copy-webpack-plugin": "^13.0.0",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-import-resolver-typescript": "^4.4.1",
