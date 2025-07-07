@@ -36,7 +36,7 @@
     "@sentry/webpack-plugin": "^3.5.0",
     "@stylistic/eslint-plugin": "^4.4.1",
     "@types/format-duration": "^3.0.0",
-    "@types/node": "^22.15.29",
+    "@types/node": "^24.0.10",
     "@types/trellopowerup": "^1.25.0",
     "@types/umami-browser": "^2.13.0",
     "@typescript-eslint/parser": "^8.32.1",
